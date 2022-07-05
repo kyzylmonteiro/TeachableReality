@@ -1,6 +1,7 @@
 const STATUS = document.getElementById('status');
 const VIDEO = document.getElementById('webcam');
 const ENABLE_CAM_BUTTON = document.getElementById('enableCam');
+const ADD_CLASS = document.getElementById('addClass');
 const RESET_BUTTON = document.getElementById('reset');
 const TRAIN_BUTTON = document.getElementById('train');
 const MOBILE_NET_INPUT_WIDTH = 224;
@@ -9,6 +10,7 @@ const STOP_DATA_GATHER = -1;
 const CLASS_NAMES = [];
 
 ENABLE_CAM_BUTTON.addEventListener('click', enableCam);
+ADD_CLASS.addEventListener('click', addClass);
 TRAIN_BUTTON.addEventListener('click', trainAndPredict);
 RESET_BUTTON.addEventListener('click', reset);
 
@@ -38,7 +40,47 @@ function enableCam() {
   }
 }
 
+var model = tf.sequential();
+async function loadMobileNetFeatureModel() {
+  const URL = 
+    'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v3_small_100_224/feature_vector/5/default/1';
+  
+  mobilenet = await tf.loadGraphModel(URL, {fromTFHub: true});
+  STATUS.innerText = 'MobileNet v3 loaded successfully!';
+  
+  // Warm up the model by passing zeros through it once.
+  tf.tidy(function () {
+    let answer = mobilenet.predict(tf.zeros([1, MOBILE_NET_INPUT_HEIGHT, MOBILE_NET_INPUT_WIDTH, 3]));
+    console.log(answer.shape);
+  });
+
+}
+// Call the function immediately to start loading.
+loadMobileNetFeatureModel();
+
 async function trainAndPredict() {
+  
+  //adding layers based on number of classes
+
+  // var model = tf.sequential();
+  model.add(tf.layers.dense({inputShape: [1024], units: 128, activation: 'relu'}));
+  model.add(tf.layers.dense({units: CLASS_NAMES.length, activation: 'softmax'}));
+
+  model.summary();
+
+  // Compile the model with the defined optimizer and specify a loss function to use.
+  model.compile({
+    // Adam changes the learning rate over time which is useful.
+    optimizer: 'adam',
+    // Use the correct loss function. If 2 classes of data, must use binaryCrossentropy.
+    // Else categoricalCrossentropy is used if more than 2 classes.
+    loss: (CLASS_NAMES.length === 2) ? 'binaryCrossentropy': 'categoricalCrossentropy', 
+    // As this is a classification problem you can record accuracy in the logs too!
+    metrics: ['accuracy']  
+  });
+
+  // training and predicting starting
+
   predict = false;
   tf.util.shuffleCombo(trainingDataInputs, trainingDataOutputs);
   let outputsAsTensor = tf.tensor1d(trainingDataOutputs, 'int32');
@@ -70,6 +112,8 @@ function reset() {
   
   console.log('Tensors in memory: ' + tf.memory().numTensors);
 }
+
+
 let dataCollectorButtons = document.querySelectorAll('button.dataCollector');
 for (let i = 0; i < dataCollectorButtons.length; i++) {
   dataCollectorButtons[i].addEventListener('mousedown', gatherDataForClass);
@@ -81,7 +125,7 @@ for (let i = 0; i < dataCollectorButtons.length; i++) {
 function gatherDataForClass() {
   let classNumber = parseInt(this.getAttribute('data-1hot'));
   gatherDataState = (gatherDataState === STOP_DATA_GATHER) ? classNumber : STOP_DATA_GATHER;
-  dataGatherLoop();
+  dataGatherLoop(classNumber);
 }
 
 let mobilenet = undefined;
@@ -92,45 +136,17 @@ let trainingDataOutputs = [];
 let examplesCount = [];
 let predict = false;
 
-
-async function loadMobileNetFeatureModel() {
-  const URL = 
-    'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v3_small_100_224/feature_vector/5/default/1';
-  
-  mobilenet = await tf.loadGraphModel(URL, {fromTFHub: true});
-  STATUS.innerText = 'MobileNet v3 loaded successfully!';
-  
-  // Warm up the model by passing zeros through it once.
-  tf.tidy(function () {
-    let answer = mobilenet.predict(tf.zeros([1, MOBILE_NET_INPUT_HEIGHT, MOBILE_NET_INPUT_WIDTH, 3]));
-    console.log(answer.shape);
-  });
-}
-
-// Call the function immediately to start loading.
-loadMobileNetFeatureModel();
-
-let model = tf.sequential();
-model.add(tf.layers.dense({inputShape: [1024], units: 128, activation: 'relu'}));
-model.add(tf.layers.dense({units: CLASS_NAMES.length, activation: 'softmax'}));
-
-model.summary();
-
-// Compile the model with the defined optimizer and specify a loss function to use.
-model.compile({
-  // Adam changes the learning rate over time which is useful.
-  optimizer: 'adam',
-  // Use the correct loss function. If 2 classes of data, must use binaryCrossentropy.
-  // Else categoricalCrossentropy is used if more than 2 classes.
-  loss: (CLASS_NAMES.length === 2) ? 'binaryCrossentropy': 'categoricalCrossentropy', 
-  // As this is a classification problem you can record accuracy in the logs too!
-  metrics: ['accuracy']  
-});
-
-
-function dataGatherLoop() {
+function dataGatherLoop(classNumber) {
   if (videoPlaying && gatherDataState !== STOP_DATA_GATHER) {
     let imageFeatures = tf.tidy(function() {
+      
+      // creating a gallery of data gathered
+      var canvas = capture(VIDEO,0.025);
+      if(classNumber<10)
+      {
+        document.getElementsByClassName("class"+(classNumber+1)+"-canvas-container")[0].appendChild(canvas);
+      }
+      // creating data for training
       let videoFrameAsTensor = tf.browser.fromPixels(VIDEO);
       let resizedTensorFrame = tf.image.resizeBilinear(videoFrameAsTensor, [MOBILE_NET_INPUT_HEIGHT, 
           MOBILE_NET_INPUT_WIDTH], true);
@@ -155,6 +171,21 @@ function dataGatherLoop() {
   }
 }
 
+function capture(video, scaleFactor) {
+  if(scaleFactor == null){
+      scaleFactor = 1;
+  }
+  var w = video.videoWidth * scaleFactor;
+  var h = video.videoHeight * scaleFactor;
+  var canvas = document.createElement('canvas');
+      canvas.width  = w;
+      canvas.height = h;
+  var ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, w, h);
+  return canvas;
+} 
+
+
 function predictLoop() {
   if (predict) {
     tf.tidy(function() {
@@ -172,4 +203,25 @@ function predictLoop() {
 
     window.requestAnimationFrame(predictLoop);
   }
+}
+
+function addClass() {
+  let btn = document.createElement("button");
+  btn.innerHTML = "Gather Class "+ (CLASS_NAMES.length+1) + " Data";
+  btn.setAttribute("class", "dataCollector" )
+  btn.setAttribute("data-1hot",(CLASS_NAMES.length))
+  btn.setAttribute("data-name","Class " + (CLASS_NAMES.length+1))
+
+  btn.addEventListener('mousedown', gatherDataForClass);
+  btn.addEventListener('mouseup', gatherDataForClass);
+  let canvas = document.createElement("div");
+  canvas.setAttribute("class","class"+(CLASS_NAMES.length+1)+"-canvas-container")
+
+
+  // Populate the human readable names for classes.
+  CLASS_NAMES.push(btn.getAttribute('data-name'));
+
+  let ele = document.getElementsByClassName('class-container');
+  ele[0].appendChild(canvas);
+  ele[0].appendChild(btn);
 }

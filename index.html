@@ -17,13 +17,21 @@
     <p id="status">Awaiting TF.js load</p>
     
     <div class="video-container">
-    <video id="webcam" autoplay muted></video>
-  </div>
+      <video id="webcam" autoplay muted></video>
+    </div>
+
+    <div class="canvas-container">
+    </div>
 
     <div class="button-container">
       <button id="enableCam">Enable Webcam</button>
-      <button class="dataCollector" data-1hot="0" data-name="Class 1">Gather Class 1 Data</button>
-      <button class="dataCollector" data-1hot="1" data-name="Class 2">Gather Class 2 Data</button>
+      <div class="class-container">
+        <div class="class1-canvas-container"></div>
+        <button class="dataCollector" data-1hot="0" data-name="Class 1">Gather Class 1 Data</button>
+        <div class="class2-canvas-container"></div>
+        <button class="dataCollector" data-1hot="1" data-name="Class 2">Gather Class 2 Data</button>
+      </div>
+      <button id="addClass"> Add </button>
       <button id="train">Train &amp; Predict!</button>
       <button id="reset">Reset</button>
     </div>
