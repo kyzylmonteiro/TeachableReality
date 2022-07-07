@@ -30,20 +30,22 @@ body {
   
   #status {
     font-size:150%;
+    color: orangered;
   }    
       
   .video-container {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 90%;
-    height: 90%; 
+    left:0;
+    /* width: 90%; */
+    height: 100%; 
     /* overflow: hidden; */
   }
   .video-container video {
     /* Make video to at least 100% wide and tall */
-    min-width: 90%; 
-    min-height: 90%; 
+    /* min-width: 90%;  */
+    min-height: 100%; 
   
     /* Setting width & height to auto prevents the browser from stretching or squishing the video */
     width: auto;
@@ -51,14 +53,16 @@ body {
   
     /* Center the video */
     position: absolute;
-    top: 80%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    top: 0%;
+    left: 0%;
+    /* transform: translate(-50%,-50%); */
+    z-index: -1;
   }
 
   .button-container {
     position: fixed;
     right: 0;
-    width: 8%;
+    width: 10%;
     display: block;
+    top: 0;
   }

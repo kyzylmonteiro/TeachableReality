@@ -197,7 +197,29 @@ function predictLoop() {
       let prediction = model.predict(imageFeatures).squeeze();
       let highestIndex = prediction.argMax().arraySync();
       let predictionArray = prediction.arraySync();
-
+      
+      var linksOfImages = [
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Un1.svg/1200px-Un1.svg.png",
+        "https://upload.wikimedia.org/wikipedia/commons/7/75/Logo_TVE-2.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Trois.svg/1200px-Trois.svg.png",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Quatre.svg/1200px-Quatre.svg.png",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/5.svg/1200px-5.svg.png"
+      ]
+      
+      for (let i = 0; i < CLASS_NAMES.length; i++) {
+        if(highestIndex == i){
+          console.log(i + " " +linksOfImages[i]);
+          let canvasConatainer = document.getElementsByClassName("output-container")[0];
+          canvasConatainer.innerHTML = i;
+          let img = document.createElement("img");
+          img.setAttribute("src",linksOfImages[i]);
+          img.setAttribute("width","50");
+          img.setAttribute("height","50"); 
+          canvasConatainer.appendChild(img);
+        }  
+      }
+      
+      
       STATUS.innerText = 'Prediction: ' + CLASS_NAMES[highestIndex] + ' with ' + Math.floor(predictionArray[highestIndex] * 100) + '% confidence';
     });
 
