@@ -60,7 +60,7 @@ loadMobileNetFeatureModel();
 
 async function trainAndPredict() {
   console.log('Training...');
-  
+  STATUS.innerText = 'Training Now! Please Wait...';
   dataPreProcess();
   console.log(trainingDataInputs.length);
   console.log(trainingDataOutputs.length);
@@ -177,7 +177,7 @@ function dataGatherLoop(classNumber) {
 
 
 function dataPreProcess(){
-
+  STATUS.innerText = 'Training Now! Please Wait...';
   for(let n = 0; n < CLASS_NAMES.length; n++){
     console.log(imageData[n])
   for(let m = 0; m < imageData[n].length; m++)
