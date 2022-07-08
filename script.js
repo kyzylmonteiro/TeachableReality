@@ -22,8 +22,8 @@ function enableCam() {
   if (hasGetUserMedia()) {
     // getUsermedia parameters.
     const constraints = {
-      video: true,
-      width: 640, 
+      video: true
+      , width: 640, 
       height: 480 
     };
 
@@ -59,7 +59,12 @@ async function loadMobileNetFeatureModel() {
 loadMobileNetFeatureModel();
 
 async function trainAndPredict() {
+  console.log('Training...');
   
+  dataPreProcess();
+  console.log(trainingDataInputs.length);
+  console.log(trainingDataOutputs.length);
+
   //adding layers based on number of classes
 
   // var model = tf.sequential();
@@ -136,28 +141,26 @@ let trainingDataOutputs = [];
 let examplesCount = [];
 let predict = false;
 
+let imageData = [];
+
 function dataGatherLoop(classNumber) {
+
+  if(imageData[classNumber]==undefined){
+    imageData[classNumber] = [];
+  }
+
   if (videoPlaying && gatherDataState !== STOP_DATA_GATHER) {
-    let imageFeatures = tf.tidy(function() {
+    
       
-      // creating a gallery of data gathered
       var canvas = capture(VIDEO,0.025);
       if(classNumber<10)
       {
         document.getElementsByClassName("class"+(classNumber+1)+"-canvas-container")[0].appendChild(canvas);
       }
-      // creating data for training
       let videoFrameAsTensor = tf.browser.fromPixels(VIDEO);
-      let resizedTensorFrame = tf.image.resizeBilinear(videoFrameAsTensor, [MOBILE_NET_INPUT_HEIGHT, 
-          MOBILE_NET_INPUT_WIDTH], true);
-      let normalizedTensorFrame = resizedTensorFrame.div(255);
-      return mobilenet.predict(normalizedTensorFrame.expandDims()).squeeze();
-    });
 
-    trainingDataInputs.push(imageFeatures);
-    trainingDataOutputs.push(gatherDataState);
-    
-    // Intialize array index element if currently undefined.
+      imageData[classNumber].push(videoFrameAsTensor);
+
     if (examplesCount[gatherDataState] === undefined) {
       examplesCount[gatherDataState] = 0;
     }
@@ -167,14 +170,42 @@ function dataGatherLoop(classNumber) {
     for (let n = 0; n < CLASS_NAMES.length; n++) {
       STATUS.innerText += CLASS_NAMES[n] + ' data count: ' + examplesCount[n] + '. ';
     }
-    window.requestAnimationFrame(dataGatherLoop);
+    // window.requestAnimationFrame(dataGatherLoop);
+    setTimeout(dataGatherLoop, 10, classNumber);
   }
 }
+
+
+function dataPreProcess(){
+
+  for(let n = 0; n < CLASS_NAMES.length; n++){
+    console.log(imageData[n])
+  for(let m = 0; m < imageData[n].length; m++)
+    {
+      console.log(n,m);
+
+      let imageFeatures = tf.tidy(function() {
+      
+      let videoFrameAsTensor = imageData[n][m];
+
+      let resizedTensorFrame = tf.image.resizeBilinear(videoFrameAsTensor, [MOBILE_NET_INPUT_HEIGHT, 
+          MOBILE_NET_INPUT_WIDTH], true);
+      let normalizedTensorFrame = resizedTensorFrame.div(255);
+      return mobilenet.predict(normalizedTensorFrame.expandDims()).squeeze();
+      });
+
+    trainingDataInputs.push(imageFeatures);
+    trainingDataOutputs.push(n);
+}
+}
+}
+
 
 function capture(video, scaleFactor) {
   if(scaleFactor == null){
       scaleFactor = 1;
   }
+
   var w = video.videoWidth * scaleFactor;
   var h = video.videoHeight * scaleFactor;
   var canvas = document.createElement('canvas');

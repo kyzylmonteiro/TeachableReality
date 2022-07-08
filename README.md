@@ -24,7 +24,6 @@ http-server --ssl
   - tbd - color/tracking
 - Immediate Details
   - [ ] Last frame gathered in a class should be larger - @kyzylmonteiro
-  - [ ] Data gathered not finalised before train & predict - @RitikVatsal-2019321 
   - [ ] Webcam video steam not cropped to 640x480 and take up more of the screen - @RitikVatsal-2019321 
   - [ ] Import image to be overlayed
   - [ ] Integrate konva, enable sketching
