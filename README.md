@@ -23,7 +23,6 @@ http-server --ssl
   - AFrame output overlay
   - tbd - color/tracking
 - Immediate Details
-  - [ ] Last frame gathered in a class should be larger - @kyzylmonteiro
   - [ ] Webcam video steam not cropped to 640x480 and take up more of the screen - @RitikVatsal-2019321 
   - [ ] Import image to be overlayed
   - [ ] Integrate konva, enable sketching

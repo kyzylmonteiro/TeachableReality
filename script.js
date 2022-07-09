@@ -35,6 +35,9 @@ function enableCam() {
         ENABLE_CAM_BUTTON.classList.add("removed");
       });
     });
+
+    setTimeout(addClass, 1000);
+    setTimeout(addClass, 1000);
   } else {
     console.warn("getUserMedia() is not supported by your browser");
   }
@@ -161,14 +164,7 @@ function dataGatherLoop(classNumber) {
   }
 
   if (videoPlaying && gatherDataState !== STOP_DATA_GATHER) {
-    var canvas = capture(VIDEO, 0.025);
-    if (classNumber < 10) {
-      document
-        .getElementsByClassName(
-          "class" + (classNumber + 1) + "-canvas-container"
-        )[0]
-        .appendChild(canvas);
-    }
+    var canvas = capture(VIDEO, 0.25, classNumber);
     let videoFrameAsTensor = tf.browser.fromPixels(VIDEO);
 
     imageData[classNumber].push(videoFrameAsTensor);
@@ -213,14 +209,14 @@ function dataPreProcess() {
   }
 }
 
-function capture(video, scaleFactor) {
+function capture(video, scaleFactor, classNumber) {
   if (scaleFactor == null) {
     scaleFactor = 1;
   }
 
   var w = video.videoWidth * scaleFactor;
   var h = video.videoHeight * scaleFactor;
-  var canvas = document.createElement("canvas");
+  var canvas = document.getElementById("class" + (classNumber + 1) + "-canvas");
   canvas.width = w;
   canvas.height = h;
   var ctx = canvas.getContext("2d");
@@ -286,16 +282,35 @@ function addClass() {
 
   btn.addEventListener("mousedown", gatherDataForClass);
   btn.addEventListener("mouseup", gatherDataForClass);
-  let canvas = document.createElement("div");
-  canvas.setAttribute(
+  let canvasConatainer = document.createElement("div");
+  canvasConatainer.setAttribute(
     "class",
     "class" + (CLASS_NAMES.length + 1) + "-canvas-container"
   );
+
+  let canvas = document.createElement("canvas");
+  canvas.setAttribute("class", "data-canvas");
+  canvas.setAttribute("id", "class" + (CLASS_NAMES.length + 1) + "-canvas");
+  canvas.setAttribute("width", VIDEO.videoWidth * 0.25);
+  canvas.setAttribute("height", VIDEO.videoHeight * 0.25);
+  var ctx = canvas.getContext("2d");
+  const blank = new Image();
+  blank.src = "./images/blankClass.png";
+  blank.onload = () => {
+    ctx.drawImage(
+      blank,
+      0,
+      0,
+      VIDEO.videoWidth * 0.25,
+      VIDEO.videoHeight * 0.25
+    );
+  };
+  canvasConatainer.appendChild(canvas);
 
   // Populate the human readable names for classes.
   CLASS_NAMES.push(btn.getAttribute("data-name"));
 
   let ele = document.getElementsByClassName("class-container");
-  ele[0].appendChild(canvas);
+  ele[0].appendChild(canvasConatainer);
   ele[0].appendChild(btn);
 }

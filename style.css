@@ -1,15 +1,14 @@
 body {
-    font-family: helvetica, arial, sans-serif;
-    margin: 2em;
-  }
-  
-  h1 {
-    font-style: italic;
-    color: #FF6F00;
-  }
-  
-  
-  /* video {
+  font-family: helvetica, arial, sans-serif;
+  margin: 2em;
+}
+
+h1 {
+  font-style: italic;
+  color: #ff6f00;
+}
+
+/* video {
     clear: both;
     display: block;
     margin: 10px;
@@ -17,52 +16,60 @@ body {
     width: 640px;
     height: 480px;
   } */
-  
-  button {
-    padding: 10px;
-    float: left;
-    margin: 5px 3px 5px 10px;
-  }
-  
-  .removed {
-    display: none;
-  }
-  
-  #status {
-    font-size:150%;
-    color: orangered;
-  }    
-      
-  .video-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left:0;
-    /* width: 90%; */
-    height: 100%; 
-    /* overflow: hidden; */
-  }
-  .video-container video {
-    /* Make video to at least 100% wide and tall */
-    /* min-width: 90%;  */
-    min-height: 100%; 
-  
-    /* Setting width & height to auto prevents the browser from stretching or squishing the video */
-    width: auto;
-    height: auto;
-  
-    /* Center the video */
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    /* transform: translate(-50%,-50%); */
-    z-index: -1;
-  }
 
-  .button-container {
-    position: fixed;
-    right: 0;
-    width: 10%;
-    display: block;
-    top: 0;
-  }
+button {
+  padding: 10px;
+  float: left;
+  margin: 5px 3px 5px 10px;
+}
+
+.removed {
+  display: none;
+}
+
+#status {
+  font-size: 150%;
+  color: orangered;
+}
+
+.video-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  /* width: 90%; */
+  height: 100%;
+  /* overflow: hidden; */
+}
+.video-container video {
+  /* Make video to at least 100% wide and tall */
+  /* min-width: 90%;  */
+  min-height: 100%;
+
+  /* Setting width & height to auto prevents the browser from stretching or squishing the video */
+  width: auto;
+  height: auto;
+
+  /* Center the video */
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  /* transform: translate(-50%,-50%); */
+  z-index: -1;
+}
+
+.button-container {
+  position: fixed;
+  right: 0;
+  width: auto;
+  display: block;
+  top: 0;
+  height: 99%;
+  border-left: 5px solid grey;
+  overflow-y: scroll;
+}
+
+.data-canvas {
+  margin: auto;
+  display: block;
+}
