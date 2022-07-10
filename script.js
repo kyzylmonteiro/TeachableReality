@@ -254,18 +254,51 @@ function onFileSelected(event){
   var selectedFile = event.target.files[0];
   var reader = new FileReader();
 
-  var imgtag = document.getElementById("debugimage");
-  imgtag.setAttribute("width",200)
-  imgtag.title = selectedFile.name;
-  var elementID = event.srcElement.id.match(/[0-9]+$/)
+  var debugContainer = document.getElementById("debug-container")     
+  var debugImage = document.getElementById("debug-image");
+  if(!debugImage){
+    debugImage = document.createElement("img");
+    debugImage.setAttribute("width","200")
+    debugImage.setAttribute("id","debug-image")
+    debugImage.classList.add("removed"); // uncomment if debugging is needed and selected image should be dispalyed
+    debugContainer.appendChild(debugImage)
+  }
+  debugImage.title = selectedFile.name;
+  var classID = event.srcElement.id.match(/[0-9]+$/)
 
   reader.onload = function(event) {
-    imgtag.src = event.target.result;
-    outputData[elementID] = event.target.result;
+    setTimeout(displayOnOutputCanvas,100,event.target.result)
+    debugImage.src = event.target.result;
+    outputData[classID] = event.target.result;
   };
 
   reader.readAsDataURL(selectedFile);
 }
+
+function displayOnOutputCanvas(imageData){
+  let canvas = document.getElementById("output-canvas");
+  if(!canvas){
+    canvas = document.createElement("canvas");
+    canvas.setAttribute("width", VIDEO.videoWidth);
+    canvas.setAttribute("height", VIDEO.videoHeight);
+    canvas.setAttribute("id","output-canvas");
+    document.getElementsByClassName("video-container")[0].appendChild(canvas);
+  }
+
+  var ctx = canvas.getContext("2d");
+  const img = new Image();
+
+  img.src = imageData;
+  var hRatio = canvas.width / img.width    ;
+  var vRatio = canvas.height / img.height  ;
+  var ratio  = Math.min ( hRatio, vRatio );
+  img.onload = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
+  };
+}
+
+
 
 function predictLoop() {
   if (predict) {
