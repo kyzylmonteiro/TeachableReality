@@ -30,6 +30,7 @@ button {
 #status {
   font-size: 150%;
   color: orangered;
+  z-index: 2;
 }
 
 .video-container {
@@ -56,6 +57,15 @@ button {
   left: 0%;
   /* transform: translate(-50%,-50%); */
   z-index: -1;
+}
+.video-container #output-canvas {
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  z-index: 1;
 }
 
 .button-container {

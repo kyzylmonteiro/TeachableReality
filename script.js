@@ -3,7 +3,8 @@ const VIDEO = document.getElementById("webcam");
 const ENABLE_CAM_BUTTON = document.getElementById("enableCam");
 const ADD_CLASS = document.getElementById("addClass");
 const RESET_BUTTON = document.getElementById("reset");
-const TRAIN_BUTTON = document.getElementById("train");
+const NEXT_BUTTON = document.getElementById("next");
+const PREDICT_BUTTON = document.getElementById("predict");
 const MOBILE_NET_INPUT_WIDTH = 224;
 const MOBILE_NET_INPUT_HEIGHT = 224;
 const STOP_DATA_GATHER = -1;
@@ -11,7 +12,8 @@ const CLASS_NAMES = [];
 
 ENABLE_CAM_BUTTON.addEventListener("click", enableCam);
 ADD_CLASS.addEventListener("click", addClass);
-TRAIN_BUTTON.addEventListener("click", trainAndPredict);
+NEXT_BUTTON.addEventListener("click", outputModeAndTrain);
+PREDICT_BUTTON.addEventListener("click", predictVideo);
 RESET_BUTTON.addEventListener("click", reset);
 
 function hasGetUserMedia() {
@@ -62,12 +64,31 @@ async function loadMobileNetFeatureModel() {
 // Call the function immediately to start loading.
 loadMobileNetFeatureModel();
 
-async function trainAndPredict() {
+async function outputModeAndTrain() {
   console.log("Training...");
   STATUS.innerText = "Training Now! Please Wait...";
+
+  let dataCollectorButtons = document.querySelectorAll("button.dataCollector");
+  let parentDiv = document.getElementsByClassName("class-container")[0]
+  for (let i = 0; i < dataCollectorButtons.length; i++) {
+    let upBtn = document.createElement("input");
+    upBtn.setAttribute("type", "file")
+    upBtn.setAttribute("id", "output-class"+i)
+    upBtn.setAttribute("name","filename")
+    upBtn.innerText = "Upload Class " + (i) + " Output";
+    upBtn.addEventListener("change", onFileSelected);
+    parentDiv.insertBefore(upBtn,dataCollectorButtons[i]);
+    dataCollectorButtons[i].classList.add("removed");
+  }
+
+  for (let i = 0; i < CLASS_NAMES.length; i++) {
+    outputData.push('');    
+  }
+
+
   dataPreProcess();
-  console.log(trainingDataInputs.length);
-  console.log(trainingDataOutputs.length);
+  console.log("trainingDataInputs.length", trainingDataInputs.length);
+  console.log("trainingDataOutputs.length", trainingDataOutputs.length);
 
   //adding layers based on number of classes
 
@@ -113,14 +134,12 @@ async function trainAndPredict() {
   outputsAsTensor.dispose();
   oneHotOutputs.dispose();
   inputsAsTensor.dispose();
-  predict = true;
-  predictLoop();
 }
 
 function logProgress(epoch, logs) {
   console.log("Data for epoch " + epoch, logs);
 }
-function reset() {
+function reset() { // to update, only clears training input for now
   predict = false;
   examplesCount.length = 0;
   for (let i = 0; i < trainingDataInputs.length; i++) {
@@ -155,6 +174,7 @@ let trainingDataInputs = [];
 let trainingDataOutputs = [];
 let examplesCount = [];
 let predict = false;
+let outputData = []
 
 let imageData = [];
 
@@ -187,9 +207,9 @@ function dataGatherLoop(classNumber) {
 function dataPreProcess() {
   STATUS.innerText = "Training Now! Please Wait...";
   for (let n = 0; n < CLASS_NAMES.length; n++) {
-    console.log(imageData[n]);
+    // console.log(imageData[n]);
     for (let m = 0; m < imageData[n].length; m++) {
-      console.log(n, m);
+      // console.log(n, m);
 
       let imageFeatures = tf.tidy(function () {
         let videoFrameAsTensor = imageData[n][m];
@@ -224,6 +244,29 @@ function capture(video, scaleFactor, classNumber) {
   return canvas;
 }
 
+function predictVideo(){
+  predict = true;
+  predictLoop();
+}
+
+
+function onFileSelected(event){
+  var selectedFile = event.target.files[0];
+  var reader = new FileReader();
+
+  var imgtag = document.getElementById("debugimage");
+  imgtag.setAttribute("width",200)
+  imgtag.title = selectedFile.name;
+  var elementID = event.srcElement.id.match(/[0-9]+$/)
+
+  reader.onload = function(event) {
+    imgtag.src = event.target.result;
+    outputData[elementID] = event.target.result;
+  };
+
+  reader.readAsDataURL(selectedFile);
+}
+
 function predictLoop() {
   if (predict) {
     tf.tidy(function () {
@@ -247,19 +290,26 @@ function predictLoop() {
         "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/5.svg/1200px-5.svg.png",
       ];
 
-      for (let i = 0; i < CLASS_NAMES.length; i++) {
-        if (highestIndex == i) {
-          console.log(i + " " + linksOfImages[i]);
-          let canvasConatainer =
-            document.getElementsByClassName("output-container")[0];
-          canvasConatainer.innerHTML = i;
-          let img = document.createElement("img");
-          img.setAttribute("src", linksOfImages[i]);
-          img.setAttribute("width", "50");
-          img.setAttribute("height", "50");
-          canvasConatainer.appendChild(img);
-        }
+      let canvas = document.getElementById("output-canvas");
+      if(!canvas){
+        canvas = document.createElement("canvas");
+        canvas.setAttribute("width", VIDEO.videoWidth);
+        canvas.setAttribute("height", VIDEO.videoHeight);
+        canvas.setAttribute("id","output-canvas");
+        document.getElementsByClassName("video-container")[0].appendChild(canvas);
       }
+      
+      var ctx = canvas.getContext("2d");
+      const img = new Image();
+      img.src = outputData[highestIndex];
+      var hRatio = canvas.width / img.width    ;
+      var vRatio = canvas.height / img.height  ;
+      var ratio  = Math.min ( hRatio, vRatio );
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0,0, img.width, img.height, 0,0,img.width*ratio, img.height*ratio);
+      };
+      
 
       STATUS.innerText =
         "Prediction: " +
@@ -285,6 +335,10 @@ function addClass() {
   let canvasConatainer = document.createElement("div");
   canvasConatainer.setAttribute(
     "class",
+    "class-canvas-container"
+  );
+  canvasConatainer.setAttribute(
+    "id",
     "class" + (CLASS_NAMES.length + 1) + "-canvas-container"
   );
 

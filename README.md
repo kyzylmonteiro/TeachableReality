@@ -24,6 +24,6 @@ http-server --ssl
   - tbd - color/tracking
 - Immediate Details
   - [ ] Webcam video steam not cropped to 640x480 and take up more of the screen - @RitikVatsal-2019321 
-  - [ ] Import image to be overlayed
+  - [ ] Organize code - @RitikVatsal-2019321
   - [ ] Integrate konva, enable sketching
   - [ ] Enable users to select type of output - overlay, in 3d space,etc

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <base href="./" />
     <link rel="icon" type="image/x-icon" href="https://kyzyl.me/favicon.ico" />
+    <script src="https://unpkg.com/konva@8/konva.min.js"></script>
     <!-- Import the webpage's stylesheet -->
     <link rel="stylesheet" href="./style.css" />
   </head>
@@ -20,13 +21,14 @@
     </div>
 
     <div class="button-container">
-      <div class="output-container">Input Mode</div>
+      <div class="output-container">Input Mode <img id="debugimage" height="200"></div>
       <button id="enableCam">Enable Webcam</button>
       <div class="class-container">
         <!-- Class buttons Generated in script.js -->
       </div>
       <button id="addClass">Add</button>
-      <button id="train">Train &amp; Predict!</button>
+      <button id="next">Next</button>
+      <button id="predict">Run</button>
       <button id="reset">Reset</button>
     </div>
 
