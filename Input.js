@@ -1,25 +1,28 @@
-  const STATUS = document.getElementById("status");
-  const VIDEO = document.getElementById("webcam");
-  const ENABLE_CAM_BUTTON = document.getElementById("enableCam");
-  const ADD_CLASS = document.getElementById("addClass");
-  const RESET_BUTTON = document.getElementById("reset");
-  const NEXT_BUTTON = document.getElementById("next");
-  const PREDICT_BUTTON = document.getElementById("predict");
-  const MOBILE_NET_INPUT_WIDTH = 224;
-  const MOBILE_NET_INPUT_HEIGHT = 224;
-  const STOP_DATA_GATHER = -1;
-  export const CLASS_NAMES = [];
+const STATUS = document.getElementById("status");
+const VIDEO = document.getElementById("webcam");
+const ENABLE_CAM_BUTTON = document.getElementById("enableCam");
+const ADD_CLASS = document.getElementById("addClass");
+const RESET_BUTTON = document.getElementById("reset");
+const NEXT_BUTTON = document.getElementById("next");
+const PREDICT_BUTTON = document.getElementById("predict");
+const MOBILE_NET_INPUT_WIDTH = 224;
+const MOBILE_NET_INPUT_HEIGHT = 224;
+const STOP_DATA_GATHER = -1;
+export const CLASS_NAMES = [];
 
-import {dataPreProcess,outputModeAndTrain} from './Training.js';
-import {predictVideo,onFileSelected,displayOnOutputCanvas,predictLoop} from './Output.js';
-
+import { dataPreProcess, outputModeAndTrain } from "./training.js";
+import {
+  predictVideo,
+  onFileSelected,
+  displayOnOutputCanvas,
+  predictLoop,
+} from "./predict.js";
 
 ENABLE_CAM_BUTTON.addEventListener("click", enableCam);
 ADD_CLASS.addEventListener("click", addClass);
 PREDICT_BUTTON.addEventListener("click", predictVideo);
 RESET_BUTTON.addEventListener("click", reset);
 NEXT_BUTTON.addEventListener("click", outputModeAndTrain);
-
 
 function hasGetUserMedia() {
   return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
@@ -70,24 +73,24 @@ async function loadMobileNetFeatureModel() {
 loadMobileNetFeatureModel();
 
 function logProgress(epoch, logs) {
-    console.log("Data for epoch " + epoch, logs);
-  }
+  console.log("Data for epoch " + epoch, logs);
+}
 
-  function gatherDataForClass() {
-    let classNumber = parseInt(this.getAttribute("data-1hot"));
-    gatherDataState =
-      gatherDataState === STOP_DATA_GATHER ? classNumber : STOP_DATA_GATHER;
-    dataGatherLoop(classNumber);
-  }
+function gatherDataForClass() {
+  let classNumber = parseInt(this.getAttribute("data-1hot"));
+  gatherDataState =
+    gatherDataState === STOP_DATA_GATHER ? classNumber : STOP_DATA_GATHER;
+  dataGatherLoop(classNumber);
+}
 
-  export let mobilenet = undefined;
-  export let gatherDataState = STOP_DATA_GATHER;
-  export let videoPlaying = false;
+export let mobilenet = undefined;
+export let gatherDataState = STOP_DATA_GATHER;
+export let videoPlaying = false;
 export let trainingDataInputs = [];
 export let trainingDataOutputs = [];
 export let examplesCount = [];
 export let predict = false;
-export let outputData = []
+export let outputData = [];
 
 export let imageData = [];
 
@@ -132,7 +135,8 @@ function capture(video, scaleFactor, classNumber) {
   return canvas;
 }
 
-function reset() { // to update, only clears training input for now
+function reset() {
+  // to update, only clears training input for now
   predict = false;
   examplesCount.length = 0;
   for (let i = 0; i < trainingDataInputs.length; i++) {
@@ -164,10 +168,7 @@ function addClass() {
   btn.addEventListener("mousedown", gatherDataForClass);
   btn.addEventListener("mouseup", gatherDataForClass);
   let canvasConatainer = document.createElement("div");
-  canvasConatainer.setAttribute(
-    "class",
-    "class-canvas-container"
-  );
+  canvasConatainer.setAttribute("class", "class-canvas-container");
   canvasConatainer.setAttribute(
     "id",
     "class" + (CLASS_NAMES.length + 1) + "-canvas-container"
