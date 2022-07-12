@@ -2,27 +2,15 @@ const STATUS = document.getElementById("status");
 const VIDEO = document.getElementById("webcam");
 const ENABLE_CAM_BUTTON = document.getElementById("enableCam");
 const ADD_CLASS = document.getElementById("addClass");
-const RESET_BUTTON = document.getElementById("reset");
-const NEXT_BUTTON = document.getElementById("next");
-const PREDICT_BUTTON = document.getElementById("predict");
+// const RESET_BUTTON = document.getElementById("reset");
 const MOBILE_NET_INPUT_WIDTH = 224;
 const MOBILE_NET_INPUT_HEIGHT = 224;
 const STOP_DATA_GATHER = -1;
 export const CLASS_NAMES = [];
 
-import { dataPreProcess, outputModeAndTrain } from "./training.js";
-import {
-  predictVideo,
-  onFileSelected,
-  displayOnOutputCanvas,
-  predictLoop,
-} from "./predict.js";
-
 ENABLE_CAM_BUTTON.addEventListener("click", enableCam);
 ADD_CLASS.addEventListener("click", addClass);
-PREDICT_BUTTON.addEventListener("click", predictVideo);
-RESET_BUTTON.addEventListener("click", reset);
-NEXT_BUTTON.addEventListener("click", outputModeAndTrain);
+// RESET_BUTTON.addEventListener("click", reset);
 
 function hasGetUserMedia() {
   return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
@@ -86,11 +74,8 @@ function gatherDataForClass() {
 export let mobilenet = undefined;
 export let gatherDataState = STOP_DATA_GATHER;
 export let videoPlaying = false;
-export let trainingDataInputs = [];
-export let trainingDataOutputs = [];
 export let examplesCount = [];
 export let predict = false;
-export let outputData = [];
 
 export let imageData = [];
 
@@ -135,19 +120,19 @@ function capture(video, scaleFactor, classNumber) {
   return canvas;
 }
 
-function reset() {
-  // to update, only clears training input for now
-  predict = false;
-  examplesCount.length = 0;
-  for (let i = 0; i < trainingDataInputs.length; i++) {
-    trainingDataInputs[i].dispose();
-  }
-  trainingDataInputs.length = 0;
-  trainingDataOutputs.length = 0;
-  STATUS.innerText = "No data collected";
+// function reset() {
+//   // to update, only clears training input for now
+//   predict = false;
+//   examplesCount.length = 0;
+//   for (let i = 0; i < trainingDataInputs.length; i++) {
+//     trainingDataInputs[i].dispose();
+//   }
+//   trainingDataInputs.length = 0;
+//   trainingDataOutputs.length = 0;
+//   STATUS.innerText = "No data collected";
 
-  console.log("Tensors in memory: " + tf.memory().numTensors);
-}
+//   console.log("Tensors in memory: " + tf.memory().numTensors);
+// }
 
 let dataCollectorButtons = document.querySelectorAll("button.dataCollector");
 

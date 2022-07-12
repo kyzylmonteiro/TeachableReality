@@ -1,79 +1,62 @@
 const STATUS = document.getElementById("status");
 const VIDEO = document.getElementById("webcam");
+const PREDICT_BUTTON = document.getElementById("predict");
 const MOBILE_NET_INPUT_WIDTH = 224;
 const MOBILE_NET_INPUT_HEIGHT = 224;
 let predict = false;
 
+PREDICT_BUTTON.addEventListener("click", updateRunModeUI);
+
 import {
-  trainingDataInputs,
-  trainingDataOutputs,
-  outputData,
+  outputData, updateOutputModeUI
+} from "./training.js";
+
+import {
   model,
   mobilenet,
   CLASS_NAMES,
 } from "./input.js";
 
-export function predictVideo() {
+export function updateRunModeUI() {
+
+  let imageUploadButtons = document.querySelectorAll("input.output-image");
+  let parentDiv = document.getElementsByClassName("class-container")[0];
+  for (let i = 0; i < imageUploadButtons.length; i++) {
+    let outputImage = document.createElement("canvas");
+    const img = new Image();
+    img.src = outputData[i];
+    outputImage.setAttribute("width", 200)
+    outputImage.setAttribute("height", 200)
+    var hRatio = outputImage.width / img.width;
+    var vRatio = outputImage.height / img.height;
+    var ratio = Math.min(hRatio, vRatio);
+
+
+
+    var ctx = outputImage.getContext("2d");
+    img.onload = () => {
+      ctx.clearRect(0, 0, outputImage.width, outputImage.height);
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        img.width,
+        img.height,
+        0,
+        0,
+        img.width * ratio,
+        img.height * ratio
+      );
+      setTimeout(parentDiv.insertBefore(outputImage, imageUploadButtons[i]),0);
+    };
+
+    imageUploadButtons[i].classList.add("removed");
+  }
+
+  PREDICT_BUTTON.classList.add("removed")
+
   predict = true;
   predictLoop();
-}
-
-export function onFileSelected(event) {
-  var selectedFile = event.target.files[0];
-  var reader = new FileReader();
-
-  var debugContainer = document.getElementById("debug-container");
-  var debugImage = document.getElementById("debug-image");
-  if (!debugImage) {
-    debugImage = document.createElement("img");
-    debugImage.setAttribute("width", "200");
-    debugImage.setAttribute("id", "debug-image");
-    debugImage.classList.add("removed"); // comment if debugging is needed and selected image should be dispalyed
-    debugContainer.appendChild(debugImage);
-  }
-  debugImage.title = selectedFile.name;
-  var classID = event.srcElement.id.match(/[0-9]+$/);
-
-  reader.onload = function (event) {
-    setTimeout(displayOnOutputCanvas, 100, event.target.result);
-    debugImage.src = event.target.result;
-    outputData[classID] = event.target.result;
-  };
-
-  reader.readAsDataURL(selectedFile);
-}
-
-export function displayOnOutputCanvas(imageData) {
-  let canvas = document.getElementById("output-canvas");
-  if (!canvas) {
-    canvas = document.createElement("canvas");
-    canvas.setAttribute("width", VIDEO.videoWidth);
-    canvas.setAttribute("height", VIDEO.videoHeight);
-    canvas.setAttribute("id", "output-canvas");
-    document.getElementsByClassName("video-container")[0].appendChild(canvas);
-  }
-
-  var ctx = canvas.getContext("2d");
-  const img = new Image();
-
-  img.src = imageData;
-  var hRatio = canvas.width / img.width;
-  var vRatio = canvas.height / img.height;
-  var ratio = Math.min(hRatio, vRatio);
-  img.onload = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(
-      img,
-      0,
-      0,
-      img.width,
-      img.height,
-      0,
-      0,
-      img.width * ratio,
-      img.height * ratio
-    );
-  };
 }
 
 export function predictLoop() {
