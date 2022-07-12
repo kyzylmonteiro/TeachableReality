@@ -74,9 +74,29 @@ button {
   width: auto;
   display: block;
   top: 0;
-  height: 99%;
+  height: 100%;
   border-left: 5px solid grey;
   overflow-y: scroll;
+  width: 15%;
+  padding: 10px;
+  margin: auto;
+}
+
+.button-container div {
+  text-align: center;
+}
+
+.button-container canvas {
+  border: 2px solid grey;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+#debug-container{
+  font-size: large;
+  font-weight: bold;
+  text-align: center;
+  padding: 20px;
 }
 
 .data-canvas {

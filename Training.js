@@ -102,6 +102,8 @@ export function displayOnOutputCanvas(imageData) {
 
 export async function updateOutputModeUI(){
   console.log("updating UI");
+  let mode = document.getElementById("debug-container");
+  mode.innerText = "Output Mode"
   STATUS.innerText = "Training Now! Please Wait...";
 
   document.getElementById("addClass").classList.add("removed");
@@ -116,6 +118,17 @@ export async function updateOutputModeUI(){
     upBtn.innerText = "Upload Class " + i + " Output";
     upBtn.addEventListener("change", onFileSelected);
     parentDiv.insertBefore(upBtn, dataCollectorButtons[i]);
+
+    let inputLabel = document.createElement("div")
+    let outputLabel = document.createElement("div")
+    inputLabel.innerHTML = "class"+i+" input"
+    outputLabel.innerHTML = "class"+i+" output"
+    parentDiv.insertBefore(inputLabel,upBtn);
+    parentDiv.insertBefore(outputLabel, dataCollectorButtons[i]);
+    let horizontalLine = document.createElement("hr");
+    parentDiv.insertBefore(horizontalLine, dataCollectorButtons[i]);
+
+
     dataCollectorButtons[i].classList.add("removed");
   }
 

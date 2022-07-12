@@ -17,39 +17,47 @@ import {
   CLASS_NAMES,
 } from "./input.js";
 
+function createCanvas(i,imageUploadButtons){
+  let parentDiv = document.getElementsByClassName("class-container")[0];
+  let outputImage = document.createElement("canvas");
+  const img = new Image();
+  img.src = outputData[i];
+  outputImage.setAttribute("width", document.getElementById("class1-canvas").width)
+  outputImage.setAttribute("height", document.getElementById("class1-canvas").height)
+  outputImage.setAttribute("id", "output-image"+i)
+  parentDiv.insertBefore(outputImage, imageUploadButtons[i]);
+  var hRatio = outputImage.width / img.width;
+  var vRatio = outputImage.height / img.height;
+  var ratio = Math.min(hRatio, vRatio);
+
+
+
+  var ctx = outputImage.getContext("2d");
+  img.onload = () => {
+    ctx.clearRect(0, 0, outputImage.width, outputImage.height);
+    ctx.drawImage(
+      img,
+      0,
+      0,
+      img.width,
+      img.height,
+      0,
+      0,
+      img.width * ratio,
+      img.height * ratio
+    );
+  };
+}
+
+
 export function updateRunModeUI() {
 
+  let mode = document.getElementById("debug-container");
+  mode.innerText = "Run Mode"
+
   let imageUploadButtons = document.querySelectorAll("input.output-image");
-  let parentDiv = document.getElementsByClassName("class-container")[0];
   for (let i = 0; i < imageUploadButtons.length; i++) {
-    let outputImage = document.createElement("canvas");
-    const img = new Image();
-    img.src = outputData[i];
-    outputImage.setAttribute("width", 200)
-    outputImage.setAttribute("height", 200)
-    var hRatio = outputImage.width / img.width;
-    var vRatio = outputImage.height / img.height;
-    var ratio = Math.min(hRatio, vRatio);
-
-
-
-    var ctx = outputImage.getContext("2d");
-    img.onload = () => {
-      ctx.clearRect(0, 0, outputImage.width, outputImage.height);
-      ctx.drawImage(
-        img,
-        0,
-        0,
-        img.width,
-        img.height,
-        0,
-        0,
-        img.width * ratio,
-        img.height * ratio
-      );
-      setTimeout(parentDiv.insertBefore(outputImage, imageUploadButtons[i]),0);
-    };
-
+    createCanvas(i, imageUploadButtons);
     imageUploadButtons[i].classList.add("removed");
   }
 

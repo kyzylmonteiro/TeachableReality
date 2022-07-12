@@ -34,6 +34,10 @@ function enableCam() {
       });
     });
 
+    ADD_CLASS.classList.remove("removed")
+    document.getElementById("next").classList.remove("removed")
+    let mode = document.getElementById("debug-container");
+    mode.innerText = "Input Mode"
     setTimeout(addClass, 1000);
     setTimeout(addClass, 1000);
   } else {
