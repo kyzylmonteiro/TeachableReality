@@ -9,13 +9,13 @@ PREDICT_BUTTON.addEventListener("click", updateRunModeUI);
 
 import {
   outputData, updateOutputModeUI
-} from "./training.js";
+} from "./modeoutput.js";
 
 import {
   model,
   mobilenet,
   CLASS_NAMES,
-} from "./input.js";
+} from "./modeinput.js";
 
 function createCanvas(i,imageUploadButtons){
   let parentDiv = document.getElementsByClassName("class-container")[0];

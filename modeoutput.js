@@ -15,7 +15,7 @@ import {
   CLASS_NAMES,
   imageData,
   mobilenet,
-} from "./input.js";
+} from "./modeinput.js";
 
 export function dataPreProcess() {
   STATUS.innerText = "Training Now! Please Wait...";
