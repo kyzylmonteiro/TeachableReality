@@ -22,7 +22,7 @@ function enableCam() {
     const constraints = {
       video: true,
       width: 640,
-      height: 480,
+      height: 480
     };
 
     // Activate the webcam stream.
@@ -38,12 +38,20 @@ function enableCam() {
     document.getElementById("next").classList.remove("removed")
     let mode = document.getElementById("debug-container");
     mode.innerText = "Input Mode"
-    setTimeout(addClass, 1000);
-    setTimeout(addClass, 1000);
+    setTimeout(addClass, 2000);
+    setTimeout(addClass, 2000);
   } else {
     console.warn("getUserMedia() is not supported by your browser");
   }
 }
+
+export let mobilenet = undefined;
+export let gatherDataState = STOP_DATA_GATHER;
+export let videoPlaying = false;
+export let examplesCount = [];
+export let predict = false;
+
+export let imageData = [];
 
 export var model = tf.sequential();
 async function loadMobileNetFeatureModel() {
@@ -75,13 +83,7 @@ function gatherDataForClass() {
   dataGatherLoop(classNumber);
 }
 
-export let mobilenet = undefined;
-export let gatherDataState = STOP_DATA_GATHER;
-export let videoPlaying = false;
-export let examplesCount = [];
-export let predict = false;
 
-export let imageData = [];
 
 function dataGatherLoop(classNumber) {
   if (imageData[classNumber] == undefined) {
@@ -147,22 +149,7 @@ for (let i = 0; i < dataCollectorButtons.length; i++) {
   CLASS_NAMES.push(dataCollectorButtons[i].getAttribute("data-name"));
 }
 
-function addClass() {
-  let btn = document.createElement("button");
-  btn.innerHTML = "Gather Class " + (CLASS_NAMES.length + 1) + " Data";
-  btn.setAttribute("class", "dataCollector");
-  btn.setAttribute("data-1hot", CLASS_NAMES.length);
-  btn.setAttribute("data-name", "Class " + (CLASS_NAMES.length + 1));
-
-  btn.addEventListener("mousedown", gatherDataForClass);
-  btn.addEventListener("mouseup", gatherDataForClass);
-  let canvasConatainer = document.createElement("div");
-  canvasConatainer.setAttribute("class", "class-canvas-container");
-  canvasConatainer.setAttribute(
-    "id",
-    "class" + (CLASS_NAMES.length + 1) + "-canvas-container"
-  );
-
+function blankCanvas(){
   let canvas = document.createElement("canvas");
   canvas.setAttribute("class", "data-canvas");
   canvas.setAttribute("id", "class" + (CLASS_NAMES.length + 1) + "-canvas");
@@ -180,6 +167,27 @@ function addClass() {
       VIDEO.videoHeight * 0.25
     );
   };
+  return canvas;
+}
+
+function addClass() {
+  let btn = document.createElement("button");
+  let canvas = blankCanvas();
+  btn.innerHTML = "Gather Class " + (CLASS_NAMES.length + 1) + " Data";
+  btn.setAttribute("class", "dataCollector");
+  btn.setAttribute("data-1hot", CLASS_NAMES.length);
+  btn.setAttribute("data-name", "Class " + (CLASS_NAMES.length + 1));
+
+  btn.addEventListener("mousedown", gatherDataForClass);
+  btn.addEventListener("mouseup", gatherDataForClass);
+  let canvasConatainer = document.createElement("div");
+  canvasConatainer.setAttribute("class", "class-canvas-container");
+  canvasConatainer.setAttribute(
+    "id",
+    "class" + (CLASS_NAMES.length + 1) + "-canvas-container"
+  );  
+  canvasConatainer.setAttribute("width", VIDEO.videoWidth * 0.25);
+  canvasConatainer.setAttribute("height", VIDEO.videoHeight * 0.25);
   canvasConatainer.appendChild(canvas);
 
   // Populate the human readable names for classes.

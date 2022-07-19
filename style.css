@@ -19,8 +19,10 @@ h1 {
 
 button {
   padding: 10px;
-  float: left;
-  margin: 5px 3px 5px 10px;
+  margin: 5px 0px 5px 0px;
+  color: black;
+  background-color: whitesmoke;
+  border-radius: 5px;
 }
 
 .removed {
@@ -69,6 +71,7 @@ button {
 }
 
 .button-container {
+  text-align: center;
   position: fixed;
   right: 0;
   width: auto;
@@ -77,9 +80,11 @@ button {
   height: 100%;
   border-left: 5px solid grey;
   overflow-y: scroll;
-  width: 15%;
+  width: 17%;
   padding: 10px;
   margin: auto;
+  z-index: 2;
+  background-color: white;
 }
 
 .button-container div {
@@ -102,4 +107,21 @@ button {
 .data-canvas {
   margin: auto;
   display: block;
+}
+
+.navigation-buttons {
+  width: 100%;
+}
+
+#addClass{
+  width: 100px;
+  height: 100px;
+
+}
+
+#next{
+  bottom: 0%;
+  position: fixed;
+  width: 16.5%;
+  right: 1%;
 }
