@@ -1,6 +1,6 @@
 // const STATUS = document.getElementById("status");
 // const VIDEO = document.getElementById("webcam");
-// const ENABLE_CAM_BUTTON = document.getElementById("enableCam");
+// const START_BUTTON = document.getElementById("startMachine");
 // const ADD_CLASS = document.getElementById("addClass");
 // const RESET_BUTTON = document.getElementById("reset");
 // const NEXT_BUTTON = document.getElementById("next");
@@ -10,7 +10,7 @@
 // const STOP_DATA_GATHER = -1;
 // const CLASS_NAMES = [];
 
-// ENABLE_CAM_BUTTON.addEventListener("click", enableCam);
+// START_BUTTON.addEventListener("click", startMachine);
 // ADD_CLASS.addEventListener("click", addClass);
 // NEXT_BUTTON.addEventListener("click", outputModeAndTrain);
 // PREDICT_BUTTON.addEventListener("click", predictVideo);
@@ -20,7 +20,7 @@
 //   return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
 // }
 
-// function enableCam() {
+// function startMachine() {
 //   if (hasGetUserMedia()) {
 //     // getUsermedia parameters.
 //     const constraints = {
@@ -34,7 +34,7 @@
 //       VIDEO.srcObject = stream;
 //       VIDEO.addEventListener("loadeddata", function () {
 //         videoPlaying = true;
-//         ENABLE_CAM_BUTTON.classList.add("removed");
+//         START_BUTTON.classList.add("removed");
 //       });
 //     });
 

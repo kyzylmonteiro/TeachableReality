@@ -1,5 +1,6 @@
 const STATUS = document.getElementById("status");
 const VIDEO = document.getElementById("webcam");
+const CAMERA_FEED_CANVAS = document.getElementById("cameraFeed");
 const MOBILE_NET_INPUT_WIDTH = 224;
 const MOBILE_NET_INPUT_HEIGHT = 224;
 const NEXT_BUTTON = document.getElementById("next");
@@ -9,6 +10,7 @@ NEXT_BUTTON.addEventListener("click", updateOutputModeUI);
 export let trainingDataInputs = [];
 export let trainingDataOutputs = [];
 export let outputData = [];
+export let output3DData = [];
 
 import {
   model,
@@ -67,12 +69,33 @@ export function onFileSelected(event) {
   reader.readAsDataURL(selectedFile);
 }
 
+export function storeState(event){
+  var el = document.getElementById("spawnedObj");
+  var position = el.getAttribute("position");
+  var scale = el.getAttribute("scale");
+  var rotation = el.getAttribute("rotation");
+  var classID = event.srcElement.id.match(/[0-9]+$/);
+
+  output3DData[parseInt(classID[0])] = [];
+  
+  console.log(parseInt(classID[0]), output3DData);
+  output3DData[parseInt(classID[0])].push({"x": position.x, "y": position.y, "z": position.z});
+  output3DData[parseInt(classID[0])].push({"x": rotation.x, "y": rotation.y, "z": rotation.z});
+  output3DData[parseInt(classID[0])].push({"x": scale.x, "y": scale.y, "z": scale.z});
+  console.log(output3DData);
+
+  // tried startEvents but trigger not working from predict.js
+  // el.setAttribute('animation__'+classID, "property: rotate; to: 0 0 45; startEvents : state-zero");
+  // el.setAttribute('animation__'+classID, "property: scale; to: "+classID+" "+classID+" "+classID+"; startEvents : state-"+classID);
+  // setTimeout(function() {el.emit("state-"+classID);},1000);
+}
+
 export function displayOnOutputCanvas(imageData) {
   let canvas = document.getElementById("output-canvas");
   if (!canvas) {
     canvas = document.createElement("canvas");
-    canvas.setAttribute("width", VIDEO.videoWidth);
-    canvas.setAttribute("height", VIDEO.videoHeight);
+    canvas.setAttribute("width", CAMERA_FEED_CANVAS.width);
+    canvas.setAttribute("height", CAMERA_FEED_CANVAS.height);
     canvas.setAttribute("id", "output-canvas");
     document.getElementsByClassName("video-container")[0].appendChild(canvas);
   }
@@ -117,7 +140,13 @@ export async function updateOutputModeUI(){
     upBtn.setAttribute("name", "filename");
     upBtn.innerText = "Upload Class " + i + " Output";
     upBtn.addEventListener("change", onFileSelected);
+    let animButton = document.createElement("button");
+    animButton.setAttribute("id", "output-state"+i);
+    animButton.setAttribute("class", "output-obj-state");
+    animButton.addEventListener("click", storeState);
+    animButton.innerText = "Save Virtual Object State" + i;
     parentDiv.insertBefore(upBtn, dataCollectorButtons[i]);
+    parentDiv.insertBefore(animButton, dataCollectorButtons[i]);
 
     let inputLabel = document.createElement("div")
     let outputLabel = document.createElement("div")
@@ -144,6 +173,7 @@ export async function outputModeAndTrain() {
 
   for (let i = 0; i < CLASS_NAMES.length; i++) {
     outputData.push("");
+    output3DData.push([]);
   }
 
   dataPreProcess();

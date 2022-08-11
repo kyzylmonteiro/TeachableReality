@@ -1,14 +1,15 @@
 const STATUS = document.getElementById("status");
 const VIDEO = document.getElementById("webcam");
-const ENABLE_CAM_BUTTON = document.getElementById("enableCam");
+const START_BUTTON = document.getElementById("startMachine");
 const ADD_CLASS = document.getElementById("addClass");
+const CAMERA_FEED_CANVAS = document.getElementById("cameraFeed");
 // const RESET_BUTTON = document.getElementById("reset");
 const MOBILE_NET_INPUT_WIDTH = 224;
 const MOBILE_NET_INPUT_HEIGHT = 224;
 const STOP_DATA_GATHER = -1;
 export const CLASS_NAMES = [];
 
-ENABLE_CAM_BUTTON.addEventListener("click", enableCam);
+START_BUTTON.addEventListener("click", startMachine);
 ADD_CLASS.addEventListener("click", addClass);
 // RESET_BUTTON.addEventListener("click", reset);
 
@@ -16,33 +17,59 @@ function hasGetUserMedia() {
   return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
 }
 
-function enableCam() {
-  if (hasGetUserMedia()) {
+function startMachine() {
+  // if (hasGetUserMedia()) {
     // getUsermedia parameters.
-    const constraints = {
-      video: true,
-      width: 640,
-      height: 480
-    };
+    // const constraints = {
+    //   video: true,
+    //   width: 640,
+    //   height: 480
+    // };
 
     // Activate the webcam stream.
-    navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-      VIDEO.srcObject = stream;
-      VIDEO.addEventListener("loadeddata", function () {
-        videoPlaying = true;
-        ENABLE_CAM_BUTTON.classList.add("removed");
-      });
+    // navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+    //   VIDEO.srcObject = stream;
+    //   VIDEO.addEventListener("loadeddata", function () {
+        // videoPlaying = true;
+        // START_BUTTON.classList.add("removed");
+    //   });
+    // });
+
+
+    XR8.addCameraPipelineModule({
+      name: "mycamerapipelinemodule",
+      onUpdate: ({
+        frameStartResult,
+        processGpuResult,
+        processCpuResult,
+      }) => {
+        if (!processCpuResult.reality) {
+          return;
+        }
+        // let {rotation, position, intrinsics} = processCpuResult.reality
+        // let {cpuDataA, cpuDataB} = processCpuResult.mycamerapipelinemodule
+        let arCanvas = processCpuResult.reality.realityTexture.drawCtx.canvas;
+
+       
+        CAMERA_FEED_CANVAS.classList.remove("removed")
+        var myCtx = CAMERA_FEED_CANVAS.getContext("2d");
+        CAMERA_FEED_CANVAS.setAttribute("width",arCanvas.width /15)
+        CAMERA_FEED_CANVAS.setAttribute("height",arCanvas.height /15)
+        myCtx.drawImage(arCanvas, 0, 0, arCanvas.width /15 ,  arCanvas.height /15 );
+      },
     });
 
+    videoPlaying = true;
+    START_BUTTON.classList.add("removed");
     ADD_CLASS.classList.remove("removed")
     document.getElementById("next").classList.remove("removed")
     let mode = document.getElementById("debug-container");
     mode.innerText = "Input Mode"
-    setTimeout(addClass, 2000);
-    setTimeout(addClass, 2000);
-  } else {
-    console.warn("getUserMedia() is not supported by your browser");
-  }
+    setTimeout(addClass, 50);
+    setTimeout(addClass, 50);
+  // } else {
+  //   console.warn("getUserMedia() is not supported by your browser");
+  // }
 }
 
 export let mobilenet = undefined;
@@ -91,9 +118,9 @@ function dataGatherLoop(classNumber) {
   }
 
   if (videoPlaying && gatherDataState !== STOP_DATA_GATHER) {
-    var canvas = capture(VIDEO, 0.25, classNumber);
-    let videoFrameAsTensor = tf.browser.fromPixels(VIDEO);
-
+    var canvas = capture(CAMERA_FEED_CANVAS, 1, classNumber);
+    let videoFrameAsTensor = tf.browser.fromPixels(CAMERA_FEED_CANVAS.getContext('2d').getImageData(0,0,CAMERA_FEED_CANVAS.width,CAMERA_FEED_CANVAS.height));
+    // console.log(videoFrameAsTensor, CAMERA_FEED_CANVAS.getContext('2d').getImageData(0,0,CAMERA_FEED_CANVAS.width,CAMERA_FEED_CANVAS.height))
     imageData[classNumber].push(videoFrameAsTensor);
 
     if (examplesCount[gatherDataState] === undefined) {
@@ -116,8 +143,8 @@ function capture(video, scaleFactor, classNumber) {
     scaleFactor = 1;
   }
 
-  var w = video.videoWidth * scaleFactor;
-  var h = video.videoHeight * scaleFactor;
+  var w = video.width * scaleFactor;
+  var h = video.height * scaleFactor;
   var canvas = document.getElementById("class" + (classNumber + 1) + "-canvas");
   canvas.width = w;
   canvas.height = h;
@@ -153,8 +180,8 @@ function blankCanvas(){
   let canvas = document.createElement("canvas");
   canvas.setAttribute("class", "data-canvas");
   canvas.setAttribute("id", "class" + (CLASS_NAMES.length + 1) + "-canvas");
-  canvas.setAttribute("width", VIDEO.videoWidth * 0.25);
-  canvas.setAttribute("height", VIDEO.videoHeight * 0.25);
+  canvas.setAttribute("width", CAMERA_FEED_CANVAS.width * 1);
+  canvas.setAttribute("height", CAMERA_FEED_CANVAS.height * 1);
   var ctx = canvas.getContext("2d");
   const blank = new Image();
   blank.src = "./images/blankClass.png";
@@ -163,8 +190,8 @@ function blankCanvas(){
       blank,
       0,
       0,
-      VIDEO.videoWidth * 0.25,
-      VIDEO.videoHeight * 0.25
+      CAMERA_FEED_CANVAS.width * 1,
+      CAMERA_FEED_CANVAS.height * 1
     );
   };
   return canvas;
@@ -186,8 +213,8 @@ function addClass() {
     "id",
     "class" + (CLASS_NAMES.length + 1) + "-canvas-container"
   );  
-  canvasConatainer.setAttribute("width", VIDEO.videoWidth * 0.25);
-  canvasConatainer.setAttribute("height", VIDEO.videoHeight * 0.25);
+  canvasConatainer.setAttribute("width", CAMERA_FEED_CANVAS.width * 1);
+  canvasConatainer.setAttribute("height", CAMERA_FEED_CANVAS.height * 1);
   canvasConatainer.appendChild(canvas);
 
   // Populate the human readable names for classes.
@@ -197,3 +224,37 @@ function addClass() {
   ele[0].appendChild(canvasConatainer);
   ele[0].appendChild(btn);
 }
+
+
+AFRAME.registerComponent("tap-place", {
+  init() {
+    const ground = document.getElementById("ground");
+    ground.addEventListener("click", (event) => {
+      // Create new entity for the new object
+      // const newElement = document.createElement('a-sphere')
+
+      if(document.getElementById("spawnedObj")!=null){ return } // to spawn max of 1 object
+
+      const newElement = document.createElement("a-entity");
+      newElement.setAttribute("gltf-model", "#treeModel");
+      newElement.setAttribute("id", "spawnedObj");
+      newElement.setAttribute("scale", "5 5 5");
+      newElement.setAttribute("class", "cantap");
+      newElement.setAttribute("xrextras-hold-drag", "");
+      newElement.setAttribute("xrextras-pinch-scale", "");
+      newElement.setAttribute("xrextras-two-finger-rotate", "");
+      // The raycaster gives a location of the touch in the scene
+      const touchPoint = event.detail.intersection.point;
+      newElement.setAttribute("position", touchPoint);
+
+      const randomYRotation = Math.random() * 360;
+      newElement.setAttribute("rotation", `0 ${randomYRotation} 0`);
+
+      newElement.setAttribute("shadow", {
+        receive: false,
+      });
+
+      this.el.sceneEl.appendChild(newElement);
+    });
+  },
+});
