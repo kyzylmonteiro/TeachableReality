@@ -51,14 +51,19 @@ function createCanvas(i,imageUploadButtons){
 }
 
 function playAnimation(classID){
-  var el = document.getElementById("spawnedObj");
+  var classList = document.getElementsByClassName("3DObj");
+  
+  classList.forEach(el => {
+    var objID = parseInt(el.id.match(/[0-9]+$/)[0]);
 
-  // console.log(output3DData[classID][2]);
-  el.setAttribute("animation__p","property:position; to: " + output3DData[classID][0].x + " " + output3DData[classID][0].y + " " + output3DData[classID][0].z +";")
-  el.setAttribute("animation__r","property:rotation; to: " + output3DData[classID][1].x + " " + output3DData[classID][1].y + " " + output3DData[classID][1].z +";")
-  el.setAttribute("animation__s","property:scale; to: " + output3DData[classID][2].x + " " + output3DData[classID][2].y + " " + output3DData[classID][2].z +";")
+    // console.log(parseInt(objID),classID, output3DData[objID]);
+    el.setAttribute("animation__p","property:position; to: " + output3DData[objID][classID]["position"].x + " " + output3DData[objID][classID]["position"].y + " " + output3DData[objID][classID]["position"].z +";")
+    el.setAttribute("animation__r","property:rotation; to: " + output3DData[objID][classID]["rotation"].x + " " + output3DData[objID][classID]["rotation"].y + " " + output3DData[objID][classID]["rotation"].z +";")
+    el.setAttribute("animation__s","property:scale; to: " + output3DData[objID][classID]["scale"].x + " " + output3DData[objID][classID]["scale"].y + " " + output3DData[objID][classID]["scale"].z +";")  
+    el.setAttribute("animation__v","property:visible; to: " + output3DData[objID][classID]["visible"].x +";")  
 
-
+  });
+ 
   // emit not working from here
   // console.log(el, el.emit(), el.emit, el.emit("state-"+classID),  el.getAttribute("animation__1"))
   // setTimeout(function() {el.emit("state-"+classID);},1000);

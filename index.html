@@ -29,7 +29,6 @@
     <div class="video-container">
       <!-- <video id="webcam" autoplay muted></video> -->
       <a-scene
-        embedded
         style= "display: block; z-index: 0;"
         id="scene"
         tap-place
@@ -42,12 +41,13 @@
       >
         <a-camera
           id="camera"
-          position="0 8 0"
+          position="0 8 8"
           raycaster="objects: .cantap"
           cursor="
             fuse: false;
             rayOrigin: mouse;"
         >
+        <a-entity id="holdAnchor" position="0 0 -3"></a-entity>
         </a-camera>
 
         <a-assets>
@@ -56,6 +56,7 @@
             id="treeModel"
             src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/tree.glb?v=1657750939103"
             ></a-asset-item>
+            <img id="imageAsset" src=".\images\blankClass.png">
         </a-assets>
 
         <a-box

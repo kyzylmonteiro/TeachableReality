@@ -59,6 +59,35 @@ function startMachine() {
       },
     });
 
+
+    var videoElement= document.getElementsByClassName("video-container")[0]  // creating a button to add 3d assets
+    var addObj = document.createElement("button");
+    addObj.innerHTML="3D";
+    addObj.addEventListener("click", addVirtualObj);
+    addObj.setAttribute("style","width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:1%;"); 
+    videoElement.appendChild(addObj);
+  
+    var videoElement= document.getElementsByClassName("video-container")[0]  // creating a button to add image assets
+    var addObj = document.createElement("button");
+    addObj.innerHTML="2D";
+    addObj.addEventListener("click", addImageObj);
+    addObj.setAttribute("style","width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:12%;"); 
+    videoElement.appendChild(addObj);
+
+    var videoElement= document.getElementsByClassName("video-container")[0]  // creating a button to add image assets
+    var addObj = document.createElement("button");
+    addObj.innerHTML="Float";
+    addObj.addEventListener("click", addFLoatingObj);
+    addObj.setAttribute("style","width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:23%;"); 
+    videoElement.appendChild(addObj);
+
+    var videoElement= document.getElementsByClassName("video-container")[0]  // creating a button to add image assets
+    var addObj = document.createElement("button");
+    addObj.innerHTML="Show All";
+    addObj.addEventListener("click", showAllObjects);
+    addObj.setAttribute("style","width: 30px; height:30px; position:fixed; z-index: 3; right:20%; bottom:1%;"); 
+    videoElement.appendChild(addObj);
+
     videoPlaying = true;
     START_BUTTON.classList.add("removed");
     ADD_CLASS.classList.remove("removed")
@@ -226,35 +255,195 @@ function addClass() {
 }
 
 
-AFRAME.registerComponent("tap-place", {
-  init() {
-    const ground = document.getElementById("ground");
-    ground.addEventListener("click", (event) => {
-      // Create new entity for the new object
-      // const newElement = document.createElement('a-sphere')
+// AFRAME.registerComponent("tap-place", {
+//   init() {
+//     const ground = document.getElementById("ground");
+//     ground.addEventListener("click", (event) => {
+//       // Create new entity for the new object
+//       // const newElement = document.createElement('a-sphere')
 
-      if(document.getElementById("spawnedObj")!=null){ return } // to spawn max of 1 object
+//       // if(document.getElementById("spawnedObj")!=null){ return } // to spawn max of 1 object
 
-      const newElement = document.createElement("a-entity");
-      newElement.setAttribute("gltf-model", "#treeModel");
-      newElement.setAttribute("id", "spawnedObj");
-      newElement.setAttribute("scale", "5 5 5");
-      newElement.setAttribute("class", "cantap");
-      newElement.setAttribute("xrextras-hold-drag", "");
-      newElement.setAttribute("xrextras-pinch-scale", "");
-      newElement.setAttribute("xrextras-two-finger-rotate", "");
-      // The raycaster gives a location of the touch in the scene
-      const touchPoint = event.detail.intersection.point;
-      newElement.setAttribute("position", touchPoint);
+//       const newElement = document.createElement("a-entity");
+//       newElement.setAttribute("gltf-model", "#treeModel");
+//       newElement.setAttribute("id", "spawnedObj");
+//       newElement.setAttribute("scale", "5 5 5");
+//       newElement.setAttribute("class", "cantap");
+//       newElement.setAttribute("xrextras-hold-drag", "");
+//       newElement.setAttribute("xrextras-pinch-scale", "");
+//       newElement.setAttribute("xrextras-two-finger-rotate", "");
+//       // The raycaster gives a location of the touch in the scene
+//       const touchPoint = event.detail.intersection.point;
+//       newElement.setAttribute("position", touchPoint);
 
-      const randomYRotation = Math.random() * 360;
-      newElement.setAttribute("rotation", `0 ${randomYRotation} 0`);
+//       const randomYRotation = Math.random() * 360;
+//       newElement.setAttribute("rotation", `0 ${randomYRotation} 0`);
 
-      newElement.setAttribute("shadow", {
-        receive: false,
-      });
+//       newElement.setAttribute("shadow", {
+//         receive: false,
+//       });
 
-      this.el.sceneEl.appendChild(newElement);
+//       this.el.sceneEl.appendChild(newElement);
+//     });
+//   },
+// });
+
+// AFRAME.registerComponent("tap-place", {
+//   init() {
+//     const ground = document.getElementById("ground");
+//     ground.addEventListener("click", (event) => {
+//       // Create new entity for the new object
+//       // const newElement = document.createElement('a-sphere')
+
+//       // if(document.getElementById("spawnedObj")!=null){ return } // to spawn max of 1 object
+
+//       const newElement = document.createElement("a-image");
+//       newElement.setAttribute("src", "#imageAsset");
+//       newElement.setAttribute("id", "spawnedObj");
+//       newElement.setAttribute("height", "5");
+//       newElement.setAttribute("width", "5");
+//       newElement.setAttribute("class", "cantap");
+//       newElement.setAttribute("xrextras-hold-drag", "");
+//       newElement.setAttribute("xrextras-pinch-scale", "");
+//       newElement.setAttribute("xrextras-two-finger-rotate", "");
+//       // The raycaster gives a location of the touch in the scene
+//       const touchPoint = event.detail.intersection.point;
+//       newElement.setAttribute("position", touchPoint.x+" "+touchPoint.y+1+" "+touchPoint.z);
+
+//       const randomYRotation = Math.random() * 360;
+//       newElement.setAttribute("rotation", `90 ${randomYRotation} 0`);
+
+//       newElement.setAttribute("shadow", {
+//         receive: false,
+//       });
+
+//       newElement.addEventListener("contextmenu", (event) => {
+//         // newElement.setAttribute("scale","3 3 3");
+//         console.log("clicked");
+//       });
+
+//       console.log(this.el.id)
+//       this.el.sceneEl.appendChild(newElement);
+//     });
+//   },
+// });
+
+var tapedTwice = false;
+
+function tapHandler(event) {
+    if(!tapedTwice) {
+        tapedTwice = true;
+        setTimeout( function() { tapedTwice = false; }, 300 );
+        return false;
+    }
+    event.preventDefault();
+    //action on double tap goes below
+    alert(event.srcElement.id + ' object visibiility set to false');
+    var obj = event.srcElement;
+    obj.setAttribute("visible","false");
+ }
+
+ function showAllObjects(){
+    var classList = document.getElementsByClassName("3DObj");
+    classList.forEach(el => {
+      el.setAttribute("visible","true");
     });
-  },
-});
+ }
+
+function addVirtualObj(){
+  var numOf3DObj = document.getElementsByClassName("3DObj").length;
+  const newElement = document.createElement("a-entity");
+  newElement.setAttribute("gltf-model", "#treeModel");
+  newElement.setAttribute("id", "3DObj-"+(numOf3DObj));
+  newElement.setAttribute("scale", "10 10 10");
+  newElement.setAttribute("class", "cantap 3DObj");
+  newElement.setAttribute("xrextras-hold-drag", "");
+  newElement.setAttribute("xrextras-pinch-scale", "");
+  newElement.setAttribute("xrextras-two-finger-rotate", "");
+  // The raycaster gives a location of the touch in the scene
+  // const touchPoint = event.detail.intersection.point;
+  // newElement.setAttribute("position", "0 0 0");
+
+  const randomYRotation = Math.random() * 360;
+  newElement.setAttribute("rotation", `0 ${randomYRotation} 0`);
+
+  newElement.setAttribute("shadow", {
+    receive: false,
+  });
+
+  newElement.addEventListener("click",tapHandler);
+
+  document.getElementById("scene").sceneEl.appendChild(newElement);
+
+}
+
+
+function addImageObj(){
+  var numOf3DObj = document.getElementsByClassName("3DObj").length;
+  const newElement = document.createElement("a-box");
+  newElement.setAttribute("src", "#imageAsset");
+  newElement.setAttribute("id", "3DObj-"+(numOf3DObj));
+  newElement.setAttribute("height", "5");
+  newElement.setAttribute("width", "5");
+  newElement.setAttribute("depth","0.5");
+  newElement.setAttribute("class", "cantap 3DObj");
+  newElement.setAttribute("xrextras-hold-drag", "");
+  newElement.setAttribute("xrextras-pinch-scale", "");
+  newElement.setAttribute("xrextras-two-finger-rotate", "");
+
+  // const randomYRotation = Math.random() * 360;
+  newElement.setAttribute("rotation", `90 0 0`);
+
+  newElement.setAttribute("shadow", {
+    receive: false,
+  });
+
+  // newElement.addEventListener("contextmenu", (event) => {
+  //   // newElement.setAttribute("scale","3 3 3");
+  //   console.log("clicked");
+  // });
+
+  document.getElementById("scene").sceneEl.appendChild(newElement);
+}
+
+const getWorldPosition = (object) => {
+  const position = new THREE.Vector3()
+  position.setFromMatrixPosition(object.matrixWorld)
+  return position
+}
+
+const getWorldQuaternion = (object) => {
+  const position = new THREE.Vector3()
+  const scale = new THREE.Vector3()
+  const target = new THREE.Quaternion()
+  object.matrixWorld.decompose(position, target, scale)
+  return target
+}
+
+
+function addFLoatingObj(){
+  var numOf3DObj = document.getElementsByClassName("3DObj").length;
+  const newElement = document.createElement("a-box");
+  newElement.object3D.position.copy(getWorldPosition(document.getElementById('holdAnchor').object3D));
+  newElement.object3D.quaternion.copy(getWorldQuaternion(document.getElementById('holdAnchor').object3D));
+  newElement.setAttribute("src", "#imageAsset");
+  newElement.setAttribute("id", "3DObj-"+(numOf3DObj));
+  newElement.setAttribute("height", "5");
+  newElement.setAttribute("width", "5");
+  newElement.setAttribute("depth","0.5");
+  newElement.setAttribute("class", "cantap 3DObj");
+  // newElement.setAttribute("xrextras-hold-drag", "");
+  newElement.setAttribute("xrextras-pinch-scale", "");
+  newElement.setAttribute("xrextras-two-finger-rotate", "");
+
+  newElement.setAttribute("shadow", {
+    receive: false,
+  });
+
+  // newElement.addEventListener("contextmenu", (event) => {
+  //   // newElement.setAttribute("scale","3 3 3");
+  //   console.log("clicked");
+  // });
+
+  document.getElementById("scene").sceneEl.appendChild(newElement);
+}

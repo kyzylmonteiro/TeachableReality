@@ -10,7 +10,7 @@ NEXT_BUTTON.addEventListener("click", updateOutputModeUI);
 export let trainingDataInputs = [];
 export let trainingDataOutputs = [];
 export let outputData = [];
-export let output3DData = [];
+export let output3DData = {};
 
 import {
   model,
@@ -70,19 +70,26 @@ export function onFileSelected(event) {
 }
 
 export function storeState(event){
-  var el = document.getElementById("spawnedObj");
-  var position = el.getAttribute("position");
-  var scale = el.getAttribute("scale");
-  var rotation = el.getAttribute("rotation");
-  var classID = event.srcElement.id.match(/[0-9]+$/);
-
-  output3DData[parseInt(classID[0])] = [];
+  var classList = document.getElementsByClassName("3DObj");
   
-  console.log(parseInt(classID[0]), output3DData);
-  output3DData[parseInt(classID[0])].push({"x": position.x, "y": position.y, "z": position.z});
-  output3DData[parseInt(classID[0])].push({"x": rotation.x, "y": rotation.y, "z": rotation.z});
-  output3DData[parseInt(classID[0])].push({"x": scale.x, "y": scale.y, "z": scale.z});
-  console.log(output3DData);
+
+  classList.forEach(el => {
+
+    var position = el.getAttribute("position");
+    var scale = el.getAttribute("scale");
+    var rotation = el.getAttribute("rotation");
+    var visible = el.getAttribute("visible");
+    
+    var classID = event.srcElement.id.match(/[0-9]+$/)[0];
+    var objID = el.id.match(/[0-9]+$/)[0];
+  
+    if(output3DData[objID]==null) output3DData[objID] = {};
+    
+    console.log(parseInt(classID), output3DData);
+    output3DData[objID][parseInt(classID)] = { "position" : {"x": position.x, "y": position.y, "z": position.z}, "rotation" : {"x": rotation.x, "y": rotation.y, "z": rotation.z}, "scale" : {"x": scale.x, "y": scale.y, "z": scale.z}, "visible" : {"x" : visible} }; 
+    console.log(output3DData);
+    
+  }); 
 
   // tried startEvents but trigger not working from predict.js
   // el.setAttribute('animation__'+classID, "property: rotate; to: 0 0 45; startEvents : state-zero");
@@ -173,7 +180,7 @@ export async function outputModeAndTrain() {
 
   for (let i = 0; i < CLASS_NAMES.length; i++) {
     outputData.push("");
-    output3DData.push([]);
+    output3DData = {};
   }
 
   dataPreProcess();
