@@ -61,24 +61,39 @@ function startMachine() {
 
 
     var videoElement= document.getElementsByClassName("video-container")[0]  // creating a button to add 3d assets
+    var addObjI = document.createElement("input");
+    addObjI.setAttribute("type","text");
+    addObjI.setAttribute("id","3DobjLink");
+    addObjI.setAttribute("style","width: 40px; height:10px; position:fixed; z-index: 3; right:20%; top:1%;");
+    videoElement.appendChild(addObjI);
     var addObj = document.createElement("button");
     addObj.innerHTML="3D";
     addObj.addEventListener("click", addVirtualObj);
-    addObj.setAttribute("style","width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:1%;"); 
+    addObj.setAttribute("style","width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:3%;"); 
     videoElement.appendChild(addObj);
   
     var videoElement= document.getElementsByClassName("video-container")[0]  // creating a button to add image assets
+    var addObjI = document.createElement("input");
+    addObjI.setAttribute("type","text");
+    addObjI.setAttribute("id","imgLink");
+    addObjI.setAttribute("style","width: 40px; height:10px; position:fixed; z-index: 3; right:20%; top:12%;");
+    videoElement.appendChild(addObjI);
     var addObj = document.createElement("button");
     addObj.innerHTML="2D";
     addObj.addEventListener("click", addImageObj);
-    addObj.setAttribute("style","width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:12%;"); 
+    addObj.setAttribute("style","width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:14%;"); 
     videoElement.appendChild(addObj);
 
     var videoElement= document.getElementsByClassName("video-container")[0]  // creating a button to add image assets
+    var addObjI = document.createElement("input");
+    addObjI.setAttribute("type","text");
+    addObjI.setAttribute("id","floatLink");
+    addObjI.setAttribute("style","width: 40px; height:10px; position:fixed; z-index: 3; right:20%; top:23%;");
+    videoElement.appendChild(addObjI);
     var addObj = document.createElement("button");
     addObj.innerHTML="Float";
     addObj.addEventListener("click", addFLoatingObj);
-    addObj.setAttribute("style","width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:23%;"); 
+    addObj.setAttribute("style","width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:25%;"); 
     videoElement.appendChild(addObj);
 
     var videoElement= document.getElementsByClassName("video-container")[0]  // creating a button to add image assets
@@ -353,7 +368,7 @@ function tapHandler(event) {
 function addVirtualObj(){
   var numOf3DObj = document.getElementsByClassName("3DObj").length;
   const newElement = document.createElement("a-entity");
-  newElement.setAttribute("gltf-model", "#treeModel");
+  newElement.setAttribute("gltf-model", document.getElementById("3DobjLink").value);
   newElement.setAttribute("id", "3DObj-"+(numOf3DObj));
   newElement.setAttribute("scale", "10 10 10");
   newElement.setAttribute("class", "cantap 3DObj");
@@ -381,7 +396,7 @@ function addVirtualObj(){
 function addImageObj(){
   var numOf3DObj = document.getElementsByClassName("3DObj").length;
   const newElement = document.createElement("a-box");
-  newElement.setAttribute("src", "#imageAsset");
+  newElement.setAttribute("src", document.getElementById("imgLink").value);
   newElement.setAttribute("id", "3DObj-"+(numOf3DObj));
   newElement.setAttribute("height", "5");
   newElement.setAttribute("width", "5");
@@ -426,7 +441,8 @@ function addFLoatingObj(){
   const newElement = document.createElement("a-box");
   newElement.object3D.position.copy(getWorldPosition(document.getElementById('holdAnchor').object3D));
   newElement.object3D.quaternion.copy(getWorldQuaternion(document.getElementById('holdAnchor').object3D));
-  newElement.setAttribute("src", "#imageAsset");
+  newElement.setAttribute("src", document.getElementById("floatLink").value);
+  document.getElementById("3DobjLink").value = "uploaded";
   newElement.setAttribute("id", "3DObj-"+(numOf3DObj));
   newElement.setAttribute("height", "5");
   newElement.setAttribute("width", "5");
