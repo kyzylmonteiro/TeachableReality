@@ -57,7 +57,7 @@ function playAnimation (classID) {
     // console.log(parseInt(objID),classID, output3DData[objID]);
     el.setAttribute(
       'animation__p',
-      'property:position; to: ' +
+      'property:position; easing: easeInOutSine; to: ' +
         output3DData[objID][classID]['position'].x +
         ' ' +
         output3DData[objID][classID]['position'].y +
@@ -67,7 +67,7 @@ function playAnimation (classID) {
     )
     el.setAttribute(
       'animation__r',
-      'property:rotation; to: ' +
+      'property:rotation; easing: easeInOutSine; to: ' +
         output3DData[objID][classID]['rotation'].x +
         ' ' +
         output3DData[objID][classID]['rotation'].y +
@@ -77,7 +77,7 @@ function playAnimation (classID) {
     )
     el.setAttribute(
       'animation__s',
-      'property:scale; to: ' +
+      'property:scale; easing: easeInOutSine; to: ' +
         output3DData[objID][classID]['scale'].x +
         ' ' +
         output3DData[objID][classID]['scale'].y +
@@ -85,10 +85,41 @@ function playAnimation (classID) {
         output3DData[objID][classID]['scale'].z +
         ';'
     )
-    el.setAttribute(
-      'animation__v',
-      'property:visible; to: ' + output3DData[objID][classID]['visible'].x + ';'
-    )
+    // el.setAttribute(
+    //   'animation__v',
+    //   'property:visible; easing: easeInOutSine; to: ' + output3DData[objID][classID]['visible'].x + ';'
+    // )
+    if (
+      output3DData[objID][classID]['visible'].x != el.getAttribute('visible')
+    ) {
+      if (output3DData[objID][classID]['visible'].x == true) {
+        el.setAttribute('visible', 'true')
+        el.setAttribute(
+          'animation__v',
+          'property:scale; easing:easeInOutSine; from: 0 0 0; to: ' +
+            output3DData[objID][classID]['scale'].x +
+            ' ' +
+            output3DData[objID][classID]['scale'].y +
+            ' ' +
+            output3DData[objID][classID]['scale'].z +
+            ';'
+        )
+      } else {
+        el.setAttribute(
+          'animation__v',
+          'property:scale; dur: 200; easing:easeInOutSine; to: 0.1 0.1 0.1; from: ' +
+            output3DData[objID][classID]['scale'].x +
+            ' ' +
+            output3DData[objID][classID]['scale'].y +
+            ' ' +
+            output3DData[objID][classID]['scale'].z +
+            ';'
+        )
+        setTimeout(function () {
+          el.setAttribute('visible', 'false')
+        }, 200)
+      }
+    }
   })
 
   // emit not working from here

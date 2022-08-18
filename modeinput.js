@@ -323,7 +323,10 @@ function addVirtualObj () {
   newElement.setAttribute('scale', '10 10 10')
   newElement.setAttribute('class', 'cantap 3DObj')
   newElement.setAttribute('xrextras-hold-drag', '')
-  newElement.setAttribute('xrextras-pinch-scale', '')
+  newElement.setAttribute(
+    'xrextras-pinch-scale',
+    'min: 0.01; max: 10; scale: 2;'
+  )
   newElement.setAttribute('xrextras-two-finger-rotate', '')
   // The raycaster gives a location of the touch in the scene
   // const touchPoint = event.detail.intersection.point;
