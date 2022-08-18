@@ -1,41 +1,39 @@
-const STATUS = document.getElementById("status");
-const VIDEO = document.getElementById("webcam");
-const CAMERA_FEED_CANVAS = document.getElementById("cameraFeed");
-const PREDICT_BUTTON = document.getElementById("predict");
-const MOBILE_NET_INPUT_WIDTH = 224;
-const MOBILE_NET_INPUT_HEIGHT = 224;
-let predict = false;
+const STATUS = document.getElementById('status')
+const VIDEO = document.getElementById('webcam')
+const CAMERA_FEED_CANVAS = document.getElementById('cameraFeed')
+const PREDICT_BUTTON = document.getElementById('predict')
+const MOBILE_NET_INPUT_WIDTH = 224
+const MOBILE_NET_INPUT_HEIGHT = 224
+let predict = false
 
-PREDICT_BUTTON.addEventListener("click", updateRunModeUI);
+PREDICT_BUTTON.addEventListener('click', updateRunModeUI)
 
-import {
-  outputData, output3DData, updateOutputModeUI
-} from "./modeoutput.js";
+import { outputData, output3DData, updateOutputModeUI } from './modeoutput.js'
 
-import {
-  model,
-  mobilenet,
-  CLASS_NAMES,
-} from "./modeinput.js";
+import { model, mobilenet, CLASS_NAMES } from './modeinput.js'
 
-function createCanvas(i,imageUploadButtons){
-  let parentDiv = document.getElementsByClassName("class-container")[0];
-  let outputImage = document.createElement("canvas");
-  const img = new Image();
-  img.src = outputData[i];
-  outputImage.setAttribute("width", document.getElementById("class1-canvas").width)
-  outputImage.setAttribute("height", document.getElementById("class1-canvas").height)
-  outputImage.setAttribute("id", "output-image"+i)
-  parentDiv.insertBefore(outputImage, imageUploadButtons[i]);
-  var hRatio = outputImage.width / img.width;
-  var vRatio = outputImage.height / img.height;
-  var ratio = Math.min(hRatio, vRatio);
+function createCanvas (i, imageUploadButtons) {
+  let parentDiv = document.getElementsByClassName('class-container')[0]
+  let outputImage = document.createElement('canvas')
+  const img = new Image()
+  img.src = outputData[i]
+  outputImage.setAttribute(
+    'width',
+    document.getElementById('class1-canvas').width
+  )
+  outputImage.setAttribute(
+    'height',
+    document.getElementById('class1-canvas').height
+  )
+  outputImage.setAttribute('id', 'output-image' + i)
+  parentDiv.insertBefore(outputImage, imageUploadButtons[i])
+  var hRatio = outputImage.width / img.width
+  var vRatio = outputImage.height / img.height
+  var ratio = Math.min(hRatio, vRatio)
 
-
-
-  var ctx = outputImage.getContext("2d");
+  var ctx = outputImage.getContext('2d')
   img.onload = () => {
-    ctx.clearRect(0, 0, outputImage.width, outputImage.height);
+    ctx.clearRect(0, 0, outputImage.width, outputImage.height)
     ctx.drawImage(
       img,
       0,
@@ -46,64 +44,101 @@ function createCanvas(i,imageUploadButtons){
       0,
       img.width * ratio,
       img.height * ratio
-    );
-  };
+    )
+  }
 }
 
-function playAnimation(classID){
-  var classList = document.getElementsByClassName("3DObj");
-  
+function playAnimation (classID) {
+  var classList = document.getElementsByClassName('3DObj')
+
   classList.forEach(el => {
-    var objID = parseInt(el.id.match(/[0-9]+$/)[0]);
+    var objID = parseInt(el.id.match(/[0-9]+$/)[0])
 
     // console.log(parseInt(objID),classID, output3DData[objID]);
-    el.setAttribute("animation__p","property:position; to: " + output3DData[objID][classID]["position"].x + " " + output3DData[objID][classID]["position"].y + " " + output3DData[objID][classID]["position"].z +";")
-    el.setAttribute("animation__r","property:rotation; to: " + output3DData[objID][classID]["rotation"].x + " " + output3DData[objID][classID]["rotation"].y + " " + output3DData[objID][classID]["rotation"].z +";")
-    el.setAttribute("animation__s","property:scale; to: " + output3DData[objID][classID]["scale"].x + " " + output3DData[objID][classID]["scale"].y + " " + output3DData[objID][classID]["scale"].z +";")  
-    el.setAttribute("animation__v","property:visible; to: " + output3DData[objID][classID]["visible"].x +";")  
+    el.setAttribute(
+      'animation__p',
+      'property:position; to: ' +
+        output3DData[objID][classID]['position'].x +
+        ' ' +
+        output3DData[objID][classID]['position'].y +
+        ' ' +
+        output3DData[objID][classID]['position'].z +
+        ';'
+    )
+    el.setAttribute(
+      'animation__r',
+      'property:rotation; to: ' +
+        output3DData[objID][classID]['rotation'].x +
+        ' ' +
+        output3DData[objID][classID]['rotation'].y +
+        ' ' +
+        output3DData[objID][classID]['rotation'].z +
+        ';'
+    )
+    el.setAttribute(
+      'animation__s',
+      'property:scale; to: ' +
+        output3DData[objID][classID]['scale'].x +
+        ' ' +
+        output3DData[objID][classID]['scale'].y +
+        ' ' +
+        output3DData[objID][classID]['scale'].z +
+        ';'
+    )
+    el.setAttribute(
+      'animation__v',
+      'property:visible; to: ' + output3DData[objID][classID]['visible'].x + ';'
+    )
+  })
 
-  });
- 
   // emit not working from here
   // console.log(el, el.emit(), el.emit, el.emit("state-"+classID),  el.getAttribute("animation__1"))
   // setTimeout(function() {el.emit("state-"+classID);},1000);
 }
 
-export function updateRunModeUI() {
+export function updateRunModeUI () {
+  let mode = document.getElementById('debug-container')
+  mode.innerText = 'Run Mode'
 
-  let mode = document.getElementById("debug-container");
-  mode.innerText = "Run Mode"
-
-  let imageUploadButtons = document.querySelectorAll("input.output-image"); 
-  let animationButtons = document.querySelectorAll("button.output-obj-state");
+  let imageUploadButtons = document.querySelectorAll('input.output-image')
+  let animationButtons = document.querySelectorAll('button.output-obj-state')
   for (let i = 0; i < imageUploadButtons.length; i++) {
     // createCanvas(i, imageUploadButtons);
-    imageUploadButtons[i].classList.add("removed");
+    imageUploadButtons[i].classList.add('removed')
   }
   for (let i = 0; i < animationButtons.length; i++) {
-    animationButtons[i].classList.add("removed");
+    animationButtons[i].classList.add('removed')
   }
 
-  PREDICT_BUTTON.classList.add("removed")
+  PREDICT_BUTTON.classList.add('removed')
 
-  predict = true;
-  predictLoop();
+  predict = true
+  predictLoop()
 }
 
-export function predictLoop() {
+export function predictLoop () {
   if (predict) {
     tf.tidy(function () {
-      let videoFrameAsTensor = tf.browser.fromPixels(CAMERA_FEED_CANVAS.getContext('2d').getImageData(0,0,CAMERA_FEED_CANVAS.width,CAMERA_FEED_CANVAS.height)).div(255);
+      let videoFrameAsTensor = tf.browser
+        .fromPixels(
+          CAMERA_FEED_CANVAS.getContext('2d').getImageData(
+            0,
+            0,
+            CAMERA_FEED_CANVAS.width,
+            CAMERA_FEED_CANVAS.height
+          )
+        )
+        .div(255)
       let resizedTensorFrame = tf.image.resizeBilinear(
         videoFrameAsTensor,
         [MOBILE_NET_INPUT_HEIGHT, MOBILE_NET_INPUT_WIDTH],
         true
-      );
+      )
 
-      let imageFeatures = mobilenet.predict(resizedTensorFrame.expandDims());
-      let prediction = model.predict(imageFeatures).squeeze();
-      let highestIndex = prediction.argMax().arraySync();
-      let predictionArray = prediction.arraySync();
+      let imageFeatures = mobilenet.predict(resizedTensorFrame.expandDims())
+      let prediction = model.predict(imageFeatures).squeeze()
+      let highestIndex = prediction.argMax().arraySync()
+      let predictionArray = prediction.arraySync()
 
       // var linksOfImages = [
       //   "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Un1.svg/1200px-Un1.svg.png",
@@ -146,28 +181,24 @@ export function predictLoop() {
       // };
 
       STATUS.innerText =
-        "Prediction: " +
+        'Prediction: ' +
         CLASS_NAMES[highestIndex] +
-        " with " +
+        ' with ' +
         Math.floor(predictionArray[highestIndex] * 100) +
-        "% confidence";
+        '% confidence'
 
+      var prevhighestIndex = -1
+      // console.log("EMMIT state"+highestIndex);
+      // if(prevhighestIndex!=highestIndex)
+      // {
+      // console.log(highestIndex);
+      // setTimeout(playAnimation,1000,highestIndex);
+      playAnimation(highestIndex)
+      //   prevhighestIndex = highestIndex
+      // }
+      // el.setAttribute("animation","property:scale; to: "+highestIndex+" "+highestIndex+" "+highestIndex+";")
+    })
 
-        
-        var prevhighestIndex = -1;
-        // console.log("EMMIT state"+highestIndex);
-        // if(prevhighestIndex!=highestIndex)
-        // {
-          // console.log(highestIndex);
-          // setTimeout(playAnimation,1000,highestIndex);
-          playAnimation(highestIndex);
-        //   prevhighestIndex = highestIndex
-        // }
-        // el.setAttribute("animation","property:scale; to: "+highestIndex+" "+highestIndex+" "+highestIndex+";")
-
-        
-    });
-
-    window.requestAnimationFrame(predictLoop);
+    window.requestAnimationFrame(predictLoop)
   }
 }
