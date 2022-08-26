@@ -53,69 +53,7 @@ function startMachine () {
     }
   })
 
-  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add 3d assets
-  var addObjI = document.createElement('input')
-  addObjI.setAttribute('type', 'text')
-  addObjI.setAttribute('id', '3DobjLink')
-  addObjI.setAttribute(
-    'style',
-    'width: 40px; height:10px; position:fixed; z-index: 3; right:20%; top:1%;'
-  )
-  videoElement.appendChild(addObjI)
-  var addObj = document.createElement('button')
-  addObj.innerHTML = '3D'
-  addObj.addEventListener('click', addVirtualObj)
-  addObj.setAttribute(
-    'style',
-    'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:3%;'
-  )
-  videoElement.appendChild(addObj)
 
-  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add image assets
-  var addObjI = document.createElement('input')
-  addObjI.setAttribute('type', 'text')
-  addObjI.setAttribute('id', 'imgLink')
-  addObjI.setAttribute(
-    'style',
-    'width: 40px; height:10px; position:fixed; z-index: 3; right:20%; top:12%;'
-  )
-  videoElement.appendChild(addObjI)
-  var addObj = document.createElement('button')
-  addObj.innerHTML = '2D'
-  addObj.addEventListener('click', addImageObj)
-  addObj.setAttribute(
-    'style',
-    'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:14%;'
-  )
-  videoElement.appendChild(addObj)
-
-  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add image assets
-  var addObjI = document.createElement('input')
-  addObjI.setAttribute('type', 'text')
-  addObjI.setAttribute('id', 'floatLink')
-  addObjI.setAttribute(
-    'style',
-    'width: 40px; height:10px; position:fixed; z-index: 3; right:20%; top:23%;'
-  )
-  videoElement.appendChild(addObjI)
-  var addObj = document.createElement('button')
-  addObj.innerHTML = 'Float'
-  addObj.addEventListener('click', addFLoatingObj)
-  addObj.setAttribute(
-    'style',
-    'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; top:25%;'
-  )
-  videoElement.appendChild(addObj)
-
-  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add image assets
-  var addObj = document.createElement('button')
-  addObj.innerHTML = 'Show All'
-  addObj.addEventListener('click', showAllObjects)
-  addObj.setAttribute(
-    'style',
-    'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; bottom:1%;'
-  )
-  videoElement.appendChild(addObj)
 
   videoPlaying = true
   START_BUTTON.classList.add('removed')
@@ -263,7 +201,7 @@ function blankCanvas () {
 function addClass () {
   let btn = document.createElement('button')
   let canvas = blankCanvas()
-  btn.innerHTML = 'Gather Class ' + (CLASS_NAMES.length + 1) + ' Data'
+  btn.innerHTML = 'Save State ' + (CLASS_NAMES.length + 1) + ''
   btn.setAttribute('class', 'dataCollector')
   btn.setAttribute('data-1hot', CLASS_NAMES.length)
   btn.setAttribute('data-name', 'Class ' + (CLASS_NAMES.length + 1))
@@ -305,118 +243,167 @@ function tapHandler (event) {
   obj.setAttribute('visible', 'false')
 }
 
-function showAllObjects () {
-  var classList = document.getElementsByClassName('3DObj')
-  classList.forEach(el => {
-    el.setAttribute('visible', 'true')
-  })
+
+
+
+
+const physicsImageTargetComponent = {
+  schema: {
+    name: { type: 'string' }
+  },
+
+  init () {
+    const { object3D } = this.el
+    const { name } = this.data
+    const scene = this.el.sceneEl
+    object3D.visible = false
+    const showImage = ({ detail }) => {
+      if (name !== detail.name) {
+        return
+      }
+      object3D.position.copy(detail.position)
+      object3D.quaternion.copy(detail.rotation)
+      object3D.scale.set(detail.scale, detail.scale, detail.scale)
+      object3D.visible = true
+    }
+
+    const imageFound = e => {
+      showImage(e)
+      
+      document.getElementById('3DObj-0').addEventListener('click', tapHandler)
+      document.getElementById('3DObj-0').setAttribute('animation__riseIn', {
+        property: 'scale',
+        dur: 1500,
+        from: '0.001 0.001 0.001',
+        to: '1 1 1',
+        easing: 'easeInOutQuad'
+      })
+    }
+
+    const imageLost = e => {
+      // object3D.visible = false
+    }
+
+    scene.addEventListener('xrimagefound', imageFound)
+    scene.addEventListener('xrimageupdated', showImage)
+    scene.addEventListener('xrimagelost', imageLost)
+  }
 }
 
-function addVirtualObj () {
-  var numOf3DObj = document.getElementsByClassName('3DObj').length
-  const newElement = document.createElement('a-entity')
-  newElement.setAttribute(
-    'gltf-model',
-    document.getElementById('3DobjLink').value
-  )
-  newElement.setAttribute('id', '3DObj-' + numOf3DObj)
-  newElement.setAttribute('scale', '10 10 10')
-  newElement.setAttribute('class', 'cantap 3DObj')
-  newElement.setAttribute('xrextras-hold-drag', '')
-  newElement.setAttribute(
-    'xrextras-pinch-scale',
-    'min: 0.01; max: 10; scale: 2;'
-  )
-  newElement.setAttribute('xrextras-two-finger-rotate', '')
-  // The raycaster gives a location of the touch in the scene
-  // const touchPoint = event.detail.intersection.point;
-  // newElement.setAttribute("position", "0 0 0");
+AFRAME.registerComponent('physics-image-target', physicsImageTargetComponent)
 
-  const randomYRotation = Math.random() * 360
-  newElement.setAttribute('rotation', `0 ${randomYRotation} 0`)
 
-  newElement.setAttribute('shadow', {
-    receive: false
-  })
+const customHoldDragComponent = {
+  schema: {
+    cameraId: {default: 'camera'},
+    groundId: {default: 'not-ground'},
+    dragDelay: {default: 300},
+    // riseHeight: {default: 1},
+  },
+  init() {
+    this.camera = document.getElementById(this.data.cameraId)
+    if (!this.camera) {
+      throw new Error(`[xrextras-hold-drag] Couldn't find camera with id '${this.data.cameraId}'`)
+    }
+    this.threeCamera = this.camera.getObject3D('camera')
+    this.ground = document.getElementById(this.data.groundId)
+    if (!this.ground) {
+      throw new Error(`[xrextras-hold-drag] Couldn't find ground with id '${this.data.groundId}'`)
+    }
 
-  newElement.addEventListener('click', tapHandler)
+    this.internalState = {
+      fingerDown: false,
+      dragging: false,
+      distance: 0,
+      startDragTimeout: null,
+      raycaster: new THREE.Raycaster(),
+    }
 
-  document.getElementById('scene').sceneEl.appendChild(newElement)
+    this.fingerDown = this.fingerDown.bind(this)
+    this.startDrag = this.startDrag.bind(this)
+    this.fingerMove = this.fingerMove.bind(this)
+    this.fingerUp = this.fingerUp.bind(this)
+
+    this.el.addEventListener('mousedown', this.fingerDown)
+    this.el.sceneEl.addEventListener('onefingermove', this.fingerMove)
+    this.el.sceneEl.addEventListener('onefingerend', this.fingerUp)
+    this.el.classList.add('cantap')  // Needs "objects: .cantap" attribute on raycaster.
+  },
+  tick() {
+    if (this.internalState.dragging) {
+      let desiredPosition = null
+      if (this.internalState.positionRaw) {
+        const screenPositionX = this.internalState.positionRaw.x / document.body.clientWidth * 2 - 1
+        const screenPositionY = this.internalState.positionRaw.y / document.body.clientHeight * 2 - 1
+        const screenPosition = new THREE.Vector2(screenPositionX, -screenPositionY)
+
+        this.threeCamera = this.threeCamera || this.camera.getObject3D('camera')
+
+        this.internalState.raycaster.setFromCamera(screenPosition, this.threeCamera)
+        const intersects = this.internalState.raycaster.intersectObject(this.ground.object3D, true)
+
+        if (intersects.length > 0) {
+          const intersect = intersects[0]
+          this.internalState.distance = intersect.distance
+          desiredPosition = intersect.point
+        }
+      }
+
+      if (!desiredPosition) {
+        console.log("miss");
+        desiredPosition = this.camera.object3D.localToWorld(new THREE.Vector3(0, 0, -this.internalState.distance))
+      }
+
+      // desiredPosition.y = this.data.riseHeight
+      var scene = document.getElementById("scene");
+      var parent = this.el.parentElement
+      scene.object3D.attach(this.el.object3D)
+      this.el.object3D.position.lerp(desiredPosition, 0.2)
+      parent.object3D.attach(this.el.object3D)
+      
+      // this.el.object3D.position.set(desiredPosition.x-this.el.parentElement.object3D.position.x,desiredPosition.y-this.el.parentElement.object3D.position.y,desiredPosition.z-this.el.parentElement.object3D.position.z)
+    }
+  },
+  remove() {
+    this.el.removeEventListener('mousedown', this.fingerDown)
+    this.el.sceneEl.removeEventListener('onefingermove', this.fingerMove)
+    this.el.sceneEl.removeEventListener('onefingerend', this.fingerUp)
+    if (this.internalState.fingerDown) {
+      this.fingerUp()
+    }
+  },
+  fingerDown(event) {
+    this.internalState.fingerDown = true
+    this.internalState.startDragTimeout = setTimeout(this.startDrag, this.data.dragDelay)
+    this.internalState.positionRaw = event.detail.positionRaw
+  },
+  startDrag(event) {
+    if (!this.internalState.fingerDown) {
+      return
+    }
+    this.internalState.dragging = true
+    this.internalState.distance = this.el.object3D.position.distanceTo(this.camera.object3D.position)
+  },
+  fingerMove(event) {
+    this.internalState.positionRaw = event.detail.positionRaw
+  },
+  fingerUp(event) {
+    this.internalState.fingerDown = false
+    clearTimeout(this.internalState.startDragTimeout)
+
+    this.internalState.positionRaw = null
+
+    // if (this.internalState.dragging) {
+    //   const endPosition = this.el.object3D.position.clone()
+    //   this.el.setAttribute('animation__drop', {
+    //     property: 'position',
+    //     to: `${endPosition.x} 0 ${endPosition.z}`,
+    //     dur: 300,
+    //     easing: 'easeOutQuad',
+    //   })
+    // }
+    this.internalState.dragging = false
+  },
 }
 
-function addImageObj () {
-  var numOf3DObj = document.getElementsByClassName('3DObj').length
-  const newElement = document.createElement('a-box')
-  newElement.setAttribute('src', document.getElementById('imgLink').value)
-  newElement.setAttribute('id', '3DObj-' + numOf3DObj)
-  newElement.setAttribute('height', '5')
-  newElement.setAttribute('width', '5')
-  newElement.setAttribute('depth', '0.5')
-  newElement.setAttribute('class', 'cantap 3DObj')
-  newElement.setAttribute('xrextras-hold-drag', '')
-  newElement.setAttribute('xrextras-pinch-scale', '')
-  newElement.setAttribute('xrextras-two-finger-rotate', '')
-
-  // const randomYRotation = Math.random() * 360;
-  newElement.setAttribute('rotation', `90 0 0`)
-
-  newElement.setAttribute('shadow', {
-    receive: false
-  })
-
-  // newElement.addEventListener("contextmenu", (event) => {
-  //   // newElement.setAttribute("scale","3 3 3");
-  //   console.log("clicked");
-  // });
-
-  newElement.addEventListener('click', tapHandler)
-
-  document.getElementById('scene').sceneEl.appendChild(newElement)
-}
-
-const getWorldPosition = object => {
-  const position = new THREE.Vector3()
-  position.setFromMatrixPosition(object.matrixWorld)
-  return position
-}
-
-const getWorldQuaternion = object => {
-  const position = new THREE.Vector3()
-  const scale = new THREE.Vector3()
-  const target = new THREE.Quaternion()
-  object.matrixWorld.decompose(position, target, scale)
-  return target
-}
-
-function addFLoatingObj () {
-  var numOf3DObj = document.getElementsByClassName('3DObj').length
-  const newElement = document.createElement('a-box')
-  newElement.object3D.position.copy(
-    getWorldPosition(document.getElementById('holdAnchor').object3D)
-  )
-  newElement.object3D.quaternion.copy(
-    getWorldQuaternion(document.getElementById('holdAnchor').object3D)
-  )
-  newElement.setAttribute('src', document.getElementById('floatLink').value)
-  newElement.setAttribute('id', '3DObj-' + numOf3DObj)
-  newElement.setAttribute('height', '5')
-  newElement.setAttribute('width', '5')
-  newElement.setAttribute('depth', '0.5')
-  newElement.setAttribute('class', 'cantap 3DObj')
-  // newElement.setAttribute("xrextras-hold-drag", "");
-  newElement.setAttribute('xrextras-pinch-scale', '')
-  newElement.setAttribute('xrextras-two-finger-rotate', '')
-
-  newElement.setAttribute('shadow', {
-    receive: false
-  })
-
-  // newElement.addEventListener("contextmenu", (event) => {
-  //   // newElement.setAttribute("scale","3 3 3");
-  //   console.log("clicked");
-  // });
-
-  newElement.addEventListener('click', tapHandler)
-
-  document.getElementById('scene').sceneEl.appendChild(newElement)
-}
+AFRAME.registerComponent('hold-drag', customHoldDragComponent)

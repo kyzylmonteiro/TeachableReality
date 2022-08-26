@@ -87,6 +87,14 @@ export function storeState (event) {
     console.log(output3DData)
   })
 
+
+  // var w = document.getElementById("scene").canvas.width 
+  // var h = document.getElementById("scene").canvas.height
+  var canvas = document.getElementById('class' + (event.srcElement.id.match(/[0-9]+$/)[0] ) + '-outputcanvas')
+  var ctx = canvas.getContext('2d')
+  ctx.drawImage(document.getElementById("scene").canvas, 0, 0, canvas.width, canvas.height)
+  return canvas
+
   // tried startEvents but trigger not working from predict.js
   // el.setAttribute('animation__'+classID, "property: rotate; to: 0 0 45; startEvents : state-zero");
   // el.setAttribute('animation__'+classID, "property: scale; to: "+classID+" "+classID+" "+classID+"; startEvents : state-"+classID);
@@ -126,6 +134,29 @@ export function displayOnOutputCanvas (imageData) {
   }
 }
 
+
+function blankCanvas (i) {
+  let canvas = document.createElement('canvas')
+  canvas.setAttribute('class', 'data-canvas')
+  canvas.setAttribute('id', 'class' + (i) + '-outputcanvas')
+  canvas.setAttribute('width', CAMERA_FEED_CANVAS.width * 1)
+  canvas.setAttribute('height', CAMERA_FEED_CANVAS.height * 1)
+  var ctx = canvas.getContext('2d')
+  const blank = new Image()
+  blank.src = './images/blankClass.png'
+  blank.onload = () => {
+    ctx.drawImage(
+      blank,
+      0,
+      0,
+      CAMERA_FEED_CANVAS.width * 1,
+      CAMERA_FEED_CANVAS.height * 1
+    )
+  }
+  return canvas
+}
+
+
 export async function updateOutputModeUI () {
   console.log('updating UI')
   let mode = document.getElementById('debug-container')
@@ -136,27 +167,38 @@ export async function updateOutputModeUI () {
   let dataCollectorButtons = document.querySelectorAll('button.dataCollector')
   let parentDiv = document.getElementsByClassName('class-container')[0]
   for (let i = 0; i < dataCollectorButtons.length; i++) {
-    let upBtn = document.createElement('input')
-    upBtn.setAttribute('type', 'file')
-    upBtn.setAttribute('id', 'output-class' + i)
-    upBtn.setAttribute('class', 'output-image')
-    upBtn.setAttribute('name', 'filename')
-    upBtn.innerText = 'Upload Class ' + i + ' Output'
-    upBtn.addEventListener('change', onFileSelected)
+
+
+    let canvas = blankCanvas(i);
+    
+    let canvasConatainer = document.createElement('div')
+    canvasConatainer.setAttribute('class', 'class-outputcanvas-container')
+    canvasConatainer.setAttribute(
+      'id',
+      'class' + (CLASS_NAMES.length + 1) + '-outputcanvas-container'
+    )
+    canvasConatainer.setAttribute('width', CAMERA_FEED_CANVAS.width * 1)
+    canvasConatainer.setAttribute('height', CAMERA_FEED_CANVAS.height * 1)
+    canvasConatainer.appendChild(canvas)
+    parentDiv.insertBefore(canvasConatainer, dataCollectorButtons[i])
+
+
+  
+    let inputLabel = document.createElement('span')
+    let outputLabel = document.createElement('span')
+    inputLabel.innerHTML = 'State ' + i + ' input'
+    outputLabel.innerHTML = 'State ' + i + ' output'
+    parentDiv.insertBefore(inputLabel, canvasConatainer)
+    parentDiv.insertBefore(outputLabel, dataCollectorButtons[i])
+
+
     let animButton = document.createElement('button')
     animButton.setAttribute('id', 'output-state' + i)
     animButton.setAttribute('class', 'output-obj-state')
     animButton.addEventListener('click', storeState)
-    animButton.innerText = 'Save Virtual Object State' + i
-    parentDiv.insertBefore(upBtn, dataCollectorButtons[i])
+    animButton.innerText = 'Save'
     parentDiv.insertBefore(animButton, dataCollectorButtons[i])
 
-    let inputLabel = document.createElement('div')
-    let outputLabel = document.createElement('div')
-    inputLabel.innerHTML = 'class' + i + ' input'
-    outputLabel.innerHTML = 'class' + i + ' output'
-    parentDiv.insertBefore(inputLabel, upBtn)
-    parentDiv.insertBefore(outputLabel, dataCollectorButtons[i])
     let horizontalLine = document.createElement('hr')
     parentDiv.insertBefore(horizontalLine, dataCollectorButtons[i])
 
@@ -168,6 +210,115 @@ export async function updateOutputModeUI () {
 
   console.log('Now Training...')
   setTimeout(outputModeAndTrain, 10)
+
+
+  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add 3d assets
+  var modeDiv = document.createElement("div")
+  modeDiv.setAttribute('id', 'anchormode')
+  modeDiv.setAttribute(
+    'style',
+    'width: 80px; height:10px; position:fixed; z-index: 3; right:20%; top:1%;'
+  )
+  
+  var modeText = document.createTextNode("Anchor to:");
+  modeDiv.appendChild(modeText)
+  
+  modeDiv.appendChild(document.createElement("br"))
+
+
+  var typesOfModes = ["Spatial", "Image", "Body", "Object"]
+
+
+  typesOfModes.forEach(modeTypeString => {
+    var modeType = document.createElement("input")
+    modeType.setAttribute("type","radio");
+    modeType.setAttribute("name","arMode");
+    modeType.setAttribute("id", modeTypeString.toLowerCase());
+    modeType.setAttribute("value", modeTypeString.toLowerCase());
+    if(modeTypeString=="Spatial") modeType.setAttribute("checked","checked")
+
+    var modeTypeLabel = document.createElement("label")
+    modeTypeLabel.setAttribute("for", modeTypeString.toLowerCase())
+    modeTypeLabel.innerHTML = modeTypeString
+    
+
+    modeDiv.appendChild(modeType)
+    modeDiv.appendChild(modeTypeLabel)
+    modeDiv.appendChild(document.createElement("br"))    
+
+
+  });
+
+  videoElement.appendChild(modeDiv)
+
+ 
+
+
+  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add 3d assets
+  var addObjI = document.createElement('input')
+  addObjI.setAttribute('type', 'text')
+  addObjI.setAttribute('id', '3DobjLink')
+  addObjI.setAttribute(
+    'style',
+    'width: 40px; height:10px; position:fixed; z-index: 3; right:20%; bottom:45%;'
+  )
+  videoElement.appendChild(addObjI)
+  var addObj = document.createElement('button')
+  addObj.innerHTML = '3D'
+  addObj.addEventListener('click', addVirtualObj)
+  addObj.setAttribute(
+    'style',
+    'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; bottom:36%;'
+  )
+  videoElement.appendChild(addObj)
+
+  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add image assets
+  var addObjI = document.createElement('input')
+  addObjI.setAttribute('type', 'text')
+  addObjI.setAttribute('id', 'imgLink')
+  addObjI.setAttribute(
+    'style',
+    'width: 40px; height:10px; position:fixed; z-index: 3; right:20%; bottom:32%'
+  )
+  videoElement.appendChild(addObjI)
+  var addObj = document.createElement('button')
+  addObj.innerHTML = '2D'
+  addObj.addEventListener('click', addImageObj)
+  addObj.setAttribute(
+    'style',
+    'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; bottom:23%;'
+  )
+  videoElement.appendChild(addObj)
+
+  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add image assets
+  var addObjI = document.createElement('input')
+  addObjI.setAttribute('type', 'text')
+  addObjI.setAttribute('id', 'floatLink')
+  addObjI.setAttribute(
+    'style',
+    'width: 40px; height:10px; position:fixed; z-index: 3; right:20%; bottom:19%;'
+  )
+  videoElement.appendChild(addObjI)
+  var addObj = document.createElement('button')
+  addObj.innerHTML = 'Float'
+  addObj.addEventListener('click', addFLoatingObj)
+  addObj.setAttribute(
+    'style',
+    'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; bottom:10%;'
+  )
+  videoElement.appendChild(addObj)
+
+  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add image assets
+  var addObj = document.createElement('button')
+  addObj.innerHTML = 'Show All'
+  addObj.addEventListener('click', showAllObjects)
+  addObj.setAttribute(
+    'style',
+    'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; bottom:1%;'
+  )
+  videoElement.appendChild(addObj)
+
+
 }
 
 export async function outputModeAndTrain () {
@@ -228,3 +379,218 @@ export async function outputModeAndTrain () {
 function logProgress (epoch, logs) {
   console.log('Data for epoch ' + epoch, logs)
 }
+
+var tapedTwice = false
+
+function tapHandler (event) {
+  if (!tapedTwice) {
+    tapedTwice = true
+    setTimeout(function () {
+      tapedTwice = false
+    }, 300)
+    return false
+  }
+  event.preventDefault()
+  //action on double tap goes below
+  alert(event.srcElement.id + ' object visibiility set to false')
+  var obj = event.srcElement
+  obj.setAttribute('visible', 'false')
+}
+
+function showAllObjects () {
+  var classList = document.getElementsByClassName('3DObj')
+  classList.forEach(el => {
+    el.setAttribute('visible', 'true')
+  })
+}
+
+
+function addVirtualObj () {
+  var numOf3DObj = document.getElementsByClassName('3DObj').length
+  const newElement = document.createElement('a-entity')
+  newElement.setAttribute(
+    'gltf-model',
+    document.getElementById('3DobjLink').value
+  )
+  newElement.setAttribute('id', '3DObj-' + numOf3DObj)
+  newElement.setAttribute('scale', '10 10 10')
+  newElement.setAttribute('class', 'cantap 3DObj')
+  newElement.setAttribute(
+    'xrextras-pinch-scale',
+    'min: 0.01; max: 50;'
+  )
+  newElement.setAttribute('xrextras-two-finger-rotate', '')
+  // The raycaster gives a location of the touch in the scene
+  // const touchPoint = event.detail.intersection.point;
+  // newElement.setAttribute("position", "0 0 0");
+
+  newElement.addEventListener('click', tapHandler)
+  const randomYRotation = Math.random() * 360
+  newElement.setAttribute('rotation', `0 ${randomYRotation} 0`)
+  newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
+  
+  // setting corresponding hold-drag component
+  var typesOfMode =document.querySelector('input[name="arMode"]:checked').value.toLowerCase()
+  if(typesOfMode=="spatial"){
+    newElement.setAttribute('xrextras-hold-drag', '')
+    document.getElementById('scene').appendChild(newElement)}
+  else if(typesOfMode=="image"){
+    newElement.setAttribute('hold-drag', 'groundId: image-plane')
+    document.getElementById('scene').appendChild(newElement)
+    document.getElementById('imageEntity').object3D.attach(newElement.object3D)}
+  else if(typesOfMode=="body"){
+    newElement.setAttribute('hold-drag', 'groundId: wall')
+    document.getElementById('scene').appendChild(newElement)
+    document.getElementById('wallEntity').object3D.attach(newElement.object3D)}
+  else if(typesOfMode=="object"){
+    newElement.setAttribute('xrextras-hold-drag', '')
+    document.getElementById('scene').sceneEl.appendChild(newElement)}  
+
+  newElement.setAttribute('shadow', {
+    receive: false
+  })
+
+}
+
+function addImageObj () {
+  var numOf3DObj = document.getElementsByClassName('3DObj').length
+  const newElement = document.createElement('a-box')
+  newElement.setAttribute('src', document.getElementById('imgLink').value)
+  newElement.setAttribute('id', '3DObj-' + numOf3DObj)
+  newElement.setAttribute('height', '5')
+  newElement.setAttribute('width', '5')
+  newElement.setAttribute('depth', '0.5')
+  newElement.setAttribute('class', 'cantap 3DObj')
+  // newElement.setAttribute('xrextras-hold-drag', '')
+  newElement.setAttribute('xrextras-pinch-scale', '')
+  newElement.setAttribute('xrextras-two-finger-rotate', '')
+
+  // const randomYRotation = Math.random() * 360;
+  newElement.addEventListener('click', tapHandler)
+  newElement.setAttribute('rotation', `90 0 0`)
+  newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
+  
+  // setting corresponding hold-drag component
+  var typesOfMode =document.querySelector('input[name="arMode"]:checked').value.toLowerCase()
+  if(typesOfMode=="spatial"){
+    newElement.setAttribute('xrextras-hold-drag', '')
+    document.getElementById('scene').appendChild(newElement)}
+  else if(typesOfMode=="image"){
+    newElement.setAttribute('hold-drag', 'groundId: image-plane')
+    document.getElementById('scene').appendChild(newElement)
+    document.getElementById('imageEntity').object3D.attach(newElement.object3D)}
+  else if(typesOfMode=="body"){
+    newElement.setAttribute('hold-drag', 'groundId: wall')
+    document.getElementById('scene').appendChild(newElement)
+    document.getElementById('wallEntity').object3D.attach(newElement.object3D)}
+  else if(typesOfMode=="object"){
+    newElement.setAttribute('xrextras-hold-drag', '')
+    document.getElementById('scene').sceneEl.appendChild(newElement)}  
+
+  newElement.setAttribute('shadow', {
+    receive: false
+  })
+
+  // newElement.addEventListener("contextmenu", (event) => {
+  //   // newElement.setAttribute("scale","3 3 3");
+  //   console.log("clicked");
+  // });
+
+
+}
+
+function getCameraRaycastPoint(raycaster) {
+  raycaster = new THREE.Raycaster()
+  var a = new THREE.Vector2(0, 0);
+  raycaster.setFromCamera(a, document.getElementById("scene").camera)
+  var intersects 
+  var typesOfModes =document.querySelector('input[name="arMode"]:checked').value.toLowerCase()
+  if(typesOfModes=="spatial")
+    intersects = raycaster.intersectObject(document.getElementById("ground").object3D, true)
+  else if(typesOfModes=="image")
+    intersects = raycaster.intersectObject(document.getElementById("image-plane").object3D, true)
+  else if(typesOfModes=="body")
+    intersects = raycaster.intersectObject(document.getElementById("wall").object3D, true)
+  else if(typesOfModes=="object")
+    intersects = raycaster.intersectObject(document.getElementById("ground").object3D, true)
+
+  var pos = intersects[0].point
+  return pos
+}
+
+const getWorldPosition = object => {
+  const position = new THREE.Vector3()
+  position.setFromMatrixPosition(object.matrixWorld)
+  return position
+}
+
+const getWorldQuaternion = object => {
+  const position = new THREE.Vector3()
+  const scale = new THREE.Vector3()
+  const target = new THREE.Quaternion()
+  object.matrixWorld.decompose(position, target, scale)
+  return target
+}
+
+function addFLoatingObj () {
+  var numOf3DObj = document.getElementsByClassName('3DObj').length
+  const newElement = document.createElement('a-box')
+  newElement.object3D.position.copy(
+    getWorldPosition(document.getElementById('holdAnchor').object3D)
+  )
+  newElement.object3D.quaternion.copy(
+    getWorldQuaternion(document.getElementById('holdAnchor').object3D)
+  )
+  newElement.setAttribute('src', document.getElementById('floatLink').value)
+  newElement.setAttribute('id', '3DObj-' + numOf3DObj)
+  newElement.setAttribute('height', '5')
+  newElement.setAttribute('width', '5')
+  newElement.setAttribute('depth', '0.5')
+  newElement.setAttribute('class', 'cantap 3DObj')
+  // newElement.setAttribute("xrextras-hold-drag", "");
+  newElement.setAttribute('xrextras-pinch-scale', '')
+  newElement.setAttribute('xrextras-two-finger-rotate', '')
+
+  newElement.setAttribute('shadow', {
+    receive: false
+  })
+
+  // newElement.addEventListener("contextmenu", (event) => {
+  //   // newElement.setAttribute("scale","3 3 3");
+  //   console.log("clicked");
+  // });
+
+  newElement.addEventListener('click', tapHandler)
+
+  document.getElementById('scene').sceneEl.appendChild(newElement)
+}
+
+
+
+
+
+// // Get the modal
+// var modal = document.getElementById("myModal");
+
+// // Get the button that opens the modal
+// var btn = document.getElementById("nothing for now");
+
+// // Get the <span> element that closes the modal
+// var span = document.getElementsByClassName("close")[0];
+
+// // When the user clicks on the button, open the modal
+// btn.onclick = function() {
+//   modal.style.display = "block";
+// }
+
+// // When the user clicks on <span> (x), close the modal
+// span.onclick = function() {
+//   modal.style.display = "none";
+// }
+
+// // When the user clicks anywhere outside of the modal, close it
+// window.onclick = function(event) {
+//   if (event.target == modal) {
+//     modal.style.display = "none";
+//   }
+// } 
