@@ -104,7 +104,6 @@ button {
 }
 
 .button-container canvas {
-  border: 2px solid whitesmoke;
   border-radius: 10px;
   margin-top: 10px;
 }
@@ -116,9 +115,19 @@ button {
   padding: 20px;
 }
 
+.dataCollector {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  user-select: none;
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version */ 
+}
+
 .data-canvas {
   margin: auto;
   display: block;
+  border: 2px solid rgba(255, 0, 0, 0.2);
 }
 
 .navigation-buttons {

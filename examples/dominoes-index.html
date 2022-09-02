@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <base href="./" />
+    <base href="./.." />
     <link rel="icon" type="image/x-icon" href="https://kyzyl.me/favicon.ico" />
     <script src="https://unpkg.com/konva@8/konva.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -102,6 +102,100 @@
           <img id="imageAsset" src=".\images\blankClass.png" />
         </a-assets>
 
+        <a-entity
+            id="3DObj-0"
+            xrextras-pinch-scale
+            xrextras-two-finger-rotate
+            xrextras-hold-drag
+            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
+            class="cantap 3DObj"
+            position="0 0 0"
+            scale="1 1 1"
+          >
+          <a-text position="-0.2 0 -0.4" rotation="-90 0 0" color="yellow" scale="2 2 2" value="6"></a-text>
+          <a-image position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/downArrow.png?v=1661609300013"></a-image>
+        </a-entity>
+
+        <a-entity
+            id="3DObj-1"
+            xrextras-pinch-scale
+            xrextras-two-finger-rotate
+            xrextras-hold-drag
+            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
+            class="cantap 3DObj"
+            position="0 0 0"
+            scale="1 1 1"
+          >
+          <a-text position="-0.2 0 -0.4" rotation="-90 0 0" color="lightgreen" scale="2 2 2" value="2"></a-text>
+          <a-image position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/downArrow.png?v=1661609300013"></a-image>
+        </a-entity>
+
+        <a-entity
+            id="3DObj-2"
+            xrextras-pinch-scale
+            xrextras-two-finger-rotate
+            xrextras-hold-drag
+            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
+            class="cantap 3DObj"
+            position="0 0 0"
+            scale="1 1 1"
+          >
+          <a-text position="-0.2 0 -0.4" rotation="-90 0 0" color="blue" scale="2 2 2" value="3"></a-text>
+        </a-entity>
+
+        <a-entity
+            id="3DObj-3"
+            xrextras-pinch-scale
+            xrextras-two-finger-rotate
+            xrextras-hold-drag
+            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
+            class="cantap 3DObj"
+            position="0 0 0"
+            scale="1 1 1"
+          >
+          <a-text position="-0.2 0 -0.4" rotation="-90 0 0" scale="2 2 2" value="/"></a-text>
+        </a-entity>
+
+        <a-entity
+            id="3DObj-4"
+            xrextras-pinch-scale
+            xrextras-two-finger-rotate
+            xrextras-hold-drag
+            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
+            class="cantap 3DObj"
+            position="0 0 0"
+            scale="1 1 1"
+          >
+          <a-text position="-0.2 0 -0.4" rotation="-90 0 0" scale="2 2 2" value="x"></a-text>
+        </a-entity>
+
+        <a-entity
+            id="3DObj-5"
+            xrextras-pinch-scale
+            xrextras-two-finger-rotate
+            xrextras-hold-drag
+            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
+            class="cantap 3DObj"
+            position="0 0 0"
+            scale="1 1 1"
+          >
+          <a-text position="0 0 -0.4" rotation="-90 0 0" scale="2 2 2" value="12"></a-text>
+        </a-entity>
+
+        <a-entity
+            id="3DObj-6"
+            xrextras-pinch-scale
+            xrextras-two-finger-rotate
+            xrextras-hold-drag
+            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
+            class="cantap 3DObj"
+            position="0 0 0"
+            scale="1 1 1"
+          >
+          <a-text position="0 0 -0.4" rotation="-90 0 0" scale="2 2 2" value="="></a-text>
+        </a-entity>
+
+
         <a-box
           id="ground"
           class="cantap"
@@ -146,7 +240,6 @@
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
-
       <!-- Modal content -->
       <div class="modal-content">
         <div class="modal-header">
@@ -161,7 +254,6 @@
           <h3>Modal Footer</h3>
         </div>
       </div>
-
     </div>
 
     <!-- Import the page's JavaScript to do some stuff -->

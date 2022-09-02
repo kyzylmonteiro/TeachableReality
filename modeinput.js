@@ -58,6 +58,12 @@ function startMachine () {
   videoPlaying = true
   START_BUTTON.classList.add('removed')
   ADD_CLASS.classList.remove('removed')
+  
+
+  document.getElementsByClassName("3DObj").forEach(ele => {
+    ele.addEventListener('click', tapHandler)
+  });
+
   document.getElementById('next').classList.remove('removed')
   let mode = document.getElementById('debug-container')
   mode.innerText = 'Input Mode'
@@ -133,6 +139,7 @@ function dataGatherLoop (classNumber) {
     for (let n = 0; n < CLASS_NAMES.length; n++) {
       STATUS.innerText +=
         CLASS_NAMES[n] + ' data count: ' + examplesCount[n] + '. '
+      document.getElementById("class"+(n+1)+"-canvas").style.borderColor = "rgba(0, 255, 0,"+ (0.2 + ((1/20)*examplesCount[n])) +")";
     }
     // window.requestAnimationFrame(dataGatherLoop);
     setTimeout(dataGatherLoop, 10, classNumber)
@@ -171,8 +178,8 @@ function capture (video, scaleFactor, classNumber) {
 let dataCollectorButtons = document.querySelectorAll('button.dataCollector')
 
 for (let i = 0; i < dataCollectorButtons.length; i++) {
-  dataCollectorButtons[i].addEventListener('mousedown', gatherDataForClass)
-  dataCollectorButtons[i].addEventListener('mouseup', gatherDataForClass)
+  dataCollectorButtons[i].addEventListener('touchstart', gatherDataForClass)
+  dataCollectorButtons[i].addEventListener('touchend', gatherDataForClass)
   // Populate the human readable names for classes.
   CLASS_NAMES.push(dataCollectorButtons[i].getAttribute('data-name'))
 }
@@ -270,14 +277,13 @@ const physicsImageTargetComponent = {
     const imageFound = e => {
       showImage(e)
       
-      document.getElementById('3DObj-0').addEventListener('click', tapHandler)
-      document.getElementById('3DObj-0').setAttribute('animation__riseIn', {
-        property: 'scale',
-        dur: 1500,
-        from: '0.001 0.001 0.001',
-        to: '1 1 1',
-        easing: 'easeInOutQuad'
-      })
+      // document.getElementById('3DObj-0').setAttribute('animation__riseIn', {
+      //   property: 'scale',
+      //   dur: 1500,
+      //   from: '0.001 0.001 0.001',
+      //   to: '1 1 1',
+      //   easing: 'easeInOutQuad'
+      // })
     }
 
     const imageLost = e => {

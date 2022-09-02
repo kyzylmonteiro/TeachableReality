@@ -102,6 +102,22 @@
           <img id="imageAsset" src=".\images\blankClass.png" />
         </a-assets>
 
+
+        <a-entity
+          id="3DObj-0"
+          xrextras-pinch-scale
+          xrextras-two-finger-rotate
+          xrextras-hold-drag
+          gltf-model="https://cdn.glitch.me/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/origami_paper_plane_animation.glb?v=1661697389329" 
+          class="cantap 3DObj"
+          position="-1 5 4"
+          rotation="0 90 0"
+          scale="0.003 0.003 0.003"
+          animation-mixer="clip: Take 001; timeScale: 0.1;loop: repeat"
+          shadow="true"
+        >
+        </a-entity>
+
         <a-box
           id="ground"
           class="cantap"
@@ -146,7 +162,6 @@
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
-
       <!-- Modal content -->
       <div class="modal-content">
         <div class="modal-header">
@@ -161,7 +176,6 @@
           <h3>Modal Footer</h3>
         </div>
       </div>
-
     </div>
 
     <!-- Import the page's JavaScript to do some stuff -->

@@ -383,6 +383,7 @@ function logProgress (epoch, logs) {
 var tapedTwice = false
 
 function tapHandler (event) {
+  // console.log("double tapped")
   if (!tapedTwice) {
     tapedTwice = true
     setTimeout(function () {
@@ -404,13 +405,24 @@ function showAllObjects () {
   })
 }
 
+var links = {
+  "tree" : "https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/tree.glb?v=1657750939103",
+  "car" : "https://cdn.glitch.global/efe36b2d-ce3d-491a-941c-3ae047b56db7/1.1.glb?v=1660628644707"
+}
+
 
 function addVirtualObj () {
+
+  var url_string = window.location.href; 
+  var url = new URL(url_string);
+  var objLink = url.searchParams.get("obj");
+  console.log(objLink);
+
   var numOf3DObj = document.getElementsByClassName('3DObj').length
   const newElement = document.createElement('a-entity')
   newElement.setAttribute(
     'gltf-model',
-    document.getElementById('3DobjLink').value
+    (document.getElementById('3DobjLink').value || links[objLink])
   )
   newElement.setAttribute('id', '3DObj-' + numOf3DObj)
   newElement.setAttribute('scale', '10 10 10')
@@ -428,6 +440,7 @@ function addVirtualObj () {
   const randomYRotation = Math.random() * 360
   newElement.setAttribute('rotation', `0 ${randomYRotation} 0`)
   newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
+  newElement.addEventListener('click', tapHandler)
   
   // setting corresponding hold-drag component
   var typesOfMode =document.querySelector('input[name="arMode"]:checked').value.toLowerCase()
@@ -454,29 +467,39 @@ function addVirtualObj () {
 
 function addImageObj () {
   var numOf3DObj = document.getElementsByClassName('3DObj').length
-  const newElement = document.createElement('a-box')
-  newElement.setAttribute('src', document.getElementById('imgLink').value)
+  const newElement = document.createElement('a-entity')
   newElement.setAttribute('id', '3DObj-' + numOf3DObj)
-  newElement.setAttribute('height', '5')
-  newElement.setAttribute('width', '5')
-  newElement.setAttribute('depth', '0.5')
-  newElement.setAttribute('class', 'cantap 3DObj')
   // newElement.setAttribute('xrextras-hold-drag', '')
   newElement.setAttribute('xrextras-pinch-scale', '')
-  newElement.setAttribute('xrextras-two-finger-rotate', '')
-
+  newElement.setAttribute('xrextras-two-finger-rotate', '') 
+  newElement.setAttribute("geometry", "primitive: box; width: 5; height: 5; depth:1;" )
+  newElement.setAttribute("material", "color: white; opacity: 0.1;" )
+  // geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
   // const randomYRotation = Math.random() * 360;
   newElement.addEventListener('click', tapHandler)
-  newElement.setAttribute('rotation', `90 0 0`)
-  newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
+  newElement.setAttribute('rotation', `-90 0 0`)
+
+  const imageElement = document.createElement("a-image")
+  imageElement.setAttribute("position","0 0 0.1")
+  imageElement.setAttribute("scale","5 5 5")
+  imageElement.setAttribute("src",document.getElementById('imgLink').value)
+  imageElement.setAttribute('shadow', {receive: false})
+  newElement.appendChild(imageElement)
+  
+  
+  newElement.addEventListener('click', tapHandler)
   
   // setting corresponding hold-drag component
   var typesOfMode =document.querySelector('input[name="arMode"]:checked').value.toLowerCase()
   if(typesOfMode=="spatial"){
     newElement.setAttribute('xrextras-hold-drag', '')
+    newElement.setAttribute('class', 'cantap 3DObj')
+    newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
     document.getElementById('scene').appendChild(newElement)}
   else if(typesOfMode=="image"){
     newElement.setAttribute('hold-drag', 'groundId: image-plane')
+    newElement.setAttribute("class","cantap 3DObj objOnImage")
+    newElement.setAttribute('position', "0 0 0")
     document.getElementById('scene').appendChild(newElement)
     document.getElementById('imageEntity').object3D.attach(newElement.object3D)}
   else if(typesOfMode=="body"){
@@ -534,22 +557,29 @@ const getWorldQuaternion = object => {
 
 function addFLoatingObj () {
   var numOf3DObj = document.getElementsByClassName('3DObj').length
-  const newElement = document.createElement('a-box')
+  const newElement = document.createElement('a-entity')
   newElement.object3D.position.copy(
     getWorldPosition(document.getElementById('holdAnchor').object3D)
   )
   newElement.object3D.quaternion.copy(
     getWorldQuaternion(document.getElementById('holdAnchor').object3D)
   )
-  newElement.setAttribute('src', document.getElementById('floatLink').value)
   newElement.setAttribute('id', '3DObj-' + numOf3DObj)
-  newElement.setAttribute('height', '5')
-  newElement.setAttribute('width', '5')
-  newElement.setAttribute('depth', '0.5')
   newElement.setAttribute('class', 'cantap 3DObj')
   // newElement.setAttribute("xrextras-hold-drag", "");
   newElement.setAttribute('xrextras-pinch-scale', '')
   newElement.setAttribute('xrextras-two-finger-rotate', '')
+  newElement.setAttribute("geometry", "primitive: box; width: 5; height: 5; depth:1;" )
+  newElement.setAttribute("material", "color: white; opacity: 0.1;" )
+  
+  newElement.addEventListener('click', tapHandler)
+
+  const imageElement = document.createElement("a-image")
+  imageElement.setAttribute("position","0 0 -0.1")
+  imageElement.setAttribute("scale","5 5 5")
+  imageElement.setAttribute("src",document.getElementById('floatLink').value)
+  imageElement.setAttribute('shadow', {receive: false})
+  newElement.appendChild(imageElement)
 
   newElement.setAttribute('shadow', {
     receive: false
@@ -560,7 +590,6 @@ function addFLoatingObj () {
   //   console.log("clicked");
   // });
 
-  newElement.addEventListener('click', tapHandler)
 
   document.getElementById('scene').sceneEl.appendChild(newElement)
 }

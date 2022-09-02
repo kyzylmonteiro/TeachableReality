@@ -12,8 +12,6 @@
 
     <script src="https://cdn.8thwall.com/web/aframe/8frame-1.2.0.min.js"></script>
     <script src="https://cdn.8thwall.com/web/xrextras/xrextras.js"></script>
-
-<script src="//cdn.8thwall.com/web/aframe/aframe-extras-6.1.1.min.js"></script>
     <script
       async
       src="https://apps.8thwall.com/xrweb?appKey=f0LPUhzxQRN1kc4sv4mM4ZRsl663KCFL7y7fj3Uc5wN7TNKY7TbKuJlwz5uu0zGbngfYA3"
@@ -98,9 +96,46 @@
             id="treeModel"
             src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/tree.glb?v=1657750939103"
           ></a-asset-item>
-          <a-asset-item id="animatedModel" src="./assets/robot.glb"></a-asset-item>
           <img id="imageAsset" src=".\images\blankClass.png" />
         </a-assets>
+
+        
+        <a-image
+          id="3DObj-0"
+          xrextras-hold-drag
+          xrextras-pinch-scale
+          xrextras-two-finger-rotate
+          class="cantap 3DObj"
+          position="3 0 0.1"
+          rotation="90 0 0"
+          width="3"
+          height="3"
+          src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/lineSmall.png?v=1661602610694"
+        ></a-image>
+        <a-image
+          id="3DObj-1"
+          xrextras-hold-drag
+          xrextras-pinch-scale
+          xrextras-two-finger-rotate
+          class="cantap 3DObj"
+          position="0 1 0.1"
+          rotation="90 0 0"
+          width="3"
+          height="3"
+          src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/lineBig.png?v=1661602610694"
+        ></a-image>
+        <a-image
+          id="3DObj-2"
+          xrextras-hold-drag
+          xrextras-pinch-scale
+          xrextras-two-finger-rotate
+          class="cantap 3DObj"
+          position="-3 0 0.1"
+          rotation="90 0 0"
+          width="3"
+          height="3"
+          src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/curve.png?v=1661602919617"
+        ></a-image>
 
         <a-box
           id="ground"
@@ -146,7 +181,6 @@
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
-
       <!-- Modal content -->
       <div class="modal-content">
         <div class="modal-header">
@@ -161,7 +195,6 @@
           <h3>Modal Footer</h3>
         </div>
       </div>
-
     </div>
 
     <!-- Import the page's JavaScript to do some stuff -->
