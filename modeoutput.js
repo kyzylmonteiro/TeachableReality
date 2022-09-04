@@ -36,6 +36,7 @@ export function dataPreProcess () {
       trainingDataOutputs.push(n)
     }
   }
+  STATUS.innerText = ''
 }
 
 export function onFileSelected (event) {
@@ -87,12 +88,19 @@ export function storeState (event) {
     console.log(output3DData)
   })
 
-
-  // var w = document.getElementById("scene").canvas.width 
+  // var w = document.getElementById("scene").canvas.width
   // var h = document.getElementById("scene").canvas.height
-  var canvas = document.getElementById('class' + (event.srcElement.id.match(/[0-9]+$/)[0] ) + '-outputcanvas')
+  var canvas = document.getElementById(
+    'class' + event.srcElement.id.match(/[0-9]+$/)[0] + '-outputcanvas'
+  )
   var ctx = canvas.getContext('2d')
-  ctx.drawImage(document.getElementById("scene").canvas, 0, 0, canvas.width, canvas.height)
+  ctx.drawImage(
+    document.getElementById('scene').canvas,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  )
   return canvas
 
   // tried startEvents but trigger not working from predict.js
@@ -134,11 +142,10 @@ export function displayOnOutputCanvas (imageData) {
   }
 }
 
-
 function blankCanvas (i) {
   let canvas = document.createElement('canvas')
   canvas.setAttribute('class', 'data-canvas')
-  canvas.setAttribute('id', 'class' + (i) + '-outputcanvas')
+  canvas.setAttribute('id', 'class' + i + '-outputcanvas')
   canvas.setAttribute('width', CAMERA_FEED_CANVAS.width * 1)
   canvas.setAttribute('height', CAMERA_FEED_CANVAS.height * 1)
   var ctx = canvas.getContext('2d')
@@ -156,7 +163,6 @@ function blankCanvas (i) {
   return canvas
 }
 
-
 export async function updateOutputModeUI () {
   console.log('updating UI')
   let mode = document.getElementById('debug-container')
@@ -167,10 +173,8 @@ export async function updateOutputModeUI () {
   let dataCollectorButtons = document.querySelectorAll('button.dataCollector')
   let parentDiv = document.getElementsByClassName('class-container')[0]
   for (let i = 0; i < dataCollectorButtons.length; i++) {
+    let canvas = blankCanvas(i)
 
-
-    let canvas = blankCanvas(i);
-    
     let canvasConatainer = document.createElement('div')
     canvasConatainer.setAttribute('class', 'class-outputcanvas-container')
     canvasConatainer.setAttribute(
@@ -182,15 +186,12 @@ export async function updateOutputModeUI () {
     canvasConatainer.appendChild(canvas)
     parentDiv.insertBefore(canvasConatainer, dataCollectorButtons[i])
 
-
-  
     let inputLabel = document.createElement('span')
     let outputLabel = document.createElement('span')
     inputLabel.innerHTML = 'State ' + i + ' input'
     outputLabel.innerHTML = 'State ' + i + ' output'
     parentDiv.insertBefore(inputLabel, canvasConatainer)
     parentDiv.insertBefore(outputLabel, dataCollectorButtons[i])
-
 
     let animButton = document.createElement('button')
     animButton.setAttribute('id', 'output-state' + i)
@@ -211,48 +212,39 @@ export async function updateOutputModeUI () {
   console.log('Now Training...')
   setTimeout(outputModeAndTrain, 10)
 
-
   var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add 3d assets
-  var modeDiv = document.createElement("div")
+  var modeDiv = document.createElement('div')
   modeDiv.setAttribute('id', 'anchormode')
   modeDiv.setAttribute(
     'style',
     'width: 80px; height:10px; position:fixed; z-index: 3; right:20%; top:1%;'
   )
-  
-  var modeText = document.createTextNode("Anchor to:");
+
+  var modeText = document.createTextNode('Anchor to:')
   modeDiv.appendChild(modeText)
-  
-  modeDiv.appendChild(document.createElement("br"))
 
+  modeDiv.appendChild(document.createElement('br'))
 
-  var typesOfModes = ["Spatial", "Image", "Body", "Object"]
-
+  var typesOfModes = ['Spatial', 'Image', 'Body', 'Object']
 
   typesOfModes.forEach(modeTypeString => {
-    var modeType = document.createElement("input")
-    modeType.setAttribute("type","radio");
-    modeType.setAttribute("name","arMode");
-    modeType.setAttribute("id", modeTypeString.toLowerCase());
-    modeType.setAttribute("value", modeTypeString.toLowerCase());
-    if(modeTypeString=="Spatial") modeType.setAttribute("checked","checked")
+    var modeType = document.createElement('input')
+    modeType.setAttribute('type', 'radio')
+    modeType.setAttribute('name', 'arMode')
+    modeType.setAttribute('id', modeTypeString.toLowerCase())
+    modeType.setAttribute('value', modeTypeString.toLowerCase())
+    if (modeTypeString == 'Spatial') modeType.setAttribute('checked', 'checked')
 
-    var modeTypeLabel = document.createElement("label")
-    modeTypeLabel.setAttribute("for", modeTypeString.toLowerCase())
+    var modeTypeLabel = document.createElement('label')
+    modeTypeLabel.setAttribute('for', modeTypeString.toLowerCase())
     modeTypeLabel.innerHTML = modeTypeString
-    
 
     modeDiv.appendChild(modeType)
     modeDiv.appendChild(modeTypeLabel)
-    modeDiv.appendChild(document.createElement("br"))    
-
-
-  });
+    modeDiv.appendChild(document.createElement('br'))
+  })
 
   videoElement.appendChild(modeDiv)
-
- 
-
 
   var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add 3d assets
   var addObjI = document.createElement('input')
@@ -317,8 +309,6 @@ export async function updateOutputModeUI () {
     'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; bottom:1%;'
   )
   videoElement.appendChild(addObj)
-
-
 }
 
 export async function outputModeAndTrain () {
@@ -406,31 +396,28 @@ function showAllObjects () {
 }
 
 var links = {
-  "tree" : "https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/tree.glb?v=1657750939103",
-  "car" : "https://cdn.glitch.global/efe36b2d-ce3d-491a-941c-3ae047b56db7/1.1.glb?v=1660628644707"
+  tree:
+    'https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/tree.glb?v=1657750939103',
+  car:
+    'https://cdn.glitch.global/efe36b2d-ce3d-491a-941c-3ae047b56db7/1.1.glb?v=1660628644707'
 }
 
-
 function addVirtualObj () {
-
-  var url_string = window.location.href; 
-  var url = new URL(url_string);
-  var objLink = url.searchParams.get("obj");
-  console.log(objLink);
+  var url_string = window.location.href
+  var url = new URL(url_string)
+  var objLink = url.searchParams.get('obj')
+  console.log(objLink)
 
   var numOf3DObj = document.getElementsByClassName('3DObj').length
   const newElement = document.createElement('a-entity')
   newElement.setAttribute(
     'gltf-model',
-    (document.getElementById('3DobjLink').value || links[objLink])
+    document.getElementById('3DobjLink').value || links[objLink]
   )
   newElement.setAttribute('id', '3DObj-' + numOf3DObj)
   newElement.setAttribute('scale', '10 10 10')
   newElement.setAttribute('class', 'cantap 3DObj')
-  newElement.setAttribute(
-    'xrextras-pinch-scale',
-    'min: 0.01; max: 50;'
-  )
+  newElement.setAttribute('xrextras-pinch-scale', 'min: 0.01; max: 50;')
   newElement.setAttribute('xrextras-two-finger-rotate', '')
   // The raycaster gives a location of the touch in the scene
   // const touchPoint = event.detail.intersection.point;
@@ -441,28 +428,30 @@ function addVirtualObj () {
   newElement.setAttribute('rotation', `0 ${randomYRotation} 0`)
   newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
   newElement.addEventListener('click', tapHandler)
-  
+
   // setting corresponding hold-drag component
-  var typesOfMode =document.querySelector('input[name="arMode"]:checked').value.toLowerCase()
-  if(typesOfMode=="spatial"){
+  var typesOfMode = document
+    .querySelector('input[name="arMode"]:checked')
+    .value.toLowerCase()
+  if (typesOfMode == 'spatial') {
     newElement.setAttribute('xrextras-hold-drag', '')
-    document.getElementById('scene').appendChild(newElement)}
-  else if(typesOfMode=="image"){
+    document.getElementById('scene').appendChild(newElement)
+  } else if (typesOfMode == 'image') {
     newElement.setAttribute('hold-drag', 'groundId: image-plane')
     document.getElementById('scene').appendChild(newElement)
-    document.getElementById('imageEntity').object3D.attach(newElement.object3D)}
-  else if(typesOfMode=="body"){
+    document.getElementById('imageEntity').object3D.attach(newElement.object3D)
+  } else if (typesOfMode == 'body') {
     newElement.setAttribute('hold-drag', 'groundId: wall')
     document.getElementById('scene').appendChild(newElement)
-    document.getElementById('wallEntity').object3D.attach(newElement.object3D)}
-  else if(typesOfMode=="object"){
+    document.getElementById('wallEntity').object3D.attach(newElement.object3D)
+  } else if (typesOfMode == 'object') {
     newElement.setAttribute('xrextras-hold-drag', '')
-    document.getElementById('scene').sceneEl.appendChild(newElement)}  
+    document.getElementById('scene').sceneEl.appendChild(newElement)
+  }
 
   newElement.setAttribute('shadow', {
     receive: false
   })
-
 }
 
 function addImageObj () {
@@ -471,44 +460,54 @@ function addImageObj () {
   newElement.setAttribute('id', '3DObj-' + numOf3DObj)
   // newElement.setAttribute('xrextras-hold-drag', '')
   newElement.setAttribute('xrextras-pinch-scale', '')
-  newElement.setAttribute('xrextras-two-finger-rotate', '') 
-  newElement.setAttribute("geometry", "primitive: box; width: 5; height: 5; depth:1;" )
-  newElement.setAttribute("material", "color: white; opacity: 0.1;" )
+  // newElement.setAttribute('xrextras-two-finger-rotate', '')
+  newElement.setAttribute(
+    'geometry',
+    'primitive: box; width: 5; height: 5; depth:5;'
+  )
+  newElement.setAttribute('material', 'color: white; opacity: 0.2;')
   // geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
   // const randomYRotation = Math.random() * 360;
   newElement.addEventListener('click', tapHandler)
-  newElement.setAttribute('rotation', `-90 0 0`)
+  newElement.setAttribute('rotation', '0 0 0')
 
-  const imageElement = document.createElement("a-image")
-  imageElement.setAttribute("position","0 0 0.1")
-  imageElement.setAttribute("scale","5 5 5")
-  imageElement.setAttribute("src",document.getElementById('imgLink').value)
-  imageElement.setAttribute('shadow', {receive: false})
+  const imageElement = document.createElement('a-image')
+  imageElement.setAttribute('position', '0 0 0.5')
+  imageElement.setAttribute('scale', '3 3 3')
+  imageElement.setAttribute('rotation', '-90 0 0')
+  imageElement.setAttribute('src', document.getElementById('imgLink').value)
+  imageElement.setAttribute('shadow', { receive: false })
   newElement.appendChild(imageElement)
-  
-  
+
   newElement.addEventListener('click', tapHandler)
-  
+
   // setting corresponding hold-drag component
-  var typesOfMode =document.querySelector('input[name="arMode"]:checked').value.toLowerCase()
-  if(typesOfMode=="spatial"){
+  var typesOfMode = document
+    .querySelector('input[name="arMode"]:checked')
+    .value.toLowerCase()
+  if (typesOfMode == 'spatial') {
     newElement.setAttribute('xrextras-hold-drag', '')
     newElement.setAttribute('class', 'cantap 3DObj')
     newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
-    document.getElementById('scene').appendChild(newElement)}
-  else if(typesOfMode=="image"){
-    newElement.setAttribute('hold-drag', 'groundId: image-plane')
-    newElement.setAttribute("class","cantap 3DObj objOnImage")
-    newElement.setAttribute('position', "0 0 0")
+    newElement.setAttribute('scale', '5 5 5')
     document.getElementById('scene').appendChild(newElement)
-    document.getElementById('imageEntity').object3D.attach(newElement.object3D)}
-  else if(typesOfMode=="body"){
+  } else if (typesOfMode == 'image') {
+    newElement.setAttribute('hold-drag', 'groundId: image-plane')
+    newElement.setAttribute('class', 'cantap 3DObj objOnImage')
+    newElement.setAttribute('position', '0 0 0')
+    newElement.setAttribute('scale', '5 5 5')
+    document.getElementById('scene').appendChild(newElement)
+    document.getElementById('imageEntity').object3D.attach(newElement.object3D)
+  } else if (typesOfMode == 'body') {
     newElement.setAttribute('hold-drag', 'groundId: wall')
     document.getElementById('scene').appendChild(newElement)
-    document.getElementById('wallEntity').object3D.attach(newElement.object3D)}
-  else if(typesOfMode=="object"){
+    newElement.setAttribute('scale', '5 5 5')
+    document.getElementById('wallEntity').object3D.attach(newElement.object3D)
+  } else if (typesOfMode == 'object') {
+    document.getElementById('scene').appendChild(newElement)
     newElement.setAttribute('xrextras-hold-drag', '')
-    document.getElementById('scene').sceneEl.appendChild(newElement)}  
+    newElement.setAttribute('scale', '5 5 5')
+  }
 
   newElement.setAttribute('shadow', {
     receive: false
@@ -518,24 +517,39 @@ function addImageObj () {
   //   // newElement.setAttribute("scale","3 3 3");
   //   console.log("clicked");
   // });
-
-
 }
 
-function getCameraRaycastPoint(raycaster) {
+function getCameraRaycastPoint (raycaster) {
   raycaster = new THREE.Raycaster()
-  var a = new THREE.Vector2(0, 0);
-  raycaster.setFromCamera(a, document.getElementById("scene").camera)
-  var intersects 
-  var typesOfModes =document.querySelector('input[name="arMode"]:checked').value.toLowerCase()
-  if(typesOfModes=="spatial")
-    intersects = raycaster.intersectObject(document.getElementById("ground").object3D, true)
-  else if(typesOfModes=="image")
-    intersects = raycaster.intersectObject(document.getElementById("image-plane").object3D, true)
-  else if(typesOfModes=="body")
-    intersects = raycaster.intersectObject(document.getElementById("wall").object3D, true)
-  else if(typesOfModes=="object")
-    intersects = raycaster.intersectObject(document.getElementById("ground").object3D, true)
+  var a = new THREE.Vector2(0, 0)
+  raycaster.setFromCamera(a, document.getElementById('scene').camera)
+  var intersects
+  var typesOfModes = document
+    .querySelector('input[name="arMode"]:checked')
+    .value.toLowerCase()
+  if (typesOfModes == 'spatial')
+    intersects = raycaster.intersectObject(
+      (
+        document.getElementById('ground') ||
+        document.getElementById('image-plane')
+      ).object3D,
+      true
+    )
+  else if (typesOfModes == 'image')
+    intersects = raycaster.intersectObject(
+      document.getElementById('image-plane').object3D,
+      true
+    )
+  else if (typesOfModes == 'body')
+    intersects = raycaster.intersectObject(
+      document.getElementById('wall').object3D,
+      true
+    )
+  else if (typesOfModes == 'object')
+    intersects = raycaster.intersectObject(
+      document.getElementById('ground').object3D,
+      true
+    )
 
   var pos = intersects[0].point
   return pos
@@ -569,16 +583,19 @@ function addFLoatingObj () {
   // newElement.setAttribute("xrextras-hold-drag", "");
   newElement.setAttribute('xrextras-pinch-scale', '')
   newElement.setAttribute('xrextras-two-finger-rotate', '')
-  newElement.setAttribute("geometry", "primitive: box; width: 5; height: 5; depth:1;" )
-  newElement.setAttribute("material", "color: white; opacity: 0.1;" )
-  
+  newElement.setAttribute(
+    'geometry',
+    'primitive: box; width: 5; height: 5; depth:1;'
+  )
+  newElement.setAttribute('material', 'color: white; opacity: 0.1;')
+
   newElement.addEventListener('click', tapHandler)
 
-  const imageElement = document.createElement("a-image")
-  imageElement.setAttribute("position","0 0 -0.1")
-  imageElement.setAttribute("scale","5 5 5")
-  imageElement.setAttribute("src",document.getElementById('floatLink').value)
-  imageElement.setAttribute('shadow', {receive: false})
+  const imageElement = document.createElement('a-image')
+  imageElement.setAttribute('position', '0 0 -0.1')
+  imageElement.setAttribute('scale', '5 5 5')
+  imageElement.setAttribute('src', document.getElementById('floatLink').value)
+  imageElement.setAttribute('shadow', { receive: false })
   newElement.appendChild(imageElement)
 
   newElement.setAttribute('shadow', {
@@ -590,36 +607,31 @@ function addFLoatingObj () {
   //   console.log("clicked");
   // });
 
-
   document.getElementById('scene').sceneEl.appendChild(newElement)
 }
 
+// Get the modal
+var modal = document.getElementById('myModal')
 
+// Get the button that opens the modal
+var btn = document.getElementById('next')
 
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName('close')[0]
 
+// When the user clicks on the button, open the modal
+btn.onclick = function () {
+  modal.style.display = 'block'
+}
 
-// // Get the modal
-// var modal = document.getElementById("myModal");
+// When the user clicks on <span> (x), close the modal
+span.onclick = function () {
+  modal.style.display = 'none'
+}
 
-// // Get the button that opens the modal
-// var btn = document.getElementById("nothing for now");
-
-// // Get the <span> element that closes the modal
-// var span = document.getElementsByClassName("close")[0];
-
-// // When the user clicks on the button, open the modal
-// btn.onclick = function() {
-//   modal.style.display = "block";
-// }
-
-// // When the user clicks on <span> (x), close the modal
-// span.onclick = function() {
-//   modal.style.display = "none";
-// }
-
-// // When the user clicks anywhere outside of the modal, close it
-// window.onclick = function(event) {
-//   if (event.target == modal) {
-//     modal.style.display = "none";
-//   }
-// } 
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+  if (event.target == modal) {
+    modal.style.display = 'none'
+  }
+}

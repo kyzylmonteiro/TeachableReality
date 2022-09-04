@@ -30,11 +30,46 @@ button {
   display: none;
 }
 
-#status {
-  font-size: 150%;
-  color: orangered;
+#statusContainer {
+  font-weight: bold;
+  font-size: 100%;
+  color: white;
+  background-color: rgb(0, 0, 0,0.5);
+  top: 0px;
+  left: 0px;
+  display: block;
+  position: fixed;
   z-index: 2;
+  width: 200px;
+  height: auto;
+  padding: 20px;
 }
+
+/* #status {
+  font-size: 100%;
+  position: fixed;
+  left: 20px;
+  width: auto;
+  display: block;
+  top: 50px;
+  z-index: 2;
+} */
+
+/* #timerContainer {
+  left: 20px;
+  font-size: 150%;
+  position: fixed;
+  width: auto;
+  display: block;
+  z-index: 2;
+} */
+
+/* #timer {
+  display: block;
+} */
+
+
+
 
 .video-container {
   position: absolute;
@@ -121,13 +156,13 @@ button {
   user-select: none;
   -moz-user-select: none; /* Old versions of Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version */ 
+  user-select: none; /* Non-prefixed version */
 }
 
 .data-canvas {
   margin: auto;
   display: block;
-  border: 2px solid rgba(255, 0, 0, 0.2);
+  border: 2px solid white;
 }
 
 .navigation-buttons {
@@ -164,8 +199,8 @@ button {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content */
@@ -176,22 +211,34 @@ button {
   padding: 0;
   border: 1px solid #888;
   width: 60%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   -webkit-animation-name: animatetop;
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;
-  animation-duration: 0.4s
+  animation-duration: 0.4s;
 }
 
 /* Add Animation */
 @-webkit-keyframes animatetop {
-  from {top:-300px; opacity:0} 
-  to {top:0; opacity:1}
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
 }
 
 @keyframes animatetop {
-  from {top:-300px; opacity:0}
-  to {top:0; opacity:1}
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
 }
 
 /* The Close Button */
@@ -215,7 +262,9 @@ button {
   color: black;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {
+  padding: 2px 16px;
+}
 
 .modal-footer {
   padding: 2px 16px;

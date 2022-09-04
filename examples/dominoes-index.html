@@ -13,7 +13,7 @@
     <script src="https://cdn.8thwall.com/web/aframe/8frame-1.2.0.min.js"></script>
     <script src="https://cdn.8thwall.com/web/xrextras/xrextras.js"></script>
 
-<script src="//cdn.8thwall.com/web/aframe/aframe-extras-6.1.1.min.js"></script>
+    <script src="//cdn.8thwall.com/web/aframe/aframe-extras-6.1.1.min.js"></script>
     <script
       async
       src="https://apps.8thwall.com/xrweb?appKey=f0LPUhzxQRN1kc4sv4mM4ZRsl663KCFL7y7fj3Uc5wN7TNKY7TbKuJlwz5uu0zGbngfYA3"
@@ -25,7 +25,13 @@
   <body>
     <!-- <h1>Make your own "Teachable Machine" using Transfer Learning with MobileNet v3 in TensorFlow.js using saved graph model from TFHub.</h1> -->
 
-    <p id="status">Awaiting TF.js load</p>
+    <p id="status">
+      Debugger <br />
+      Awaiting TF.js load
+    </p>
+    <p id="timerContainer"> <input id="timerEnabled" type="checkbox" value="timerEnabled"> 
+      <p id="timer">Timer</p>
+    </p>
 
     <div class="video-container">
       <!-- <video id="webcam" autoplay muted></video> -->
@@ -98,103 +104,160 @@
             id="treeModel"
             src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/tree.glb?v=1657750939103"
           ></a-asset-item>
-          <a-asset-item id="animatedModel" src="./assets/robot.glb"></a-asset-item>
+          <a-asset-item
+            id="animatedModel"
+            src="./assets/robot.glb"
+          ></a-asset-item>
           <img id="imageAsset" src=".\images\blankClass.png" />
         </a-assets>
 
         <a-entity
-            id="3DObj-0"
-            xrextras-pinch-scale
-            xrextras-two-finger-rotate
-            xrextras-hold-drag
-            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
-            class="cantap 3DObj"
+          id="3DObj-0"
+          xrextras-pinch-scale
+          xrextras-two-finger-rotate
+          xrextras-hold-drag
+          geometry="primitive: box; width: 0.5; height: 0.25; depth:1"
+          material="color: white; transparent: true; opacity: 0"
+          class="cantap 3DObj"
+          position="0 0 0"
+          scale="1 1 1"
+        >
+          <a-text
+            position="-0.2 0 -0.4"
+            rotation="-90 0 0"
+            color="yellow"
+            scale="2 2 2"
+            value="6"
+          ></a-text>
+          <a-image
             position="0 0 0"
-            scale="1 1 1"
-          >
-          <a-text position="-0.2 0 -0.4" rotation="-90 0 0" color="yellow" scale="2 2 2" value="6"></a-text>
-          <a-image position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/downArrow.png?v=1661609300013"></a-image>
+            rotation="-90 0 0"
+            scale="0.25 0.25 0.25"
+            src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/downArrow.png?v=1661609300013"
+          ></a-image>
         </a-entity>
 
         <a-entity
-            id="3DObj-1"
-            xrextras-pinch-scale
-            xrextras-two-finger-rotate
-            xrextras-hold-drag
-            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
-            class="cantap 3DObj"
+          id="3DObj-1"
+          xrextras-pinch-scale
+          xrextras-two-finger-rotate
+          xrextras-hold-drag
+          geometry="primitive: box; width: 0.5; height: 0.25; depth:1"
+          material="color: white; transparent: true; opacity: 0"
+          class="cantap 3DObj"
+          position="0 0 0"
+          scale="1 1 1"
+        >
+          <a-text
+            position="-0.2 0 -0.4"
+            rotation="-90 0 0"
+            color="lightgreen"
+            scale="2 2 2"
+            value="2"
+          ></a-text>
+          <a-image
             position="0 0 0"
-            scale="1 1 1"
-          >
-          <a-text position="-0.2 0 -0.4" rotation="-90 0 0" color="lightgreen" scale="2 2 2" value="2"></a-text>
-          <a-image position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/downArrow.png?v=1661609300013"></a-image>
+            rotation="-90 0 0"
+            scale="0.25 0.25 0.25"
+            src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/downArrow.png?v=1661609300013"
+          ></a-image>
         </a-entity>
 
         <a-entity
-            id="3DObj-2"
-            xrextras-pinch-scale
-            xrextras-two-finger-rotate
-            xrextras-hold-drag
-            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
-            class="cantap 3DObj"
-            position="0 0 0"
-            scale="1 1 1"
-          >
-          <a-text position="-0.2 0 -0.4" rotation="-90 0 0" color="blue" scale="2 2 2" value="3"></a-text>
+          id="3DObj-2"
+          xrextras-pinch-scale
+          xrextras-two-finger-rotate
+          xrextras-hold-drag
+          geometry="primitive: box; width: 0.5; height: 0.25; depth:1"
+          material="color: white; transparent: true; opacity: 0"
+          class="cantap 3DObj"
+          position="0 0 0"
+          scale="1 1 1"
+        >
+          <a-text
+            position="-0.2 0 -0.4"
+            rotation="-90 0 0"
+            color="blue"
+            scale="2 2 2"
+            value="3"
+          ></a-text>
         </a-entity>
 
         <a-entity
-            id="3DObj-3"
-            xrextras-pinch-scale
-            xrextras-two-finger-rotate
-            xrextras-hold-drag
-            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
-            class="cantap 3DObj"
-            position="0 0 0"
-            scale="1 1 1"
-          >
-          <a-text position="-0.2 0 -0.4" rotation="-90 0 0" scale="2 2 2" value="/"></a-text>
+          id="3DObj-3"
+          xrextras-pinch-scale
+          xrextras-two-finger-rotate
+          xrextras-hold-drag
+          geometry="primitive: box; width: 0.5; height: 0.25; depth:1"
+          material="color: white; transparent: true; opacity: 0"
+          class="cantap 3DObj"
+          position="0 0 0"
+          scale="1 1 1"
+        >
+          <a-text
+            position="-0.2 0 -0.4"
+            rotation="-90 0 0"
+            scale="2 2 2"
+            value="/"
+          ></a-text>
         </a-entity>
 
         <a-entity
-            id="3DObj-4"
-            xrextras-pinch-scale
-            xrextras-two-finger-rotate
-            xrextras-hold-drag
-            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
-            class="cantap 3DObj"
-            position="0 0 0"
-            scale="1 1 1"
-          >
-          <a-text position="-0.2 0 -0.4" rotation="-90 0 0" scale="2 2 2" value="x"></a-text>
+          id="3DObj-4"
+          xrextras-pinch-scale
+          xrextras-two-finger-rotate
+          xrextras-hold-drag
+          geometry="primitive: box; width: 0.5; height: 0.25; depth:1"
+          material="color: white; transparent: true; opacity: 0"
+          class="cantap 3DObj"
+          position="0 0 0"
+          scale="1 1 1"
+        >
+          <a-text
+            position="-0.2 0 -0.4"
+            rotation="-90 0 0"
+            scale="2 2 2"
+            value="x"
+          ></a-text>
         </a-entity>
 
         <a-entity
-            id="3DObj-5"
-            xrextras-pinch-scale
-            xrextras-two-finger-rotate
-            xrextras-hold-drag
-            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
-            class="cantap 3DObj"
-            position="0 0 0"
-            scale="1 1 1"
-          >
-          <a-text position="0 0 -0.4" rotation="-90 0 0" scale="2 2 2" value="12"></a-text>
+          id="3DObj-5"
+          xrextras-pinch-scale
+          xrextras-two-finger-rotate
+          xrextras-hold-drag
+          geometry="primitive: box; width: 0.5; height: 0.25; depth:1"
+          material="color: white; transparent: true; opacity: 0"
+          class="cantap 3DObj"
+          position="0 0 0"
+          scale="1 1 1"
+        >
+          <a-text
+            position="0 0 -0.4"
+            rotation="-90 0 0"
+            scale="2 2 2"
+            value="12"
+          ></a-text>
         </a-entity>
 
         <a-entity
-            id="3DObj-6"
-            xrextras-pinch-scale
-            xrextras-two-finger-rotate
-            xrextras-hold-drag
-            geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
-            class="cantap 3DObj"
-            position="0 0 0"
-            scale="1 1 1"
-          >
-          <a-text position="0 0 -0.4" rotation="-90 0 0" scale="2 2 2" value="="></a-text>
+          id="3DObj-6"
+          xrextras-pinch-scale
+          xrextras-two-finger-rotate
+          xrextras-hold-drag
+          geometry="primitive: box; width: 0.5; height: 0.25; depth:1"
+          material="color: white; transparent: true; opacity: 0"
+          class="cantap 3DObj"
+          position="0 0 0"
+          scale="1 1 1"
+        >
+          <a-text
+            position="0 0 -0.4"
+            rotation="-90 0 0"
+            scale="2 2 2"
+            value="="
+          ></a-text>
         </a-entity>
-
 
         <a-box
           id="ground"
@@ -261,5 +324,6 @@
     <script type="module" src="./predict.js"></script>
     <script type="module" src="./modeoutput.js"></script>
     <script type="module" src="./modeinput.js"></script>
+    <script type="module" src="./customcomponents.js"></script>
   </body>
 </html>

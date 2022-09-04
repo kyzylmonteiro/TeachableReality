@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <base href="./" />
+    <base href="./.." />
     <link rel="icon" type="image/x-icon" href="https://kyzyl.me/favicon.ico" />
     <script src="https://unpkg.com/konva@8/konva.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -13,7 +13,7 @@
     <script src="https://cdn.8thwall.com/web/aframe/8frame-1.2.0.min.js"></script>
     <script src="https://cdn.8thwall.com/web/xrextras/xrextras.js"></script>
 
-<script src="//cdn.8thwall.com/web/aframe/aframe-extras-6.1.1.min.js"></script>
+    <script src="//cdn.8thwall.com/web/aframe/aframe-extras-6.1.1.min.js"></script>
     <script
       async
       src="https://apps.8thwall.com/xrweb?appKey=f0LPUhzxQRN1kc4sv4mM4ZRsl663KCFL7y7fj3Uc5wN7TNKY7TbKuJlwz5uu0zGbngfYA3"
@@ -25,7 +25,13 @@
   <body>
     <!-- <h1>Make your own "Teachable Machine" using Transfer Learning with MobileNet v3 in TensorFlow.js using saved graph model from TFHub.</h1> -->
 
-    <p id="status">Awaiting TF.js load</p>
+    <p id="status">
+      Debugger <br />
+      Awaiting TF.js load
+    </p>
+    <p id="timerContainer"> <input id="timerEnabled" type="checkbox" value="timerEnabled"> 
+      <p id="timer">Timer</p>
+    </p>
 
     <div class="video-container">
       <!-- <video id="webcam" autoplay muted></video> -->
@@ -98,7 +104,10 @@
             id="treeModel"
             src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/tree.glb?v=1657750939103"
           ></a-asset-item>
-          <a-asset-item id="animatedModel" src="./assets/robot.glb"></a-asset-item>
+          <a-asset-item
+            id="animatedModel"
+            src="./assets/robot.glb"
+          ></a-asset-item>
           <img id="imageAsset" src=".\images\blankClass.png" />
         </a-assets>
 
@@ -107,7 +116,7 @@
           xrextras-pinch-scale
           xrextras-two-finger-rotate
           xrextras-hold-drag
-          gltf-model="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/Deer-White.glb?v=1661773615034" 
+          gltf-model="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/Deer-White.glb?v=1661773615034"
           class="cantap 3DObj"
           position="0 0 -5"
           rotation="0 -180 0"
@@ -116,13 +125,12 @@
         >
         </a-entity>
 
-
         <a-entity
           id="3DObj-1"
           xrextras-pinch-scale
           xrextras-two-finger-rotate
           xrextras-hold-drag
-          gltf-model="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/Dog-White.glb?v=1661773629893" 
+          gltf-model="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/Dog-White.glb?v=1661773629893"
           class="cantap 3DObj"
           position="0 0 -5"
           rotation="0 -90 0"
@@ -131,13 +139,12 @@
         >
         </a-entity>
 
-
         <a-entity
           id="3DObj-2"
           xrextras-pinch-scale
           xrextras-two-finger-rotate
           xrextras-hold-drag
-          gltf-model="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/Elephant-white.glb?v=1661773629893" 
+          gltf-model="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/Elephant-white.glb?v=1661773629893"
           class="cantap 3DObj"
           position="0 0 -5"
           rotation="0 -90 0"
@@ -145,8 +152,6 @@
           shadow="true"
         >
         </a-entity>
-
-
 
         <a-box
           id="ground"
@@ -213,5 +218,6 @@
     <script type="module" src="./predict.js"></script>
     <script type="module" src="./modeoutput.js"></script>
     <script type="module" src="./modeinput.js"></script>
+    <script type="module" src="./customcomponents.js"></script>
   </body>
 </html>

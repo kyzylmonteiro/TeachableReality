@@ -13,7 +13,8 @@
     <script src="https://cdn.8thwall.com/web/aframe/8frame-1.2.0.min.js"></script>
     <script src="https://cdn.8thwall.com/web/xrextras/xrextras.js"></script>
 
-<script src="//cdn.8thwall.com/web/aframe/aframe-extras-6.1.1.min.js"></script>
+    <script src="//cdn.8thwall.com/web/aframe/aframe-extras-6.1.1.min.js"></script>
+    <!-- <script src="./opencv/opencv.js"></script> -->
     <script
       async
       src="https://apps.8thwall.com/xrweb?appKey=f0LPUhzxQRN1kc4sv4mM4ZRsl663KCFL7y7fj3Uc5wN7TNKY7TbKuJlwz5uu0zGbngfYA3"
@@ -25,7 +26,16 @@
   <body>
     <!-- <h1>Make your own "Teachable Machine" using Transfer Learning with MobileNet v3 in TensorFlow.js using saved graph model from TFHub.</h1> -->
 
-    <p id="status">Awaiting TF.js load</p>
+    <div id="statusContainer">
+      <p id="timerContainer"> <input id="timerEnabled" type="checkbox" value="timerEnabled"> 
+        <label id="timer">Timer</label>
+      </p>
+      <p id="status">
+        Debugger <br />
+        Awaiting TF.js load
+      </p>
+    </div>
+    
 
     <div class="video-container">
       <!-- <video id="webcam" autoplay muted></video> -->
@@ -68,29 +78,18 @@
           </a-plane>
         </a-entity> -->
 
-        <!-- <a-entity id="wallEntity" visible="true" position="0 0 -20">
-          <a-entity
-              id="3DObj-1"
-              gltf-model="#treeModel"
-              class="cantap 3DObj"
-              hold-drag="groundId: wall"
-              xrextras-two-finger-rotate 
-              xrextras-pinch-scale 
-              scale="3 3 3"
-              shadow="receive: false"
-            >
-            </a-entity>
-            <a-plane
-              id="wall"
-              class="cantap"
-              rotation="0 0 0"
-              width="10" 
-              height="10"
-              material="color:white; transparent: true; opacity: 0.4" 
-              shadow
-            >
-            </a-plane>
-        </a-entity> -->
+        <a-entity id="wallEntity" visible="true" position="0 0 -20">
+          <a-plane
+            id="wall"
+            class="cantap"
+            rotation="0 0 0"
+            width="10"
+            height="10"
+            material="color:white; transparent: true; opacity: 0.4"
+            shadow
+          >
+          </a-plane>
+        </a-entity>
 
         <a-assets>
           <!-- Download from https://github.com/8thwall/web/blob/master/examples/aframe/placeground/tree.glb -->
@@ -98,7 +97,10 @@
             id="treeModel"
             src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/tree.glb?v=1657750939103"
           ></a-asset-item>
-          <a-asset-item id="animatedModel" src="./assets/robot.glb"></a-asset-item>
+          <a-asset-item
+            id="animatedModel"
+            src="./assets/robot.glb"
+          ></a-asset-item>
           <img id="imageAsset" src=".\images\blankClass.png" />
         </a-assets>
 
@@ -146,7 +148,6 @@
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
-
       <!-- Modal content -->
       <div class="modal-content">
         <div class="modal-header">
@@ -161,7 +162,6 @@
           <h3>Modal Footer</h3>
         </div>
       </div>
-
     </div>
 
     <!-- Import the page's JavaScript to do some stuff -->
@@ -169,5 +169,6 @@
     <script type="module" src="./predict.js"></script>
     <script type="module" src="./modeoutput.js"></script>
     <script type="module" src="./modeinput.js"></script>
+    <script type="module" src="./customcomponents.js"></script>
   </body>
 </html>

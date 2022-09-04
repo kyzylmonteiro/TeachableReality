@@ -54,24 +54,37 @@ function playAnimation (classID) {
   classList.forEach(el => {
     var objID = parseInt(el.id.match(/[0-9]+$/)[0])
 
-    if(el.classList.contains("objOnImage")){
+    if (el.classList.contains('objOnImage')) {
       // console.log(output3DData[objID][classID]['position'].x);
       // document.getElementById("scene").object3D.attach(el.object3D);
-      el.object3D.position.lerp(new THREE.Vector3(output3DData[objID][classID]['position'].x,
-      output3DData[objID][classID]['position'].y,
-      output3DData[objID][classID]['position'].z ),0.2)
-      el.setAttribute("rotation",output3DData[objID][classID]['rotation'].x + " " +
-      output3DData[objID][classID]['rotation'].y + " " +
-      output3DData[objID][classID]['rotation'].z )
-      el.object3D.scale.lerp(new THREE.Vector3(output3DData[objID][classID]['scale'].x,
-      output3DData[objID][classID]['scale'].y,
-      output3DData[objID][classID]['scale'].z ),0.2)
+      el.object3D.position.lerp(
+        new THREE.Vector3(
+          output3DData[objID][classID]['position'].x,
+          output3DData[objID][classID]['position'].y,
+          output3DData[objID][classID]['position'].z
+        ),
+        0.2
+      )
+      el.setAttribute(
+        'rotation',
+        output3DData[objID][classID]['rotation'].x +
+          ' ' +
+          output3DData[objID][classID]['rotation'].y +
+          ' ' +
+          output3DData[objID][classID]['rotation'].z
+      )
+      el.object3D.scale.lerp(
+        new THREE.Vector3(
+          output3DData[objID][classID]['scale'].x,
+          output3DData[objID][classID]['scale'].y,
+          output3DData[objID][classID]['scale'].z
+        ),
+        0.2
+      )
     }
 
     // console.log(parseInt(objID),classID, output3DData[objID]);
-
-    
-    else{
+    else {
       el.setAttribute(
         'animation__p',
         'property:position; dur: 200; easing: easeInOutSine; to: ' +
@@ -82,26 +95,26 @@ function playAnimation (classID) {
           output3DData[objID][classID]['position'].z +
           ';'
       )
-    el.setAttribute(
-      'animation__r',
-      'property:rotation; dur: 200; easing: easeInOutSine; to: ' +
-        output3DData[objID][classID]['rotation'].x +
-        ' ' +
-        output3DData[objID][classID]['rotation'].y +
-        ' ' +
-        output3DData[objID][classID]['rotation'].z +
-        ';'
-    )
-    el.setAttribute(
-      'animation__s',
-      'property:scale; dur: 200; easing: easeInOutSine; to: ' +
-        output3DData[objID][classID]['scale'].x +
-        ' ' +
-        output3DData[objID][classID]['scale'].y +
-        ' ' +
-        output3DData[objID][classID]['scale'].z +
-        ';'
-    )
+      el.setAttribute(
+        'animation__r',
+        'property:rotation; dur: 200; easing: easeInOutSine; to: ' +
+          output3DData[objID][classID]['rotation'].x +
+          ' ' +
+          output3DData[objID][classID]['rotation'].y +
+          ' ' +
+          output3DData[objID][classID]['rotation'].z +
+          ';'
+      )
+      el.setAttribute(
+        'animation__s',
+        'property:scale; dur: 200; easing: easeInOutSine; to: ' +
+          output3DData[objID][classID]['scale'].x +
+          ' ' +
+          output3DData[objID][classID]['scale'].y +
+          ' ' +
+          output3DData[objID][classID]['scale'].z +
+          ';'
+      )
     }
     // el.setAttribute(
     //   'animation__v',
@@ -160,13 +173,15 @@ export function updateRunModeUI () {
   }
 
   PREDICT_BUTTON.classList.add('removed')
+  STATUS.style.display = "none"
+  document.getElementById('timer').style.display = "none"
 
-  var videoContainerChildern = document.getElementsByClassName("video-container")[0].children
-  videoContainerChildern.forEach(ele=> {
-    if(ele.id!="scene")
-      ele.classList.add("removed")
-    
-  }); 
+  var videoContainerChildern = document.getElementsByClassName(
+    'video-container'
+  )[0].children
+  videoContainerChildern.forEach(ele => {
+    if (ele.id != 'scene') ele.classList.add('removed')
+  })
 
   predict = true
   predictLoop()
