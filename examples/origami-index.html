@@ -25,13 +25,22 @@
   <body>
     <!-- <h1>Make your own "Teachable Machine" using Transfer Learning with MobileNet v3 in TensorFlow.js using saved graph model from TFHub.</h1> -->
 
-    <p id="status">
-      Debugger <br />
-      Awaiting TF.js load
-    </p>
-    <p id="timerContainer"> <input id="timerEnabled" type="checkbox" value="timerEnabled"> 
-      <p id="timer">Timer</p>
-    </p>
+    <div id="statusContainer">
+      <p id="timerContainer"> <input id="timerEnabled" type="checkbox" value="timerEnabled"> 
+        <label id="timer">Timer</label>
+      </p>
+      <p id="status">
+        Debugger <br />
+        Awaiting TF.js load
+      </p>
+      <!-- // added for colortracking -->
+      <!-- <div id="opencv">
+        <input type="color" class="form-control form-control-color" id="color-picker" value="#FFFFFF"
+        title="Choose your color">
+        <canvas id="canvasOutput" width="320" height="180"></canvas>
+        <video id="inputVideo" width="1280" height="720"></video>
+      </div> -->
+    </div>
 
     <div class="video-container">
       <!-- <video id="webcam" autoplay muted></video> -->
@@ -174,14 +183,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <span class="close">&times;</span>
-          <h2>Modal Header</h2>
+          <h2>Choose Subject of Expereince</h2>
         </div>
         <div class="modal-body">
-          <p>Some text in the Modal Body</p>
-          <p>Some other text...</p>
+          
         </div>
         <div class="modal-footer">
-          <h3>Modal Footer</h3>
+          <h3></h3>
         </div>
       </div>
     </div>

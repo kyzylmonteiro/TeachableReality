@@ -213,20 +213,22 @@ export async function updateOutputModeUI () {
   console.log('Now Training...')
   setTimeout(outputModeAndTrain, 10)
 
-  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add 3d assets
+  // var videoElement = document.getElementsByClassName('video-container')[0] // adding anchor mode menu
+  var videoElement = document.getElementsByClassName('modal-body')[0]
   var modeDiv = document.createElement('div')
   modeDiv.setAttribute('id', 'anchormode')
   modeDiv.setAttribute(
     'style',
-    'width: 80px; height:10px; position:fixed; z-index: 3; right:20%; top:1%;'
+    // 'width: 80px; height:10px; position:fixed; z-index: 3; right:20%; top:1%;'
+    'width: 100px; z-index: 3;'
   )
 
-  var modeText = document.createTextNode('Anchor to:')
-  modeDiv.appendChild(modeText)
+  // var modeText = document.createTextNode('Anchor to:')
+  // modeDiv.appendChild(modeText)
 
-  modeDiv.appendChild(document.createElement('br'))
+  // modeDiv.appendChild(document.createElement('br'))
 
-  var typesOfModes = ['Spatial', 'Image', 'Body', 'Object']
+  var typesOfModes = ['Environment', 'Image', 'Body', 'Object']
 
   typesOfModes.forEach(modeTypeString => {
     var modeType = document.createElement('input')
@@ -234,7 +236,7 @@ export async function updateOutputModeUI () {
     modeType.setAttribute('name', 'arMode')
     modeType.setAttribute('id', modeTypeString.toLowerCase())
     modeType.setAttribute('value', modeTypeString.toLowerCase())
-    if (modeTypeString == 'Spatial') modeType.setAttribute('checked', 'checked')
+    if (modeTypeString == 'environment') modeType.setAttribute('checked', 'checked')
 
     var modeTypeLabel = document.createElement('label')
     modeTypeLabel.setAttribute('for', modeTypeString.toLowerCase())
@@ -434,7 +436,7 @@ function addVirtualObj () {
   var typesOfMode = document
     .querySelector('input[name="arMode"]:checked')
     .value.toLowerCase()
-  if (typesOfMode == 'spatial') {
+  if (typesOfMode == 'environment') {
     newElement.setAttribute('xrextras-hold-drag', '')
     document.getElementById('scene').appendChild(newElement)
   } else if (typesOfMode == 'image') {
@@ -486,7 +488,7 @@ function addImageObj () {
   var typesOfMode = document
     .querySelector('input[name="arMode"]:checked')
     .value.toLowerCase()
-  if (typesOfMode == 'spatial') {
+  if (typesOfMode == 'environment') {
     newElement.setAttribute('xrextras-hold-drag', '')
     newElement.setAttribute('class', 'cantap 3DObj')
     newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
@@ -528,7 +530,7 @@ function getCameraRaycastPoint (raycaster) {
   var typesOfModes = document
     .querySelector('input[name="arMode"]:checked')
     .value.toLowerCase()
-  if (typesOfModes == 'spatial')
+  if (typesOfModes == 'environment')
     intersects = raycaster.intersectObject(
       (
         document.getElementById('ground') ||
@@ -628,6 +630,24 @@ btn.onclick = function () {
 // When the user clicks on <span> (x), close the modal
 span.onclick = function () {
   modal.style.display = 'none'
+  // setting corresponding hold-drag component
+  var typesOfMode = document
+  .querySelector('input[name="arMode"]:checked')
+  .value.toLowerCase()
+
+  if (typesOfMode == 'environment') {
+    document.getElementById('scene').removeChild(document.getElementById("wallEntity"))
+    document.getElementById('scene').removeChild(document.getElementById("imageEntity"))
+  } else if (typesOfMode == 'image') {
+    document.getElementById('scene').removeChild(document.getElementById("wallEntity"))
+    document.getElementById('scene').removeChild(document.getElementById("ground"))
+  } else if (typesOfMode == 'body') {
+    document.getElementById('scene').removeChild(document.getElementById("ground"))
+    document.getElementById('scene').removeChild(document.getElementById("imageEntity"))
+  } else if (typesOfMode == 'object') {
+    document.getElementById('scene').removeChild(document.getElementById("wallEntity"))
+    document.getElementById('scene').removeChild(document.getElementById("imageEntity"))
+  }
 }
 
 // When the user clicks anywhere outside of the modal, close it
