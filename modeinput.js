@@ -1,3 +1,5 @@
+// import { colorTrack } from "./colorTracking.js"
+
 const STATUS = document.getElementById('status')
 const VIDEO = document.getElementById('webcam')
 const START_BUTTON = document.getElementById('startMachine')
@@ -8,6 +10,8 @@ const MOBILE_NET_INPUT_WIDTH = 224
 const MOBILE_NET_INPUT_HEIGHT = 224
 const STOP_DATA_GATHER = -1
 export const CLASS_NAMES = []
+export let arCanvas = null;
+export let rawImageData;
 
 START_BUTTON.addEventListener('click', startMachine)
 ADD_CLASS.addEventListener('click', addClass)
@@ -35,6 +39,12 @@ function startMachine () {
   //   });
   // });
 
+
+  // added for colortracking
+  // XR8.addCameraPipelineModule(
+  //   XR8.CameraPixelArray.pipelineModule(), 
+  // )
+
   XR8.addCameraPipelineModule({
     name: 'mycamerapipelinemodule',
     onUpdate: ({ frameStartResult, processGpuResult, processCpuResult }) => {
@@ -43,13 +53,38 @@ function startMachine () {
       }
       // let {rotation, position, intrinsics} = processCpuResult.reality
       // let {cpuDataA, cpuDataB} = processCpuResult.mycamerapipelinemodule
-      let arCanvas = processCpuResult.reality.realityTexture.drawCtx.canvas
+      arCanvas = processCpuResult.reality.realityTexture.drawCtx.canvas
 
       CAMERA_FEED_CANVAS.classList.remove('removed')
       var myCtx = CAMERA_FEED_CANVAS.getContext('2d')
       CAMERA_FEED_CANVAS.setAttribute('width', arCanvas.width / 15)
       CAMERA_FEED_CANVAS.setAttribute('height', arCanvas.height / 15)
       myCtx.drawImage(arCanvas, 0, 0, arCanvas.width / 15, arCanvas.height / 15)
+      // console.log(processCpuResult.camerapixelarray)
+      
+
+    // added for colortracking
+    // // console.log(processGpuResult.camerapixelarray)
+    // if (processGpuResult.camerapixelarray){
+    //   // console.log("here2")
+    //   try {
+    //     // console.log("imageData")
+    //     window.processGpuResult = processGpuResult
+    //     let width = processGpuResult.camerapixelarray.cols
+    //     let height = processGpuResult.camerapixelarray.rows
+    //     let pixels = processGpuResult.camerapixelarray.pixels              
+    //     rawImageData = new ImageData(width, height)
+    //     rawImageData.data.set(pixels)
+    //     return {}
+    //   } catch (e) {
+    //     console.log(e)
+    //     return {found: false}
+    //   }
+    // }
+
+    // colorTrack(arCanvas)
+
+
     }
   })
 

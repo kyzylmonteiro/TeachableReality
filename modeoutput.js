@@ -168,6 +168,7 @@ export async function updateOutputModeUI () {
   let mode = document.getElementById('debug-container')
   mode.innerText = 'Output Mode'
   STATUS.innerText = 'Training Now! Please Wait...'
+  document.getElementById("statusContainer").style.display="none"
 
   document.getElementById('addClass').classList.add('removed')
   let dataCollectorButtons = document.querySelectorAll('button.dataCollector')

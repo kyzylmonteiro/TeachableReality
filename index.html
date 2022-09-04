@@ -14,7 +14,7 @@
     <script src="https://cdn.8thwall.com/web/xrextras/xrextras.js"></script>
 
     <script src="//cdn.8thwall.com/web/aframe/aframe-extras-6.1.1.min.js"></script>
-    <!-- <script src="./opencv/opencv.js"></script> -->
+    <script src="./opencv/opencv.js"></script>
     <script
       async
       src="https://apps.8thwall.com/xrweb?appKey=f0LPUhzxQRN1kc4sv4mM4ZRsl663KCFL7y7fj3Uc5wN7TNKY7TbKuJlwz5uu0zGbngfYA3"
@@ -34,6 +34,13 @@
         Debugger <br />
         Awaiting TF.js load
       </p>
+      <!-- // added for colortracking -->
+      <!-- <div id="opencv">
+        <input type="color" class="form-control form-control-color" id="color-picker" value="#FFFFFF"
+        title="Choose your color">
+        <canvas id="canvasOutput" width="320" height="180"></canvas>
+        <video id="inputVideo" width="1280" height="720"></video>
+      </div> -->
     </div>
     
 
@@ -170,5 +177,6 @@
     <script type="module" src="./modeoutput.js"></script>
     <script type="module" src="./modeinput.js"></script>
     <script type="module" src="./customcomponents.js"></script>
+    <!-- <script type="module" src="./colorTracking.js"></script> -->
   </body>
 </html>
