@@ -6,6 +6,8 @@ const MOBILE_NET_INPUT_HEIGHT = 224
 const NEXT_BUTTON = document.getElementById('next')
 NEXT_BUTTON.addEventListener('click', updateOutputModeUI)
 
+import { assetUrls } from "./assetUrls.js"
+
 export let trainingDataInputs = []
 export let trainingDataOutputs = []
 export let outputData = []
@@ -85,7 +87,7 @@ export function storeState (event) {
       scale: { x: scale.x, y: scale.y, z: scale.z },
       visible: { x: visible }
     }
-    console.log(output3DData)
+    // console.log(output3DData)
   })
 
   // var w = document.getElementById("scene").canvas.width
@@ -406,19 +408,19 @@ var links = {
 }
 
 function addVirtualObj () {
-  var url_string = window.location.href
-  var url = new URL(url_string)
-  var objLink = url.searchParams.get('obj')
-  console.log(objLink)
+  // var url_string = window.location.href
+  // var url = new URL(url_string)
+  // var objLink = url.searchParams.get('obj')
+  // console.log(objLink)
 
   var numOf3DObj = document.getElementsByClassName('3DObj').length
   const newElement = document.createElement('a-entity')
   newElement.setAttribute(
     'gltf-model',
-    document.getElementById('3DobjLink').value || links[objLink]
+    assetUrls[document.getElementById('3DobjLink').value] || document.getElementById('3DobjLink').value
   )
   newElement.setAttribute('id', '3DObj-' + numOf3DObj)
-  newElement.setAttribute('scale', '10 10 10')
+  newElement.setAttribute('scale', '5 5 5')
   newElement.setAttribute('class', 'cantap 3DObj')
   newElement.setAttribute('xrextras-pinch-scale', 'min: 0.01; max: 50;')
   newElement.setAttribute('xrextras-two-finger-rotate', '')
@@ -427,8 +429,8 @@ function addVirtualObj () {
   // newElement.setAttribute("position", "0 0 0");
 
   newElement.addEventListener('click', tapHandler)
-  const randomYRotation = Math.random() * 360
-  newElement.setAttribute('rotation', `0 ${randomYRotation} 0`)
+  // const randomYRotation = Math.random() * 360
+  newElement.setAttribute('rotation', `0 0 0`)
   newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
   newElement.addEventListener('click', tapHandler)
 
@@ -468,17 +470,17 @@ function addImageObj () {
     'geometry',
     'primitive: box; width: 5; height: 5; depth:5;'
   )
-  newElement.setAttribute('material', 'color: white; opacity: 0.2;')
+  newElement.setAttribute('material', 'color: white; transparent: true; opacity: 0;')
   // geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
   // const randomYRotation = Math.random() * 360;
   newElement.addEventListener('click', tapHandler)
   newElement.setAttribute('rotation', '0 0 0')
 
   const imageElement = document.createElement('a-image')
-  imageElement.setAttribute('position', '0 0 0.5')
+  imageElement.setAttribute('position', '0 1 0')
   imageElement.setAttribute('scale', '3 3 3')
   imageElement.setAttribute('rotation', '-90 0 0')
-  imageElement.setAttribute('src', document.getElementById('imgLink').value)
+  imageElement.setAttribute('src', assetUrls[document.getElementById('imgLink').value] || document.getElementById('imgLink').value)
   imageElement.setAttribute('shadow', { receive: false })
   newElement.appendChild(imageElement)
 
@@ -590,14 +592,14 @@ function addFLoatingObj () {
     'geometry',
     'primitive: box; width: 5; height: 5; depth:1;'
   )
-  newElement.setAttribute('material', 'color: white; opacity: 0.1;')
+  newElement.setAttribute('material', 'color: white; opacity: 0;')
 
   newElement.addEventListener('click', tapHandler)
 
   const imageElement = document.createElement('a-image')
   imageElement.setAttribute('position', '0 0 -0.1')
   imageElement.setAttribute('scale', '5 5 5')
-  imageElement.setAttribute('src', document.getElementById('floatLink').value)
+  imageElement.setAttribute('src', assetUrls[document.getElementById('floatLink').value] || document.getElementById('floatLink').value)
   imageElement.setAttribute('shadow', { receive: false })
   newElement.appendChild(imageElement)
 

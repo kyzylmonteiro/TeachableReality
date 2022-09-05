@@ -5,6 +5,7 @@ const PREDICT_BUTTON = document.getElementById('predict')
 const MOBILE_NET_INPUT_WIDTH = 224
 const MOBILE_NET_INPUT_HEIGHT = 224
 let predict = false
+let arrOfPrediction = []
 
 PREDICT_BUTTON.addEventListener('click', updateRunModeUI)
 
@@ -187,6 +188,22 @@ export function updateRunModeUI () {
   predictLoop()
 }
 
+function mostOccurringElement(array) {
+  var max = array[0],
+      counter = {},
+      i = array.length,
+      element;
+  
+  while (i--) {
+      element = array[i];
+      if (!counter[element]) counter[element] = 0;
+      counter[element]++;
+      if (counter[max] < counter[element]) max = element;
+  }
+  return max;
+}
+
+
 export function predictLoop () {
   if (predict) {
     tf.tidy(function () {
@@ -208,7 +225,10 @@ export function predictLoop () {
 
       let imageFeatures = mobilenet.predict(resizedTensorFrame.expandDims())
       let prediction = model.predict(imageFeatures).squeeze()
-      let highestIndex = prediction.argMax().arraySync()
+      arrOfPrediction.push(prediction.argMax().arraySync())
+      if(arrOfPrediction.length > 7)
+        arrOfPrediction.shift()
+      let highestIndex = mostOccurringElement(arrOfPrediction)
       let predictionArray = prediction.arraySync()
 
       // var linksOfImages = [
