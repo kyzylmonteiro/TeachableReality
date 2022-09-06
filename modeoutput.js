@@ -172,6 +172,8 @@ export async function updateOutputModeUI () {
   STATUS.innerText = 'Training Now! Please Wait...'
   document.getElementById("statusContainer").style.display="none"
 
+  showAllObjects()
+
   document.getElementById('addClass').classList.add('removed')
   let dataCollectorButtons = document.querySelectorAll('button.dataCollector')
   let parentDiv = document.getElementsByClassName('class-container')[0]
@@ -189,21 +191,26 @@ export async function updateOutputModeUI () {
     canvasConatainer.appendChild(canvas)
     parentDiv.insertBefore(canvasConatainer, dataCollectorButtons[i])
 
-    let inputLabel = document.createElement('span')
-    let outputLabel = document.createElement('span')
-    inputLabel.innerHTML = 'State ' + i + ' input'
-    outputLabel.innerHTML = 'State ' + i + ' output'
+    document.getElementById('state' + (i+1) + "dataCount").classList.add('removed')
+    let inputLabel = document.createElement('div')
+    let outputLabel = document.createElement('div')
+    inputLabel.setAttribute('id','sate'+i+'inputlabel')
+    outputLabel.setAttribute('id','sate'+i+'outputlabel')
+    inputLabel.innerHTML = 'State ' + i + ' input  '
+    outputLabel.innerHTML = 'State ' + i + ' output  '
     parentDiv.insertBefore(inputLabel, canvasConatainer)
     parentDiv.insertBefore(outputLabel, dataCollectorButtons[i])
 
     let animButton = document.createElement('button')
     animButton.setAttribute('id', 'output-state' + i)
     animButton.setAttribute('class', 'output-obj-state')
+    animButton.setAttribute('width', '100%')
     animButton.addEventListener('click', storeState)
     animButton.innerText = 'Save'
     parentDiv.insertBefore(animButton, dataCollectorButtons[i])
 
     let horizontalLine = document.createElement('hr')
+    horizontalLine.style = "margin-top: 10px; margin-bottom: 10px;"
     parentDiv.insertBefore(horizontalLine, dataCollectorButtons[i])
 
     dataCollectorButtons[i].classList.add('removed')
@@ -238,7 +245,7 @@ export async function updateOutputModeUI () {
     modeType.setAttribute('name', 'arMode')
     modeType.setAttribute('id', modeTypeString.toLowerCase())
     modeType.setAttribute('value', modeTypeString.toLowerCase())
-    if (modeTypeString == 'environment') modeType.setAttribute('checked', 'checked')
+    if (modeTypeString == 'Environment') modeType.setAttribute('checked', 'checked')
 
     var modeTypeLabel = document.createElement('label')
     modeTypeLabel.setAttribute('for', modeTypeString.toLowerCase())
@@ -468,7 +475,7 @@ function addImageObj () {
   // newElement.setAttribute('xrextras-two-finger-rotate', '')
   newElement.setAttribute(
     'geometry',
-    'primitive: box; width: 5; height: 5; depth:5;'
+    'primitive: box; width: 5; height: 2; depth:5;'
   )
   newElement.setAttribute('material', 'color: white; transparent: true; opacity: 0;')
   // geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
@@ -477,8 +484,8 @@ function addImageObj () {
   newElement.setAttribute('rotation', '0 0 0')
 
   const imageElement = document.createElement('a-image')
-  imageElement.setAttribute('position', '0 1 0')
-  imageElement.setAttribute('scale', '3 3 3')
+  imageElement.setAttribute('position', '0 0.5 0')
+  imageElement.setAttribute('scale', '1 1 1')
   imageElement.setAttribute('rotation', '-90 0 0')
   imageElement.setAttribute('src', assetUrls[document.getElementById('imgLink').value] || document.getElementById('imgLink').value)
   imageElement.setAttribute('shadow', { receive: false })
@@ -494,24 +501,24 @@ function addImageObj () {
     newElement.setAttribute('xrextras-hold-drag', '')
     newElement.setAttribute('class', 'cantap 3DObj')
     newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
-    newElement.setAttribute('scale', '5 5 5')
+    newElement.setAttribute('scale', '2 2 2')
     document.getElementById('scene').appendChild(newElement)
   } else if (typesOfMode == 'image') {
     newElement.setAttribute('hold-drag', 'groundId: image-plane')
     newElement.setAttribute('class', 'cantap 3DObj objOnImage')
     newElement.setAttribute('position', '0 0 0')
-    newElement.setAttribute('scale', '5 5 5')
+    newElement.setAttribute('scale', '2 2 2')
     document.getElementById('scene').appendChild(newElement)
     document.getElementById('imageEntity').object3D.attach(newElement.object3D)
   } else if (typesOfMode == 'body') {
     newElement.setAttribute('hold-drag', 'groundId: wall')
     document.getElementById('scene').appendChild(newElement)
-    newElement.setAttribute('scale', '5 5 5')
+    newElement.setAttribute('scale', '2 2 2')
     document.getElementById('wallEntity').object3D.attach(newElement.object3D)
   } else if (typesOfMode == 'object') {
     document.getElementById('scene').appendChild(newElement)
     newElement.setAttribute('xrextras-hold-drag', '')
-    newElement.setAttribute('scale', '5 5 5')
+    newElement.setAttribute('scale', '2 2 2')
   }
 
   newElement.setAttribute('shadow', {
@@ -598,7 +605,7 @@ function addFLoatingObj () {
 
   const imageElement = document.createElement('a-image')
   imageElement.setAttribute('position', '0 0 -0.1')
-  imageElement.setAttribute('scale', '5 5 5')
+  imageElement.setAttribute('scale', '2 2 2') 
   imageElement.setAttribute('src', assetUrls[document.getElementById('floatLink').value] || document.getElementById('floatLink').value)
   imageElement.setAttribute('shadow', { receive: false })
   newElement.appendChild(imageElement)
@@ -622,7 +629,7 @@ var modal = document.getElementById('myModal')
 var btn = document.getElementById('next')
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName('close')[0]
+var span = document.getElementById("saveARMode")
 
 // When the user clicks on the button, open the modal
 btn.onclick = function () {

@@ -24,9 +24,6 @@
     <!-- <h1>Make your own "Teachable Machine" using Transfer Learning with MobileNet v3 in TensorFlow.js using saved graph model from TFHub.</h1> -->
 
     <div id="statusContainer">
-      <p id="timerContainer"> <input id="timerEnabled" type="checkbox" value="timerEnabled"> 
-        <label id="timer">Timer</label>
-      </p>
       <p id="status">
         Debugger <br />
         Awaiting TF.js load
@@ -76,6 +73,7 @@
             hold-drag="groundId: image-plane"
             class="cantap 3DObj objOnImage"
             position="0 1 0.1"
+            visible = "false"
             width="1.7"
             height="1"
             src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/videoResearchPaper.png?v=1661586471078"
@@ -87,6 +85,7 @@
             hold-drag="groundId: image-plane"
             class="cantap 3DObj objOnImage"
             position="1.5 -1.3 0.1"
+            visible = "false"
             width="1.6"
             height="0.5"
             src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/citationOne.png?v=1661586467613"
@@ -98,6 +97,7 @@
             hold-drag="groundId: image-plane"
             class="cantap 3DObj objOnImage"
             position="1.3 0 0.1"
+            visible = "false"
             width="1.2"
             height="1.5"
             src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/citationTwo.png?v=1661586468747"
@@ -149,7 +149,7 @@
     </div>
 
     <div class="button-container">
-      <div id="debug-container">Tool Bar</div>
+      <div id="debug-container">Teachable Reality</div>
       <canvas
         style="z-index: -1; display: none;"
         id="cameraFeed"
@@ -160,7 +160,7 @@
         <!-- Class buttons Generated in script.js -->
       </div>
       <div class="navigation-buttons">
-        <button id="addClass" class="removed">Add</button>
+        <button id="addClass" class="removed">Add State</button>
         <br />
         <br />
         <br />
@@ -183,7 +183,7 @@
       <!-- Modal content -->
       <div class="modal-content">
         <div class="modal-header">
-          <span class="close">&times;</span>
+          <!-- <span class="close">&times;</span> -->
           <h2>Choose Subject of Expereince</h2>
         </div>
         <div class="modal-body">
@@ -191,6 +191,7 @@
         </div>
         <div class="modal-footer">
           <h3></h3>
+          <button id="saveARMode"> SAVE </button>
         </div>
       </div>
     </div>

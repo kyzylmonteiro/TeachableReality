@@ -99,6 +99,14 @@ function startMachine () {
   document.getElementById('next').classList.remove('removed')
   let mode = document.getElementById('debug-container')
   mode.innerText = 'Input Mode'
+  // <p id="timerContainer"> <input id="timerEnabled" type="checkbox" value="timerEnabled"> 
+  //       <label id="timer">Timer</label>
+  //     </p>
+  let timerContainer = document.createElement("p")
+  timerContainer.setAttribute('id','timerContainer');
+  timerContainer.innerHTML = '<input id="timerEnabled" type="checkbox" value="timerEnabled"> <label id="timer">Camera Timer</label>'
+  mode.appendChild(document.createElement("br"));
+  mode.appendChild(timerContainer);
   setTimeout(addClass, 50)
   setTimeout(addClass, 50)
   // } else {
@@ -190,6 +198,10 @@ function dataGatherLoop (classNumber) {
 
     STATUS.innerText = 'Data count \n'
     for (let n = 0; n < CLASS_NAMES.length; n++) {
+
+      document.getElementById('state' + (n+1) + "dataCount").innerHTML = "State " + (n+1) +" <br/> Data count: " + examplesCount[n]
+      if(examplesCount[n]==null) document.getElementById('state' + (n+1) + "dataCount").innerHTML = "State " + (n+1) +" <br/> Data count: 0"
+
       STATUS.innerText += CLASS_NAMES[n] + ': ' + examplesCount[n] + '\n'
       document.getElementById('class' + (n + 1) + '-canvas').style.borderColor =
         'rgba(0, 255, 0,' + (0.2 + (1 / 20) * examplesCount[n]) + ')'
@@ -261,10 +273,14 @@ function blankCanvas () {
 function addClass () {
   let btn = document.createElement('button')
   let canvas = blankCanvas()
-  btn.innerHTML = 'Save State ' + (CLASS_NAMES.length + 1) + ''
+  btn.innerHTML = 'Add Data'
   btn.setAttribute('class', 'dataCollector')
   btn.setAttribute('data-1hot', CLASS_NAMES.length)
   btn.setAttribute('data-name', 'Class ' + (CLASS_NAMES.length + 1))
+
+  let dataCount = document.createElement('div')
+  dataCount.setAttribute('id','state' + (CLASS_NAMES.length + 1)+ "dataCount")
+  dataCount.innerHTML = "State " + (CLASS_NAMES.length + 1) +" <br/> Data count: 0"
 
   btn.addEventListener('click', gatherDataForClass)
   // btn.addEventListener('onclick', gatherDataForClass)
@@ -283,6 +299,7 @@ function addClass () {
 
   let ele = document.getElementsByClassName('class-container')
   ele[0].appendChild(canvasConatainer)
+  ele[0].appendChild(dataCount)
   ele[0].appendChild(btn)
 }
 

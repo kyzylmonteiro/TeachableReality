@@ -24,9 +24,6 @@
     <!-- <h1>Make your own "Teachable Machine" using Transfer Learning with MobileNet v3 in TensorFlow.js using saved graph model from TFHub.</h1> -->
 
     <div id="statusContainer">
-      <p id="timerContainer"> <input id="timerEnabled" type="checkbox" value="timerEnabled"> 
-        <label id="timer">Timer</label>
-      </p>
       <p id="status">
         Debugger <br />
         Awaiting TF.js load
@@ -185,9 +182,8 @@
         </a-box>
       </a-scene>
     </div>
-
     <div class="button-container">
-      <div id="debug-container">Tool Bar</div>
+      <div id="debug-container">Teachable Reality</div>
       <canvas
         style="z-index: -1; display: none;"
         id="cameraFeed"
@@ -198,7 +194,7 @@
         <!-- Class buttons Generated in script.js -->
       </div>
       <div class="navigation-buttons">
-        <button id="addClass" class="removed">Add</button>
+        <button id="addClass" class="removed">Add State</button>
         <br />
         <br />
         <br />
@@ -221,7 +217,7 @@
       <!-- Modal content -->
       <div class="modal-content">
         <div class="modal-header">
-          <span class="close">&times;</span>
+          <!-- <span class="close">&times;</span> -->
           <h2>Choose Subject of Expereince</h2>
         </div>
         <div class="modal-body">
@@ -229,6 +225,7 @@
         </div>
         <div class="modal-footer">
           <h3></h3>
+          <button id="saveARMode"> SAVE </button>
         </div>
       </div>
     </div>

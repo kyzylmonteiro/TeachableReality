@@ -175,7 +175,7 @@ export function updateRunModeUI () {
 
   PREDICT_BUTTON.classList.add('removed')
   STATUS.style.display = "none"
-  document.getElementById('timer').style.display = "none"
+  // document.getElementById('timer').style.display = "none"
 
   var videoContainerChildern = document.getElementsByClassName(
     'video-container'
