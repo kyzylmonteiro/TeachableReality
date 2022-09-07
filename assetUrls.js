@@ -74,5 +74,13 @@ export let assetUrls = {
     "turnrightblack" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/RightArrow_B.png?v=1662546083435",
     "tvremote" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/TVRemote.png?v=1662546083436",
     "redcircle" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Red%20Circle.png?v=1662547160225",
-    "todolist" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Todolist.png?v=1662547638294"
+    "todolist" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Todolist.png?v=1662547638294",
+    "musicimage" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/musicnotes.png?v=1662558963873",
+    "alert" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Caution.png?v=1662570158687",
+    "xcross" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Cross.png?v=1662569926450",
+    "lightbulb" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/bulb.png?v=1662570310703",
+    "lightning" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Lightning.png?v=1662570215988",
+    "fire" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/flame.png?v=1662570403865",
+    "blur" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/blur.png?v=1662570572643"
+
 }
