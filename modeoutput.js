@@ -424,7 +424,7 @@ function addVirtualObj () {
   const newElement = document.createElement('a-entity')
   newElement.setAttribute(
     'gltf-model',
-    assetUrls[document.getElementById('3DobjLink').value] || document.getElementById('3DobjLink').value
+    assetUrls[document.getElementById('3DobjLink').value.toLowerCase().replace(" ","")] || document.getElementById('3DobjLink').value
   )
   newElement.setAttribute('id', '3DObj-' + numOf3DObj)
   newElement.setAttribute('scale', '5 5 5')
@@ -475,7 +475,7 @@ function addImageObj () {
   // newElement.setAttribute('xrextras-two-finger-rotate', '')
   newElement.setAttribute(
     'geometry',
-    'primitive: box; width: 5; height: 2; depth:5;'
+    'primitive: box; width: 1; height: 1; depth:1;'
   )
   newElement.setAttribute('material', 'color: white; transparent: true; opacity: 0;')
   // geometry="primitive: box; width: 0.5; height: 0.25; depth:1" material="color: white; transparent: true; opacity: 0"
@@ -487,7 +487,7 @@ function addImageObj () {
   imageElement.setAttribute('position', '0 0.5 0')
   imageElement.setAttribute('scale', '1 1 1')
   imageElement.setAttribute('rotation', '-90 0 0')
-  imageElement.setAttribute('src', assetUrls[document.getElementById('imgLink').value] || document.getElementById('imgLink').value)
+  imageElement.setAttribute('src', assetUrls[document.getElementById('imgLink').value.toLowerCase().replace(" ","")] || document.getElementById('imgLink').value)
   imageElement.setAttribute('shadow', { receive: false })
   newElement.appendChild(imageElement)
 
@@ -512,13 +512,17 @@ function addImageObj () {
     document.getElementById('imageEntity').object3D.attach(newElement.object3D)
   } else if (typesOfMode == 'body') {
     newElement.setAttribute('hold-drag', 'groundId: wall')
+    newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
+    newElement.setAttribute('class', 'cantap 3DObj')
+    newElement.setAttribute('rotation', '90 0 0')
     document.getElementById('scene').appendChild(newElement)
     newElement.setAttribute('scale', '2 2 2')
     document.getElementById('wallEntity').object3D.attach(newElement.object3D)
   } else if (typesOfMode == 'object') {
-    document.getElementById('scene').appendChild(newElement)
+    newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
     newElement.setAttribute('xrextras-hold-drag', '')
     newElement.setAttribute('scale', '2 2 2')
+    document.getElementById('scene').appendChild(newElement)
   }
 
   newElement.setAttribute('shadow', {
@@ -606,7 +610,7 @@ function addFLoatingObj () {
   const imageElement = document.createElement('a-image')
   imageElement.setAttribute('position', '0 0 -0.1')
   imageElement.setAttribute('scale', '2 2 2') 
-  imageElement.setAttribute('src', assetUrls[document.getElementById('floatLink').value] || document.getElementById('floatLink').value)
+  imageElement.setAttribute('src', assetUrls[document.getElementById('floatLink').value.toLowerCase().replace(" ","")] || document.getElementById('floatLink').value)
   imageElement.setAttribute('shadow', { receive: false })
   newElement.appendChild(imageElement)
 
