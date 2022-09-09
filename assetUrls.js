@@ -81,6 +81,7 @@ export let assetUrls = {
     "lightbulb" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/bulb.png?v=1662570310703",
     "lightning" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Lightning.png?v=1662570215988",
     "fire" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/flame.png?v=1662570403865",
-    "blur" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/blur.png?v=1662570572643"
-
+    "blur" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/blur.png?v=1662570572643",
+    "UpDownArrow" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/UpDownArrow.glb?v=1662739922429",
+    "LeftRightArrow" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/LeftRightArrow.glb?v=1662739921959"
 }
