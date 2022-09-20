@@ -83,5 +83,16 @@ export let assetUrls = {
     "fire" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/flame.png?v=1662570403865",
     "blur" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/blur.png?v=1662570572643",
     "UpDownArrow" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/UpDownArrow.glb?v=1662739922429",
-    "LeftRightArrow" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/LeftRightArrow.glb?v=1662739921959"
+    "LeftRightArrow" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/LeftRightArrow.glb?v=1662739921959",
+    "ovenui" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/ovenui.png?v=1663114483105",
+    "pose1" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Frame%202.png?v=1663162657833",
+    "pose2" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Frame%203.png?v=1663162657725",
+    "pose3" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/incorrectPos.png?v=1663162657725",
+    "pose4" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Frame%205.png?v=1663162658111",
+    "card1" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/statement_short.png?v=1663223542961",
+    "card2" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Statement_Full.png?v=1663223543174",
+    "sbunny" : "https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/stanford_bunny.glb?v=1663263048253",
+    "2":"https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Number2blue.glb?v=1663270760052",
+    "6":"https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Number6blue.glb?v=1663270760722",
+    "8":"https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Number8blue.glb?v=1663270759520"
 }

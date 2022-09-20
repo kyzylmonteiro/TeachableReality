@@ -258,60 +258,47 @@ export async function updateOutputModeUI () {
 
   videoElement.appendChild(modeDiv)
 
-  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add 3d assets
-  var addObjI = document.createElement('input')
-  addObjI.setAttribute('type', 'text')
-  addObjI.setAttribute('id', '3DobjLink')
-  addObjI.setAttribute(
-    'style',
-    'width: 40px; height:10px; position:fixed; z-index: 3; right:20%; bottom:45%;'
-  )
-  videoElement.appendChild(addObjI)
+  var videoElement = document.getElementById('addObjButtons') // creating a button to add 3d assets
   var addObj = document.createElement('button')
   addObj.innerHTML = '3D'
-  addObj.addEventListener('click', addVirtualObj)
-  addObj.setAttribute(
-    'style',
-    'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; bottom:36%;'
-  )
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; setTimeout(addVirtualObj,10);})
   videoElement.appendChild(addObj)
 
-  var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add image assets
-  var addObjI = document.createElement('input')
-  addObjI.setAttribute('type', 'text')
-  addObjI.setAttribute('id', 'imgLink')
-  addObjI.setAttribute(
-    'style',
-    'width: 40px; height:10px; position:fixed; z-index: 3; right:20%; bottom:32%'
-  )
-  videoElement.appendChild(addObjI)
+  var videoElement = document.getElementById('addObjButtons') // creating a button to add image assets
   var addObj = document.createElement('button')
   addObj.innerHTML = '2D'
-  addObj.addEventListener('click', addImageObj)
-  addObj.setAttribute(
-    'style',
-    'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; bottom:23%;'
-  )
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; setTimeout(addImageObj,10);})
+  videoElement.appendChild(addObj)
+
+  var videoElement = document.getElementById('addObjButtons') // creating a button to add image assets
+  var addObj = document.createElement('button')
+  addObj.innerHTML = 'Float'
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; addFLoatingObj();})
+  videoElement.appendChild(addObj)
+
+  var videoElement = document.getElementById('addObjButtons') // creating a button to add image assets
+  var addObj = document.createElement('button')
+  addObj.innerHTML = 'Count'
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; })
+  videoElement.appendChild(addObj)
+
+  var videoElement = document.getElementById('addObjButtons') // creating a button to add image assets
+  var addObj = document.createElement('button')
+  addObj.innerHTML = 'Script'
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; })
   videoElement.appendChild(addObj)
 
   var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add image assets
-  var addObjI = document.createElement('input')
-  addObjI.setAttribute('type', 'text')
-  addObjI.setAttribute('id', 'floatLink')
-  addObjI.setAttribute(
-    'style',
-    'width: 40px; height:10px; position:fixed; z-index: 3; right:20%; bottom:19%;'
-  )
-  videoElement.appendChild(addObjI)
   var addObj = document.createElement('button')
-  addObj.innerHTML = 'Float'
-  addObj.addEventListener('click', addFLoatingObj)
+  addObj.innerHTML = '+'
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'block';})
   addObj.setAttribute(
     'style',
-    'width: 30px; height:30px; position:fixed; z-index: 3; right:20%; bottom:10%;'
+    'width: 30px; font-weight: bold; font-size: 25px; height:30px; position:fixed; z-index: 3; right:20%; bottom:10%;'
   )
   videoElement.appendChild(addObj)
-
+  
+  
   var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add image assets
   var addObj = document.createElement('button')
   addObj.innerHTML = 'Show All'
@@ -424,8 +411,7 @@ function addVirtualObj () {
   const newElement = document.createElement('a-entity')
   newElement.setAttribute(
     'gltf-model',
-    assetUrls[document.getElementById('3DobjLink').value.toLowerCase().replace(" ","")] || document.getElementById('3DobjLink').value
-  )
+    assetUrls[document.getElementById('objectVariable').value.toLowerCase().replace(" ","")] || document.getElementById('objectVariable').value)
   newElement.setAttribute('id', '3DObj-' + numOf3DObj)
   newElement.setAttribute('scale', '5 5 5')
   newElement.setAttribute('class', 'cantap 3DObj')
@@ -487,7 +473,7 @@ function addImageObj () {
   imageElement.setAttribute('position', '0 0.5 0')
   imageElement.setAttribute('scale', '1 1 1')
   imageElement.setAttribute('rotation', '-90 0 0')
-  imageElement.setAttribute('src', assetUrls[document.getElementById('imgLink').value.toLowerCase().replace(" ","")] || document.getElementById('imgLink').value)
+  imageElement.setAttribute('src', assetUrls[document.getElementById('objectVariable').value.toLowerCase().replace(" ","")] || document.getElementById('objectVariable').value)
   imageElement.setAttribute('shadow', { receive: false })
   newElement.appendChild(imageElement)
 
@@ -609,8 +595,8 @@ function addFLoatingObj () {
 
   const imageElement = document.createElement('a-image')
   imageElement.setAttribute('position', '0 0 -0.1')
-  imageElement.setAttribute('scale', '2 2 2') 
-  imageElement.setAttribute('src', assetUrls[document.getElementById('floatLink').value.toLowerCase().replace(" ","")] || document.getElementById('floatLink').value)
+  imageElement.setAttribute('scale', '5 5 5') 
+  imageElement.setAttribute('src', assetUrls[document.getElementById('objectVariable').value.toLowerCase().replace(" ","")] || document.getElementById('objectVariable').value)
   imageElement.setAttribute('shadow', { receive: false })
   newElement.appendChild(imageElement)
 

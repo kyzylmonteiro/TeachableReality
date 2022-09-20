@@ -60,7 +60,8 @@ cvOutput.addEventListener("click", (e) => {
     }
 });
 
-export function colorTrack(arCanvas)
+colorTrack()
+export function colorTrack()
 {
     
     let stream = arCanvas.captureStream(25)

@@ -175,6 +175,7 @@ export function updateRunModeUI () {
 
   PREDICT_BUTTON.classList.add('removed')
   STATUS.style.display = "none"
+  document.getElementsByClassName("button-container")[0].style.display = "none"
   // document.getElementById('timer').style.display = "none"
 
   var videoContainerChildern = document.getElementsByClassName(
@@ -228,7 +229,8 @@ export function predictLoop () {
       arrOfPrediction.push(prediction.argMax().arraySync())
       if(arrOfPrediction.length > 7)
         arrOfPrediction.shift()
-      let highestIndex = mostOccurringElement(arrOfPrediction)
+      // let highestIndex = mostOccurringElement(arrOfPrediction)
+      let highestIndex = prediction.argMax().arraySync()
       let predictionArray = prediction.arraySync()
 
       // var linksOfImages = [

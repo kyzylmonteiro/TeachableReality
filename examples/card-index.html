@@ -12,8 +12,6 @@
 
     <script src="https://cdn.8thwall.com/web/aframe/8frame-1.2.0.min.js"></script>
     <script src="https://cdn.8thwall.com/web/xrextras/xrextras.js"></script>
-
-    <script src="//cdn.8thwall.com/web/aframe/aframe-extras-6.1.1.min.js"></script>
     <script
       async
       src="https://apps.8thwall.com/xrweb?appKey=f0LPUhzxQRN1kc4sv4mM4ZRsl663KCFL7y7fj3Uc5wN7TNKY7TbKuJlwz5uu0zGbngfYA3"
@@ -63,11 +61,33 @@
           <a-entity id="holdAnchor" position="0 0 -3"></a-entity>
         </a-camera>
 
-        <!-- <a-entity
+        <a-entity
           id="imageEntity"
-          physics-image-target="name: researchPaper-1"
+          physics-image-target="name: card"
           visible="false"
         >
+          <a-image
+            id="3DObj-0"
+            xrextras-pinch-scale
+            xrextras-two-finger-rotate
+            hold-drag="groundId: image-plane"
+            class="cantap 3DObj objOnImage"
+            position="1.25 -0.5 0.3"
+            visible = "false"
+            src="https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/statement.png?v=1663250989620"
+          ></a-image>
+          <a-image
+            id="3DObj-1"
+            xrextras-pinch-scale
+            xrextras-two-finger-rotate
+            hold-drag="groundId: image-plane"
+            class="cantap 3DObj objOnImage"
+            position="0 1.25 0.3"
+            rotation="0 0 90"
+            scale="1.25 1.25 1.25"
+            visible = "false"
+            src="https://cdn.glitch.global/9d96da6c-4608-4db3-916b-e2708b3bf5bc/Frame%207.png?v=1663260800142"
+          ></a-image>
           <a-plane
             id="image-plane"
             class="cantap"
@@ -78,20 +98,9 @@
             shadow
           >
           </a-plane>
-        </a-entity> -->
+        </a-entity>
 
-        <!-- <a-entity id="wallEntity" visible="true" position="0 0 -20">
-          <a-entity
-              id="3DObj-1"
-              gltf-model="#treeModel"
-              class="cantap 3DObj"
-              hold-drag="groundId: wall"
-              xrextras-two-finger-rotate 
-              xrextras-pinch-scale 
-              scale="3 3 3"
-              shadow="receive: false"
-            >
-            </a-entity>
+        <a-entity id="wallEntity" visible="true" position="0 0 -20">
             <a-plane
               id="wall"
               class="cantap"
@@ -102,7 +111,7 @@
               shadow
             >
             </a-plane>
-        </a-entity> -->
+        </a-entity>
 
         <a-assets>
           <!-- Download from https://github.com/8thwall/web/blob/master/examples/aframe/placeground/tree.glb -->
@@ -110,54 +119,8 @@
             id="treeModel"
             src="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/tree.glb?v=1657750939103"
           ></a-asset-item>
-          <a-asset-item
-            id="animatedModel"
-            src="./assets/robot.glb"
-          ></a-asset-item>
           <img id="imageAsset" src=".\images\blankClass.png" />
         </a-assets>
-
-        <a-entity
-          id="3DObj-0"
-          xrextras-pinch-scale
-          xrextras-two-finger-rotate
-          xrextras-hold-drag
-          gltf-model="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/Deer-White.glb?v=1661773615034"
-          class="cantap 3DObj"
-          position="0 0 -5"
-          rotation="0 -180 0"
-          scale="0.007 0.007 0.007"
-          shadow="true"
-        >
-        </a-entity>
-
-        <a-entity
-          id="3DObj-1"
-          xrextras-pinch-scale
-          xrextras-two-finger-rotate
-          xrextras-hold-drag
-          gltf-model="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/Dog-White.glb?v=1661773629893"
-          class="cantap 3DObj"
-          position="0 0 -5"
-          rotation="0 -90 0"
-          scale="0.1 0.1 0.1"
-          shadow="true"
-        >
-        </a-entity>
-
-        <a-entity
-          id="3DObj-2"
-          xrextras-pinch-scale
-          xrextras-two-finger-rotate
-          xrextras-hold-drag
-          gltf-model="https://cdn.glitch.global/dcd6b5e7-e048-4ae6-b52c-5911b57fca1f/Elephant-white.glb?v=1661773629893"
-          class="cantap 3DObj"
-          position="0 0 -5"
-          rotation="0 -90 0"
-          scale="0.035 0.035 0.035"
-          shadow="true"
-        >
-        </a-entity>
 
         <a-box
           id="ground"
@@ -237,7 +200,7 @@
             <h3></h3>
           </div>
         </div>
-      </div>  
+      </div> 
 
     <!-- Import the page's JavaScript to do some stuff -->
     <!-- <script type="module" src="./script.js"></script> -->
