@@ -201,7 +201,7 @@ button {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 10; /* Sit on top */
-  padding-top: 150px; /* Location of the box */
+  padding-top: 100px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -287,6 +287,12 @@ button {
 }
 
 #addObjButtons button{
+  margin: 10px;
+  width: 50px;
+  height: 50px;
+}
+
+#addCustomObjButtons button{
   margin: 10px;
   width: 50px;
   height: 50px;

@@ -1,4 +1,4 @@
-// import { colorTrack } from "./colorTracking.js"
+import { colorTrack, objCen } from "./colorTracking.js"
 
 const STATUS = document.getElementById('status')
 const VIDEO = document.getElementById('webcam')
@@ -12,6 +12,7 @@ const STOP_DATA_GATHER = -1
 export const CLASS_NAMES = []
 export let arCanvas = null;
 export let rawImageData;
+export let objCenXY = objCen;
 
 START_BUTTON.addEventListener('click', startMachine)
 ADD_CLASS.addEventListener('click', addClass)
@@ -82,8 +83,20 @@ function startMachine () {
     //   }
     // }
 
-    // colorTrack(arCanvas)
+    var offscreenCanvas = document.createElement("canvas");
+    offscreenCanvas.setAttribute("id","offscreenraw")
+    offscreenCanvas.width = arCanvas.width;
+    offscreenCanvas.height = arCanvas.height;
+    var ctx = offscreenCanvas.getContext("2d");
+    ctx.drawImage(arCanvas,0,0,arCanvas.width,arCanvas.height);
 
+    // document.getElementsByTagName("body")[0].appendChild(offscreenCanvas)
+
+    // console.log(offscreenCanvas.width + " " + offscreenCanvas.height)
+
+    colorTrack(offscreenCanvas)
+    objCenXY = objCen
+    // console.log(objCenXY)
 
     }
   })

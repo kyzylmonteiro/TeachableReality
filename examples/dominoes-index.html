@@ -307,43 +307,34 @@
       type="text/javascript"
     ></script>
 
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-      <!-- Modal content -->
-      <div class="modal-content">
-        <div class="modal-header">
-          <!-- <span class="close">&times;</span> -->
-          <h2>Choose Subject of Expereince</h2>
-        </div>
-        <div class="modal-body">
-          
-        </div>
-        <div class="modal-footer">
-          <h3></h3>
-          <button id="saveARMode"> SAVE </button>
-        </div>
-      </div>
-    </div>
-
-       <!-- The Modal -->
-       <div id="myObjectsModal" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-          <div class="modal-header">
-            <!-- <span class="close">&times;</span> -->
-            <h2>Type and Select the object you want to import:</h2>
-          </div>
-          <div class="modal-body">
-            <div id="addObjInput" style="width: 100%;"> 
-              <input id="objectVariable" type="text" style="width: 85%;" placeholder="Object Name">
+        <!-- The Modal -->
+        <div id="myObjectsModal" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content">
+            <div class="modal-header">
+              <!-- <span class="close">&times;</span> -->
+              <h2> Add Asset to Scene</h2>
+            </div>
+            <div class="modal-body">
+              <div id="addObjInput" style="width: 100%;"> 
+                <input id="objectVariable" type="text" style="width: 85%;" placeholder="Type Asset Name (eg. tree)">
+              </div> <br>
+            <div id="anchorType">
+              <h3>Anchor Asset to:</h3>
             </div> <br>
-            <div id="addObjButtons"></div>
-          </div>
-          <div class="modal-footer">
-            <h3></h3>
+            <div id="addObjButtons">
+              <h3>Select Type of Asset:</h3>
+            </div>
+            <div id="addCustomObjButtons">
+              <h3>Custom Logic:</h3>
+            </div>
+            </div>
+            <div class="modal-footer">
+              <h3></h3>
+              <!-- <button id="addObject"> SAVE </button> -->
+            </div>
           </div>
         </div>
-      </div>
  
 
     <!-- Import the page's JavaScript to do some stuff -->

@@ -13,7 +13,7 @@ export let trainingDataOutputs = []
 export let outputData = []
 export let output3DData = {}
 
-import { model, CLASS_NAMES, imageData, mobilenet } from './modeinput.js'
+import { model, CLASS_NAMES, imageData, mobilenet, objCenXY} from './modeinput.js'
 
 export function dataPreProcess () {
   STATUS.innerText = 'Training Now! Please Wait...'
@@ -223,13 +223,12 @@ export async function updateOutputModeUI () {
   setTimeout(outputModeAndTrain, 10)
 
   // var videoElement = document.getElementsByClassName('video-container')[0] // adding anchor mode menu
-  var videoElement = document.getElementsByClassName('modal-body')[0]
-  var modeDiv = document.createElement('div')
+  var modeDiv = document.getElementById('anchorType')
   modeDiv.setAttribute('id', 'anchormode')
   modeDiv.setAttribute(
     'style',
     // 'width: 80px; height:10px; position:fixed; z-index: 3; right:20%; top:1%;'
-    'width: 100px; z-index: 3;'
+    'width: 300px; z-index: 3;'
   )
 
   // var modeText = document.createTextNode('Anchor to:')
@@ -237,7 +236,7 @@ export async function updateOutputModeUI () {
 
   // modeDiv.appendChild(document.createElement('br'))
 
-  var typesOfModes = ['Environment', 'Image', 'Body', 'Object']
+  var typesOfModes = ['Surface', 'Image', 'Body', 'Object']
 
   typesOfModes.forEach(modeTypeString => {
     var modeType = document.createElement('input')
@@ -245,7 +244,7 @@ export async function updateOutputModeUI () {
     modeType.setAttribute('name', 'arMode')
     modeType.setAttribute('id', modeTypeString.toLowerCase())
     modeType.setAttribute('value', modeTypeString.toLowerCase())
-    if (modeTypeString == 'Environment') modeType.setAttribute('checked', 'checked')
+    if (modeTypeString == 'Surface') modeType.setAttribute('checked', 'checked')
 
     var modeTypeLabel = document.createElement('label')
     modeTypeLabel.setAttribute('for', modeTypeString.toLowerCase())
@@ -256,36 +255,44 @@ export async function updateOutputModeUI () {
     modeDiv.appendChild(document.createElement('br'))
   })
 
-  videoElement.appendChild(modeDiv)
-
   var videoElement = document.getElementById('addObjButtons') // creating a button to add 3d assets
   var addObj = document.createElement('button')
   addObj.innerHTML = '3D'
-  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; setTimeout(addVirtualObj,10);})
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; updateInvisiblePlanes(); setTimeout(addVirtualObj,10);})
   videoElement.appendChild(addObj)
 
   var videoElement = document.getElementById('addObjButtons') // creating a button to add image assets
   var addObj = document.createElement('button')
   addObj.innerHTML = '2D'
-  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; setTimeout(addImageObj,10);})
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; updateInvisiblePlanes(); setTimeout(addImageObj,10);})
   videoElement.appendChild(addObj)
 
   var videoElement = document.getElementById('addObjButtons') // creating a button to add image assets
   var addObj = document.createElement('button')
-  addObj.innerHTML = 'Float'
-  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; addFLoatingObj();})
+  addObj.innerHTML = 'Floating'
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; updateInvisiblePlanes(); addFLoatingObj();})
   videoElement.appendChild(addObj)
 
   var videoElement = document.getElementById('addObjButtons') // creating a button to add image assets
+  var addObj = document.createElement('button')
+  addObj.innerHTML = 'Audio'
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; updateInvisiblePlanes(); })
+  videoElement.appendChild(addObj)
+
+  videoElement.appendChild(document.createElement("br"))
+  videoElement.appendChild(document.createElement("hr"))
+  videoElement.appendChild(document.createElement("br"))
+
+  var videoElement = document.getElementById('addCustomObjButtons') // creating a button to add image assets
   var addObj = document.createElement('button')
   addObj.innerHTML = 'Count'
-  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; })
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; updateInvisiblePlanes();  })
   videoElement.appendChild(addObj)
 
-  var videoElement = document.getElementById('addObjButtons') // creating a button to add image assets
+  var videoElement = document.getElementById('addCustomObjButtons') // creating a button to add image assets
   var addObj = document.createElement('button')
   addObj.innerHTML = 'Script'
-  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; })
+  addObj.addEventListener('click', ()=>{document.getElementById('myObjectsModal').style.display = 'none'; updateInvisiblePlanes();  })
   videoElement.appendChild(addObj)
 
   var videoElement = document.getElementsByClassName('video-container')[0] // creating a button to add image assets
@@ -431,7 +438,7 @@ function addVirtualObj () {
   var typesOfMode = document
     .querySelector('input[name="arMode"]:checked')
     .value.toLowerCase()
-  if (typesOfMode == 'environment') {
+  if (typesOfMode == 'surface') {
     newElement.setAttribute('xrextras-hold-drag', '')
     document.getElementById('scene').appendChild(newElement)
   } else if (typesOfMode == 'image') {
@@ -483,7 +490,7 @@ function addImageObj () {
   var typesOfMode = document
     .querySelector('input[name="arMode"]:checked')
     .value.toLowerCase()
-  if (typesOfMode == 'environment') {
+  if (typesOfMode == 'surface') {
     newElement.setAttribute('xrextras-hold-drag', '')
     newElement.setAttribute('class', 'cantap 3DObj')
     newElement.setAttribute('position', getCameraRaycastPoint(this.raycaster))
@@ -522,14 +529,28 @@ function addImageObj () {
 }
 
 function getCameraRaycastPoint (raycaster) {
-  raycaster = new THREE.Raycaster()
-  var a = new THREE.Vector2(0, 0)
-  raycaster.setFromCamera(a, document.getElementById('scene').camera)
-  var intersects
+
   var typesOfModes = document
     .querySelector('input[name="arMode"]:checked')
     .value.toLowerCase()
-  if (typesOfModes == 'environment')
+
+
+  raycaster = new THREE.Raycaster()
+  var a;
+  if(typesOfModes == 'object'){
+    console.log(objCenXY)
+    a = new THREE.Vector2(objCenXY.x,objCenXY.y)
+  }
+  else{
+    a = new THREE.Vector2(0, 0)
+  }
+
+  raycaster.setFromCamera(a, document.getElementById('scene').camera)
+  var intersects
+  
+
+
+  if (typesOfModes == 'surface')
     intersects = raycaster.intersectObject(
       (
         document.getElementById('ground') ||
@@ -613,28 +634,29 @@ function addFLoatingObj () {
 }
 
 // Get the modal
-var modal = document.getElementById('myModal')
+var modal = document.getElementById('myObjectsModal')
 
 // Get the button that opens the modal
-var btn = document.getElementById('next')
+// var btn = document.getElementById('next')
 
 // Get the <span> element that closes the modal
-var span = document.getElementById("saveARMode")
+var span = document.getElementById("addObject")
 
 // When the user clicks on the button, open the modal
-btn.onclick = function () {
-  modal.style.display = 'block'
-}
+// btn.onclick = function () {
+//   modal.style.display = 'block'
+// }
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-  modal.style.display = 'none'
+// When the user clicks on Add Object, close the modal
+function updateInvisiblePlanes() {
+  // document.getElementById('myObjectsModal').style.display = 'none';
+  // modal.style.display = 'none'
   // setting corresponding hold-drag component
   var typesOfMode = document
   .querySelector('input[name="arMode"]:checked')
   .value.toLowerCase()
 
-  if (typesOfMode == 'environment') {
+  if (typesOfMode == 'surface') {
     document.getElementById('scene').removeChild(document.getElementById("wallEntity"))
     document.getElementById('scene').removeChild(document.getElementById("imageEntity"))
   } else if (typesOfMode == 'image') {
