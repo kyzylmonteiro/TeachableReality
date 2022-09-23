@@ -656,7 +656,7 @@ function updateInvisiblePlanes() {
   .querySelector('input[name="arMode"]:checked')
   .value.toLowerCase()
 
-  if (typesOfMode == 'surface') {
+  if ( document.getElementsByClassName('3DObj').length==0 && typesOfMode == 'surface') {
     document.getElementById('scene').removeChild(document.getElementById("wallEntity"))
     document.getElementById('scene').removeChild(document.getElementById("imageEntity"))
   } else if (typesOfMode == 'image') {
